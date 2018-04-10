@@ -35,3 +35,4 @@ Following boost and STL coding guidelines with these exceptions:
 * Using `m_` prefix for member variables
 * Placing a space before and after the `*` or `&`
 * Using `{}` instead of `()` to denote constructors, use `()` only for functions
+* Include order is: interface file, standard includes, internal ones

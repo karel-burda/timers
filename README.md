@@ -17,14 +17,13 @@ Library itself is just header-only, so no need for linking.
 
 In order to build the usage example (`main.cpp`) run the cmake in the top-level directory: `cmake .`
 
-I personally prefer to specify the separate build directory:
-```cmake -Bbuild -H.
+I personally prefer to specify the separate build directory: `cmake -Bbuild -H.`
 
 You can of course specify cmake options like build type (debug, release, ...), used generator, etc.
 
 # Unit Tests
 For building tests, run cmake with the option `tests=ON` and pass path to the gtest like this
-```cmake . -DTESTS=ON -Dgtest_DIR=/path/to/gtest
+`cmake . -DTESTS=ON -Dgtest_DIR=/path/to/gtest`
 
 # Branch Model
 Project is using git workflow, this includes `master`, `develop`, feature (prefix `feature/`) and bugfix (`bugfix/`) branches, and `release/` for stable releases. 

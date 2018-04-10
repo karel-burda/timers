@@ -1,7 +1,7 @@
 #pragma once
 
+#include <exception>
 #include <functional>
-#include <stdexcept>
 
 #include "timers/blocking.h"
 
@@ -10,9 +10,8 @@ namespace timers
 class periodic
 {
 public:
-    class empty_callback_set : public std::runtime_error
+    class callback_not_callable : public std::exception
     {
-
     };
 
     periodic() = delete;
@@ -47,7 +46,7 @@ private:
             }
             else
             {
-                //throw empty_callback_set{"Empty callback is set"};
+                throw callback_not_callable{};
             }
         }
     }

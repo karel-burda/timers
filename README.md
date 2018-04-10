@@ -1,5 +1,7 @@
 # Introduction
-`timers` features a header-only library that's implemented timers and provides following features:
+** This is only alpha version that's just being developed**
+
+`timers` features a header-only library that's implementing timer-related functionality and provides following features:
 * General blocking timer
 * Timer that does some action periodically
 * Periodic timer with asynchronous behaviour
@@ -10,7 +12,7 @@ Implemented using C++ 11 with the use of `std::conditional_variable`, `std::prom
 # Usage
 TODO
 
-For full use case, see `main.cpp` or implementation of tests.
+For full use case, see `main.cpp` or implementation of unit tests.
 
 # Build Process
 Library itself is just header-only, so no need for linking.

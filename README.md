@@ -25,7 +25,7 @@ You can of course specify cmake options like build type (debug, release, ...), u
 
 # Unit Tests
 For building tests, run cmake with the option `tests=ON` and pass path to the gtest like this
-`cmake . -DTESTS=ON -Dgtest_DIR=/path/to/gtest`
+`cmake . -D TESTS:BOOL=ON -D gtest_DIR:PATH=/path/to/gtest`
 
 # Branch Model
 Project is using git workflow, this includes `master`, `develop`, feature (prefix `feature/`) and bugfix (`bugfix/`) branches, and `release/` for stable releases. 

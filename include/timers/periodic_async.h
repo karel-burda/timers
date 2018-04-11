@@ -13,7 +13,6 @@ public:
     periodic_async(std::chrono::duration<double> interval)
     : periodic{ interval }
     {
-
     }
     periodic_async(const periodic_async &) = delete;
     periodic_async(periodic_async &&) = delete;

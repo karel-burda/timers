@@ -18,7 +18,6 @@ public:
     periodic(std::chrono::duration<double> interval)
     : m_interval{ interval }
     {
-
     }
     periodic(const periodic &) = delete;
     periodic(periodic &&) = delete;

@@ -41,7 +41,7 @@ public:
 
 private:
     std::condition_variable m_cv;
-    mutable std::mutex m_protection;
+    std::mutex m_protection;
     bool m_terminated_by_client = false;
 };
 }

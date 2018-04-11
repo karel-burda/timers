@@ -24,8 +24,10 @@ I personally prefer to specify the separate build directory: `cmake -Bbuild -H.`
 You can of course specify cmake options like build type (debug, release, ...), used generator, etc.
 
 # Unit Tests
-For building tests, run cmake with the option `tests=ON` and pass path to the gtest like this
-`cmake . -D TESTS:BOOL=ON -D gtest_DIR:PATH=/path/to/gtest`
+For building tests, run cmake with the option `tests=ON`:
+`cmake . -DTESTS:BOOL=ON`
+
+The project is using the `gtest` and it's automatically downloaded using the CMake in its build step.
 
 # Branch Model
 Project is using git workflow, this includes `master`, `develop`, feature (prefix `feature/`) and bugfix (`bugfix/`) branches, and `release/` for stable releases. 

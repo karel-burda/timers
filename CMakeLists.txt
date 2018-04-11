@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(timers VERSION 0.9.0 LANGUAGES CXX)
+project(timers VERSION 0.9.1 LANGUAGES CXX)
 
 include("cmake/settings.cmake")
 include("cmake/warnings.cmake")

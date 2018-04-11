@@ -17,7 +17,7 @@ public:
 
     /// Waits and blocks current thread until the "time" elapses OR client code calls "terminate()"
     /// Returns false if terminated by the client
-    bool wait_for_termination(std::chrono::duration<double> time)
+    bool wait(std::chrono::duration<double> time)
     {
         std::unique_lock<decltype(m_protection)> lock{ m_protection };
 

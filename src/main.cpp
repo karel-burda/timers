@@ -18,7 +18,7 @@ void demonstrate_blocking_timer()
     std::cout << "demonstrate_blocking_timer(): starting the blocking timer with 5 seconds timeout" << std::endl;
 
     // passing 5 seconds here, you can pass any chrono literal or std::chrono::duration manually
-    timer_blocking.wait_for_termination(5s);
+    timer_blocking.wait(5s);
 
     // from other thread you can terminate the timer, although this is not usually the case
     // since the main aim is the blocking behaviour itself: timer_blocking.terminate()

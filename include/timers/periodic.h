@@ -38,7 +38,7 @@ public:
 private:
     void perform_callback_periodically(std::function<void()> callback)
     {
-        while (m_blocking_timer.wait_for_termination(m_interval))
+        while (m_blocking_timer.wait(m_interval))
         {
             if (callback)
             {

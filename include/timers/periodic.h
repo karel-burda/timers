@@ -10,7 +10,7 @@ namespace timers
 class periodic
 {
 public:
-    class callback_not_callable : public std::exception
+    struct callback_not_callable : std::exception
     {
     };
 

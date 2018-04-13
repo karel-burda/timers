@@ -31,6 +31,8 @@ The project is using the `gtest` that is automatically downloaded, cmaked and bu
 
 Then, you can run the default test target (e.g. `make test` or `RUN_TESTS` in the Visual Studio) or own custom target `run-all-tests-verbose` (which is recommended).
 
+If you want to debug tests and beyond, run the target `timers-tests` manually.
+
 # Branch Model
 Project is using git workflow, this includes `master`, `develop`, feature (prefix `feature/`) and bugfix (`bugfix/`) branches, and `release/` for stable releases. 
 

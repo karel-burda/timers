@@ -25,7 +25,8 @@ link_directories(${PROJECT_NAME} ${binary_dir}/googlemock/gtest/${_GTEST_BUILD_V
 
 if (TESTS)
     if (WIN32)
-        # gtest is always built in the Release, so just use "/MT" (not "/MTd")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+        # TODO: Find out why the same doesn't work for the "CMAKE_CXX_FLAGS"
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MT")
     endif()
 endif()

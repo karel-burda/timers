@@ -12,10 +12,13 @@ file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "README.md")
 
 include_directories(include)
 
+
 option(TESTS "Build all unit tests" OFF)
 if (TESTS)
     message(STATUS "Building with unit tests")
 
+    # "enable_testing()" has to be called in the top-level cmake
+    enable_testing()
     add_subdirectory(tests)
 endif()
 

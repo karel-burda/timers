@@ -6,7 +6,7 @@
 
 namespace
 {
-TEST(blocking, basic)
+TEST(blocking, construction)
 {
     ASSERT_NO_THROW(timers::blocking blocking_timer);
 }

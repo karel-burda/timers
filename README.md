@@ -27,7 +27,9 @@ You can of course specify cmake options like build type (debug, release, ...), u
 For building tests, run cmake with the option `tests=ON`:
 `cmake -Bbuild -H. -DTESTS:BOOL=ON`
 
-The project is using the `gtest` and it's automatically downloaded using the CMake in its build step.
+The project is using the `gtest` that is automatically downloaded, cmaked and built in its build step.
+
+Then, you can run the default test target (e.g. `make test` or `RUN_TESTS` in the Visual Studio) or own custom target `run-all-tests-verbose` (which is recommended).
 
 # Branch Model
 Project is using git workflow, this includes `master`, `develop`, feature (prefix `feature/`) and bugfix (`bugfix/`) branches, and `release/` for stable releases. 

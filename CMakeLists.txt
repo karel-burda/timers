@@ -13,11 +13,10 @@ file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "README.md")
 include_directories(include)
 
 option(TESTS "Build all unit tests" OFF)
-# TODO: add subdirectory and in there do the ExternalProject
 if (TESTS)
+    message(STATUS "Building with unit tests")
+
     add_subdirectory(tests)
-    #find_package(gtest MODULE REQUIRED)
-    #enable_testing()
 endif()
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${CMAKE_RELATED} ${OTHER})

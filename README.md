@@ -25,7 +25,7 @@ You can of course specify cmake options like build type (debug, release, ...), u
 
 # Unit Tests
 For building tests, run cmake with the option `tests=ON`:
-`cmake . -DTESTS:BOOL=ON`
+`cmake -Bbuild -H. -DTESTS:BOOL=ON`
 
 The project is using the `gtest` and it's automatically downloaded using the CMake in its build step.
 

@@ -1,9 +1,13 @@
+#include <chrono>
+
 #include <gtest/gtest.h>
+
+#include <timers/blocking.h>
 
 namespace
 {
 TEST(blocking, basic)
 {
-  EXPECT_EQ(1, 1);
+    ASSERT_NO_THROW(timers::blocking blocking_timer);
 }
 }

@@ -6,7 +6,9 @@ include("../cmake/gtest.cmake")
 include("../cmake/settings.cmake")
 include("../cmake/warnings.cmake")
 
-add_executable(${PROJECT_NAME} src/blocking.test.cpp src/periodic.test.cpp)
+include_directories(include)
+
+add_executable(${PROJECT_NAME} src/blocking.test.cpp src/periodic.test.cpp include/make_all_members_public.h)
 
 add_dependencies(${PROJECT_NAME} gtest-build)
 target_link_libraries(${PROJECT_NAME} gtest gtest_main)

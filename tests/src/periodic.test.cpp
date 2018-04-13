@@ -2,6 +2,7 @@
 
 #include <gtest/gtest.h>
 
+#include "make_all_members_public.h"
 #include <timers/periodic.h>
 
 namespace

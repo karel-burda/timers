@@ -4,26 +4,20 @@
 
 #include <future>
 
+#include "timers/common.h"
+
+namespace burda
+{
 namespace timers
 {
 class periodic_async : public periodic
 {
 public:
-    periodic_async() = delete;
-    periodic_async(std::chrono::duration<double> interval)
-    : periodic{ interval }
-    {
-    }
-    periodic_async(const periodic_async &) = delete;
-    periodic_async(periodic_async &&) = delete;
-    periodic_async & operator=(const periodic_async &) = delete;
-    periodic_async & operator=(periodic_async &&) = delete;
-
     void start(std::function<void()> callback) override
     {
-        m_async_task = std::async(std::launch::async, [this, callback]
+        m_async_task = std::async(std::launch::async, [this, &callback]
         {
-            periodic::start(callback);
+            periodic::start(std::move(callback));
         });
     }
 
@@ -37,4 +31,5 @@ public:
 private:
     std::future<void> m_async_task;
 };
+}
 }

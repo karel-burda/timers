@@ -4,44 +4,71 @@
 #include <condition_variable>
 #include <mutex>
 
+#include "timers/common.h"
+#include "timers/exceptions.h"
+
+#include <iostream>
+#include <thread>
+
+namespace burda
+{
 namespace timers
 {
-class blocking
+class blocking : public no_copy_and_move_operations
 {
 public:
-    blocking() = default;
-    blocking(const blocking &) = delete;
-    blocking(blocking &&) = delete;
-    blocking & operator=(const blocking &) = delete;
-    blocking & operator=(blocking &&) = delete;
-
     /// Waits and blocks current thread until the "time" elapses OR client code calls "terminate()"
     /// Returns false if terminated by the client
-    bool wait(std::chrono::duration<double> time)
+    bool block(time_interval time)
     {
-        std::unique_lock<decltype(m_protection)> lock{ m_protection };
+        std::lock_guard<decltype(m_block_protection)> lock_block{ m_block_protection };
 
-        return !m_cv.wait_for(lock, time, [&]
+        throw_if_time_invalid(time);
+
         {
-            return m_terminated_by_client;
-        });
+            std::unique_lock<decltype(m_protection)> lock{ m_protection };
+            m_terminated = false;
+
+            const auto terminated = !m_cv.wait_for(lock, time, [&]
+            {
+                return m_terminated;
+            });
+
+            m_terminated = true;
+
+            return terminated;
+        }
     }
 
-    /// Terminates timer, will set the "m_terminated_by_client" to true, so that the cv stops to block
+    /// Terminates timer, will set the "m_terminated" to true, so that the cv stops to block
     void terminate()
     {
         {
             std::lock_guard<decltype(m_protection)> lock{ m_protection };
 
-            m_terminated_by_client = true;
+            m_terminated = true;
         }
 
         m_cv.notify_all();
     }
 
 private:
+    void throw_if_time_invalid(time_interval time)
+    {
+        if (time == time.zero())
+        {
+            throw exceptions::time_period_zero{};
+        }
+        else if (time < time.zero())
+        {
+            throw exceptions::time_period_negative{};
+        }
+    }
+
     std::condition_variable m_cv;
     std::mutex m_protection;
-    bool m_terminated_by_client = false;
+    std::mutex m_block_protection;
+    bool m_terminated = false;
 };
+}
 }

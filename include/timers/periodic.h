@@ -4,53 +4,25 @@
 #include <functional>
 
 #include "timers/blocking.h"
+#include "timers/exceptions.h"
+#include "timers/single_shot.h"
 
+namespace burda
+{
 namespace timers
 {
-class periodic
+class periodic : public single_shot
 {
 public:
-    struct callback_not_callable : std::exception
+    void start(time_interval interval, timers_callback callback) override
     {
-    };
-
-    periodic() = delete;
-    periodic(std::chrono::duration<double> interval)
-    : m_interval{ interval }
-    {
-    }
-    periodic(const periodic &) = delete;
-    periodic(periodic &&) = delete;
-    periodic & operator=(const periodic &) = delete;
-    periodic & operator=(periodic &&) = delete;
-
-    virtual void start(std::function<void()> callback)
-    {
-        perform_callback_periodically(std::move(callback));
-    }
-
-    virtual void stop()
-    {
-        m_blocking_timer.terminate();
-    }
-
-private:
-    void perform_callback_periodically(std::function<void()> callback)
-    {
-        while (m_blocking_timer.wait(m_interval))
+        while (m_blocking_timer.block(interval))
         {
-            if (callback)
-            {
-                callback();
-            }
-            else
-            {
-                throw callback_not_callable{};
-            }
+            call_or_throw_if_callback_is_not_callable(std::move(callback));
         }
-    }
 
-    std::chrono::duration<double> m_interval = {0};
-    blocking m_blocking_timer = {};
+        //while(single_shot::start(interval, std::move(callback)));
+    }
 };
+}
 }

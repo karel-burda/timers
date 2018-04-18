@@ -31,7 +31,7 @@ TEST(single_shot_construction_destruction, basic_construction_destruction)
     ASSERT_NO_THROW(burda::timers::single_shot single_shot_timer);
 
     burda::timers::single_shot single_shot_timer;
-    EXPECT_NO_THROW(single_shot_timer.~single_shot_timer());
+    EXPECT_NO_THROW(single_shot_timer.burda::timers::single_shot::~single_shot());
 }
 
 TEST_F(single_shot_test, callback_called)

@@ -7,7 +7,7 @@
 * Periodic timer with asynchronous behaviour
 
 # Technicals
-Implemented using C++ 11 with the use of `std::conditional_variable`, `std::promise` and `std::async`.
+Implemented using C++ 14 with the use of `std::conditional_variable`, `std::promise` and `std::async`.
 
 # Usage
 TODO

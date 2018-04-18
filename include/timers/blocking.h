@@ -23,7 +23,7 @@ public:
         throw_if_time_invalid(time);
 
         {
-            std::unique_lock<decltype(m_protection)> lock{ m_protection };
+            std::unique_lock<decltype(m_cv_protection)> lock{ m_cv_protection };
             m_terminated = false;
 
             const auto terminated = !m_cv.wait_for(lock, time, [&]
@@ -41,7 +41,7 @@ public:
     void terminate()
     {
         {
-            std::lock_guard<decltype(m_protection)> lock{ m_protection };
+            std::lock_guard<decltype(m_cv_protection)> lock{ m_cv_protection };
 
             m_terminated = true;
         }
@@ -63,7 +63,7 @@ private:
     }
 
     std::condition_variable m_cv;
-    std::mutex m_protection;
+    std::mutex m_cv_protection;
     std::mutex m_block_protection;
     bool m_terminated = false;
 };

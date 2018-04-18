@@ -20,8 +20,6 @@ public:
         {
             call_or_throw_if_callback_is_not_callable(std::move(callback));
         }
-
-        //while(single_shot::start(interval, std::move(callback)));
     }
 };
 }

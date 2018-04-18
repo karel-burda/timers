@@ -28,21 +28,6 @@ TEST(blocking_test_construction_destruction, basic_construction_destruction)
     EXPECT_NO_THROW(blocking_timer.~blocking());
 }
 
-TEST(blocking_test_construction_destruction, destruction_while_blocking)
-{
-    burda::timers::blocking blocking_timer;
-
-    auto blocker = std::async(std::launch::async, [&blocking_timer]()
-    {
-        blocking_timer.block(5s);
-    });
-
-    std::this_thread::sleep_for(1s);
-    EXPECT_NO_THROW(blocking_timer.~blocking());
-
-    blocker.get();
-}
-
 TEST_F(blocking_test, default_values)
 {
     EXPECT_FALSE(m_blocking_timer.m_terminated);

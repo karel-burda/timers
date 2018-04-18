@@ -31,7 +31,7 @@ TEST(periodic_construction_destruction, basic_construction_destruction)
     ASSERT_NO_THROW(burda::timers::periodic periodic_timer);
 
     burda::timers::periodic periodic_timer;
-    EXPECT_NO_THROW(periodic_timer.~periodic());
+    EXPECT_NO_THROW(periodic_timer.burda::timers::periodic::~periodic());
 }
 
 TEST_F(periodic_test, callback)

@@ -25,7 +25,7 @@ TEST(blocking_test_construction_destruction, basic_construction_destruction)
     ASSERT_NO_THROW(burda::timers::blocking blocking_timer);
 
     burda::timers::blocking blocking_timer;
-    EXPECT_NO_THROW(blocking_timer.~blocking_timer());
+    EXPECT_NO_THROW(blocking_timer.~blocking());
 }
 
 TEST(blocking_test_construction_destruction, destruction_while_blocking)
@@ -38,7 +38,7 @@ TEST(blocking_test_construction_destruction, destruction_while_blocking)
     });
 
     std::this_thread::sleep_for(1s);
-    EXPECT_NO_THROW(blocking_timer.~blocking_timer());
+    EXPECT_NO_THROW(blocking_timer.~blocking());
 
     blocker.get();
 }

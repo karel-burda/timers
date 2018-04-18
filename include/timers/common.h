@@ -2,10 +2,6 @@
 
 #include <chrono>
 
-// TODO
-#define DISABLE_COPY_OPERATIONS()
-#define DISABLE_MOVE_OPERATIONS()
-
 namespace burda
 {
 namespace timers

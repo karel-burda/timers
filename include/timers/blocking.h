@@ -7,9 +7,6 @@
 #include "timers/common.h"
 #include "timers/exceptions.h"
 
-#include <iostream>
-#include <thread>
-
 namespace burda
 {
 namespace timers

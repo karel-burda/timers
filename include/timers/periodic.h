@@ -16,7 +16,7 @@ class periodic : public single_shot
 public:
     void start(time_interval interval, timers_callback callback) override
     {
-        while (m_blocking_timer.block(interval))
+        while (blocking::block(interval))
         {
             call_or_throw_if_callback_is_not_callable(std::move(callback));
         }

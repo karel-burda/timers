@@ -66,7 +66,7 @@ TEST_F(single_shot_test, stop)
     for (size_t i = 0; i < 10; ++i)
     {
         EXPECT_NO_THROW(m_single_shot_timer.stop());
-        ASSERT_TRUE(m_single_shot_timer.m_blocking_timer.m_terminated);
+        ASSERT_TRUE(m_single_shot_timer.m_terminated);
     }
 }
 

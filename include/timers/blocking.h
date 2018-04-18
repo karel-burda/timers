@@ -38,7 +38,7 @@ public:
     }
 
     /// Terminates timer, will set the "m_terminated" to true, so that the cv stops to block
-    void terminate()
+    virtual void stop()
     {
         {
             std::lock_guard<decltype(m_cv_protection)> lock{ m_cv_protection };

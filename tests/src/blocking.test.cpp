@@ -25,7 +25,7 @@ TEST(blocking_test_construction_destruction, basic_construction_destruction)
     ASSERT_NO_THROW(burda::timers::blocking blocking_timer);
 
     burda::timers::blocking blocking_timer;
-    EXPECT_NO_THROW(blocking_timer.~blocking());
+    EXPECT_NO_THROW(blocking_timer.burda::timers::blocking::~blocking());
 }
 
 TEST_F(blocking_test, default_values)
@@ -55,12 +55,12 @@ TEST_F(blocking_test, block_time)
     burda::timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 2.0, 100.0);
 }
 
-TEST_F(blocking_test, block_and_terminate)
+TEST_F(blocking_test, block_and_stop)
 {
     auto terminator = std::async(std::launch::async, [this]()
     {
         std::this_thread::sleep_for(2s);
-        m_blocking_timer.terminate();
+        m_blocking_timer.stop();
     });
 
     m_blocking_timer.block(10s);
@@ -104,12 +104,12 @@ TEST_F(blocking_test, block_multiple_times_in_parallel)
     burda::timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 10.0, 100.0);
 }
 
-TEST_F(blocking_test, termination)
+TEST_F(blocking_test, stop)
 {
-    EXPECT_NO_THROW(m_blocking_timer.terminate());
+    EXPECT_NO_THROW(m_blocking_timer.stop());
 
     m_blocking_timer.m_terminated = false;
-    m_blocking_timer.terminate();
+    m_blocking_timer.stop();
     EXPECT_TRUE(m_blocking_timer.m_terminated);
 }
 }

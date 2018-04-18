@@ -58,7 +58,7 @@ TEST_F(periodic_test, stop)
     std::this_thread::sleep_for(1s);
 
     EXPECT_NO_THROW(m_periodic_timer.stop());
-    EXPECT_TRUE(m_periodic_timer.m_blocking_timer.m_terminated);
+    EXPECT_TRUE(m_periodic_timer.m_terminated);
 
     for (size_t i = 0; i < 10; ++i)
     {

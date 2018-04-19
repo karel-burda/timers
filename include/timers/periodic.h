@@ -1,10 +1,5 @@
 #pragma once
 
-#include <exception>
-#include <functional>
-
-#include "timers/blocking.h"
-#include "timers/exceptions.h"
 #include "timers/single_shot.h"
 
 namespace burda

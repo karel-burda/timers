@@ -4,14 +4,17 @@
 #include <condition_variable>
 #include <mutex>
 
-#include "timers/common.h"
+#include "timers/disable_copy_and_move.h"
 #include "timers/exceptions.h"
 
 namespace burda
 {
 namespace timers
 {
-class blocking : public no_copy_and_move_operations
+using time_interval = std::chrono::duration<double>;
+using timers_callback = std::function<void()>;
+
+    class blocking : public disable_copy_and_move
 {
 public:
     /// Waits and blocks current thread until the "time" elapses OR client code calls "terminate()"

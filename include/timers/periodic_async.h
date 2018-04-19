@@ -4,8 +4,6 @@
 
 #include <future>
 
-#include "timers/common.h"
-
 namespace burda
 {
 namespace timers

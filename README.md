@@ -24,8 +24,8 @@ I personally prefer to specify the separate build directory: `cmake -Bbuild -H.`
 You can of course specify cmake options like build type (debug, release, ...), used generator, etc.
 
 # Unit Tests
-For building tests, run cmake with the option `tests=ON`:
-`cmake -Bbuild -H. -DTESTS:BOOL=ON`
+For building tests, run cmake with the option `UNIT-TESTS=ON`:
+`cmake -Bbuild -H. -DUNIT-TESTS:BOOL=ON`
 
 The project is using the `gtest` that is automatically downloaded, cmaked and built in its build step.
 

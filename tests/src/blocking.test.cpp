@@ -48,7 +48,7 @@ TEST_F(blocking_test, block_time)
 {
     // TODO: move this measuring into some common macro
     const auto start = burda::timers::testing::clock::now();
-    m_blocking_timer.block(2s);
+    EXPECT_TRUE(m_blocking_timer.block(2s));
     const auto end = burda::timers::testing::clock::now();
     const auto elapsed = burda::timers::testing::round_to_seconds(end - start);
 
@@ -63,7 +63,7 @@ TEST_F(blocking_test, block_and_stop)
         m_blocking_timer.stop();
     });
 
-    m_blocking_timer.block(10s);
+    EXPECT_FALSE(m_blocking_timer.block(10s));
     terminator.get();
 
     EXPECT_TRUE(m_blocking_timer.m_terminated);
@@ -72,8 +72,8 @@ TEST_F(blocking_test, block_and_stop)
 TEST_F(blocking_test, block_multiple_times)
 {
     const auto start = burda::timers::testing::clock::now();
-    m_blocking_timer.block(1s);
-    m_blocking_timer.block(4s);
+    EXPECT_TRUE(m_blocking_timer.block(1s));
+    EXPECT_TRUE(m_blocking_timer.block(4s));
     const auto end = burda::timers::testing::clock::now();
     const auto elapsed = burda::timers::testing::round_to_seconds(end - start);
 
@@ -87,12 +87,12 @@ TEST_F(blocking_test, block_multiple_times_in_parallel)
 
     auto caller1 = std::async(std::launch::async, [this]()
     {
-        m_blocking_timer.block(5s);
+        EXPECT_TRUE(m_blocking_timer.block(5s));
     });
 
     auto caller2 = std::async(std::launch::async, [this]()
     {
-        m_blocking_timer.block(5s);
+        EXPECT_TRUE(m_blocking_timer.block(5s));
     });
 
     caller1.get();

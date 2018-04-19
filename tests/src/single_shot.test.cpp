@@ -38,7 +38,7 @@ TEST_F(single_shot_test, callback_called)
 {
     EXPECT_FALSE(m_callback_called);
 
-    m_single_shot_timer.start(3s, std::bind(&single_shot_test::callback, this));
+    EXPECT_TRUE(m_single_shot_timer.start(3s, std::bind(&single_shot_test::callback, this)));
 
     EXPECT_TRUE(m_callback_called);
 }
@@ -52,8 +52,8 @@ TEST_F(single_shot_test, callback_multiple_times)
 {
     const auto start = burda::timers::testing::clock::now();
 
-    m_single_shot_timer.start(3s, std::bind(&single_shot_test::callback, this));
-    m_single_shot_timer.start(3s, std::bind(&single_shot_test::callback, this));
+    EXPECT_TRUE(m_single_shot_timer.start(3s, std::bind(&single_shot_test::callback, this)));
+    EXPECT_TRUE(m_single_shot_timer.start(3s, std::bind(&single_shot_test::callback, this)));
 
     const auto end = burda::timers::testing::clock::now();
     const auto elapsed = burda::timers::testing::round_to_seconds(end - start);
@@ -74,9 +74,10 @@ TEST_F(single_shot_test, stop_before_callback)
 {
     auto caller = std::async(std::launch::async, [this]()
     {
-        m_single_shot_timer.start(5s, std::bind(&single_shot_test::callback, this));
+        EXPECT_FALSE(m_single_shot_timer.start(5s, std::bind(&single_shot_test::callback, this)));
     });
 
+    std::this_thread::sleep_for(1s);
     m_single_shot_timer.stop();
 
     EXPECT_FALSE(m_callback_called);

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(timers-tests VERSION 0.9.1 LANGUAGES CXX)
+project(timers-tests VERSION 0.9.2 LANGUAGES CXX)
 
 include("../cmake/gtest.cmake")
 include("../cmake/settings.cmake")

@@ -14,7 +14,7 @@ namespace timers
 using time_interval = std::chrono::duration<double>;
 using timers_callback = std::function<void()>;
 
-    class blocking : public disable_copy_and_move
+class blocking : public disable_copy_and_move
 {
 public:
     /// Waits and blocks current thread until the "time" elapses OR client code calls "terminate()"

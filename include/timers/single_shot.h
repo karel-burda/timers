@@ -10,12 +10,16 @@ namespace timers
 class single_shot : public blocking
 {
 public:
-    virtual void start(time_interval interval, timers_callback callback)
+    virtual bool start(time_interval interval, timers_callback callback)
     {
-        if (blocking::block(interval))
+        const auto terminated_after_time_elapsed = blocking::block(interval);
+
+        if (terminated_after_time_elapsed)
         {
             call_or_throw_if_callback_is_not_callable(std::move(callback));
         }
+
+        return terminated_after_time_elapsed;
     }
 
 protected:

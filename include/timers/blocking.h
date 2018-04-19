@@ -26,14 +26,14 @@ public:
             std::unique_lock<decltype(m_cv_protection)> lock{ m_cv_protection };
             m_terminated = false;
 
-            const auto terminated = !m_cv.wait_for(lock, time, [&]
+            const auto terminated_after_interval_elapsed = !m_cv.wait_for(lock, time, [&]
             {
                 return m_terminated;
             });
 
             m_terminated = true;
 
-            return terminated;
+            return terminated_after_interval_elapsed;
         }
     }
 

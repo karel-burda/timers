@@ -20,6 +20,19 @@ protected:
     burda::timers::blocking m_blocking_timer;
 };
 
+TEST(blocking_test_static, static_assertions)
+{
+    static_assert(std::is_default_constructible<burda::timers::blocking>::value, "blocking timer is not default constructible");
+
+    static_assert(!std::is_move_constructible<burda::timers::blocking>::value, "blocking timer is move constructible");
+    static_assert(!std::is_move_assignable<burda::timers::blocking>::value, "blocking timer is move assignable");
+
+    static_assert(!std::is_copy_constructible<burda::timers::blocking>::value, "blocking timer is copy constructible");
+    static_assert(!std::is_copy_assignable<burda::timers::blocking>::value, "blocking timer is copy assignable");
+
+    SUCCEED();
+}
+
 TEST(blocking_test_construction_destruction, basic_construction_destruction)
 {
     ASSERT_NO_THROW(burda::timers::blocking blocking_timer);

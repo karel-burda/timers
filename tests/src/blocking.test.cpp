@@ -8,37 +8,33 @@
 #include <timers/blocking.h>
 #include <timers/exceptions.h>
 
-#include "common.h"
+#include "static_assertions.h"
+#include "time_utils.h"
 
 namespace
 {
 using namespace std::chrono_literals;
+namespace timers = burda::timers;
 
 class blocking_test : public ::testing::Test
 {
 protected:
-    burda::timers::blocking m_blocking_timer;
+    timers::blocking m_blocking_timer;
 };
 
 TEST(blocking_test_static, static_assertions)
 {
-    static_assert(std::is_default_constructible<burda::timers::blocking>::value, "blocking timer is not default constructible");
-
-    static_assert(!std::is_move_constructible<burda::timers::blocking>::value, "blocking timer is move constructible");
-    static_assert(!std::is_move_assignable<burda::timers::blocking>::value, "blocking timer is move assignable");
-
-    static_assert(!std::is_copy_constructible<burda::timers::blocking>::value, "blocking timer is copy constructible");
-    static_assert(!std::is_copy_assignable<burda::timers::blocking>::value, "blocking timer is copy assignable");
+    assert_properties<timers::blocking>();
 
     SUCCEED();
 }
 
 TEST(blocking_test_construction_destruction, basic_construction_destruction)
 {
-    ASSERT_NO_THROW(burda::timers::blocking blocking_timer);
+    ASSERT_NO_THROW(timers::blocking blocking_timer);
 
-    burda::timers::blocking blocking_timer;
-    EXPECT_NO_THROW(blocking_timer.burda::timers::blocking::~blocking());
+    timers::blocking blocking_timer;
+    EXPECT_NO_THROW(blocking_timer.timers::blocking::~blocking());
 }
 
 TEST_F(blocking_test, default_values)
@@ -53,19 +49,19 @@ TEST_F(blocking_test, block_not_throwing)
 
 TEST_F(blocking_test, block_throwing)
 {
-    EXPECT_THROW(m_blocking_timer.block(0h), burda::timers::exceptions::time_period_zero);
-    EXPECT_THROW(m_blocking_timer.block(-1ms), burda::timers::exceptions::time_period_negative);
+    EXPECT_THROW(m_blocking_timer.block(0h), timers::exceptions::time_period_zero);
+    EXPECT_THROW(m_blocking_timer.block(-1ms), timers::exceptions::time_period_negative);
 }
 
 TEST_F(blocking_test, block_time)
 {
     // TODO: move this measuring into some common macro
-    const auto start = burda::timers::testing::clock::now();
+    const auto start = timers::testing::clock::now();
     EXPECT_TRUE(m_blocking_timer.block(2s));
-    const auto end = burda::timers::testing::clock::now();
-    const auto elapsed = burda::timers::testing::round_to_seconds(end - start);
+    const auto end = timers::testing::clock::now();
+    const auto elapsed = timers::testing::round_to_seconds(end - start);
 
-    burda::timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 2.0, 100.0);
+    timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 2.0, 100.0);
 }
 
 TEST_F(blocking_test, block_and_stop)
@@ -84,19 +80,19 @@ TEST_F(blocking_test, block_and_stop)
 
 TEST_F(blocking_test, block_multiple_times)
 {
-    const auto start = burda::timers::testing::clock::now();
+    const auto start = timers::testing::clock::now();
     EXPECT_TRUE(m_blocking_timer.block(1s));
     EXPECT_TRUE(m_blocking_timer.block(4s));
-    const auto end = burda::timers::testing::clock::now();
-    const auto elapsed = burda::timers::testing::round_to_seconds(end - start);
+    const auto end = timers::testing::clock::now();
+    const auto elapsed = timers::testing::round_to_seconds(end - start);
 
-    burda::timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 5.0, 100.0);
+    timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 5.0, 100.0);
     EXPECT_TRUE(m_blocking_timer.m_terminated);
 }
 
 TEST_F(blocking_test, block_multiple_times_in_parallel)
 {
-    const auto start = burda::timers::testing::clock::now();
+    const auto start = timers::testing::clock::now();
 
     auto caller1 = std::async(std::launch::async, [this]()
     {
@@ -111,10 +107,10 @@ TEST_F(blocking_test, block_multiple_times_in_parallel)
     caller1.get();
     caller2.get();
 
-    const auto end = burda::timers::testing::clock::now();
-    const auto elapsed = burda::timers::testing::round_to_seconds(end - start);
+    const auto end = timers::testing::clock::now();
+    const auto elapsed = timers::testing::round_to_seconds(end - start);
 
-    burda::timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 10.0, 100.0);
+    timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 10.0, 100.0);
 }
 
 TEST_F(blocking_test, stop)

@@ -8,11 +8,13 @@
 #include "make_all_members_public.h"
 #include <timers/periodic.h>
 
-#include "common.h"
+#include "static_assertions.h"
+#include "time_utils.h"
 
 namespace
 {
 using namespace std::chrono_literals;
+namespace timers = burda::timers;
 
 class periodic_test : public ::testing::Test
 {
@@ -23,15 +25,22 @@ protected:
     }
 
     unsigned char m_counter = 0;
-    burda::timers::periodic m_periodic_timer;
+    timers::periodic m_periodic_timer;
 };
+
+TEST(blocking_test_static, static_assertions)
+{
+    assert_properties<timers::periodic>();
+
+    SUCCEED();
+}
 
 TEST(periodic_construction_destruction, basic_construction_destruction)
 {
-    ASSERT_NO_THROW(burda::timers::periodic periodic_timer);
+    ASSERT_NO_THROW(timers::periodic periodic_timer);
 
-    burda::timers::periodic periodic_timer;
-    EXPECT_NO_THROW(periodic_timer.burda::timers::periodic::~periodic());
+    timers::periodic periodic_timer;
+    EXPECT_NO_THROW(periodic_timer.timers::periodic::~periodic());
 }
 
 TEST_F(periodic_test, callback)

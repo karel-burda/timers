@@ -21,7 +21,7 @@ public:
         return terminated_after_time_elapsed;
     }
 
-protected:
+private:
     void call_or_throw_if_callback_is_not_callable(timers_callback && callback)
     {
         if (callback)

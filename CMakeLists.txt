@@ -18,7 +18,8 @@ if (UNIT-TESTS)
 
     # "enable_testing()" has to be called in the top-level cmake
     enable_testing()
-    add_subdirectory(tests)
+    add_subdirectory(tests/unit)
 endif()
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} ${CMAKE_RELATED} ${OTHER})
+

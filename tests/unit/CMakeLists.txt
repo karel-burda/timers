@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.0)
 
 project(timers-tests VERSION 0.9.2 LANGUAGES CXX)
 
-include("../cmake/gtest.cmake")
-include("../cmake/settings.cmake")
-include("../cmake/warnings.cmake")
+include("${CMAKE_SOURCE_DIR}/cmake/gtest.cmake")
+include("${CMAKE_SOURCE_DIR}/cmake/settings.cmake")
+include("${CMAKE_SOURCE_DIR}/cmake/warnings.cmake")
 
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB_RECURSE SOURCES src/*.c*)
@@ -18,3 +18,4 @@ target_link_libraries(${PROJECT_NAME} gtest gtest_main)
 
 add_test(${PROJECT_NAME} ${PROJECT_NAME})
 add_custom_target(run-all-tests-verbose COMMAND ${CMAKE_CTEST_COMMAND} -V DEPENDS ${PROJECT_NAME})
+

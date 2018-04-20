@@ -57,13 +57,11 @@ TEST_F(single_shot_test, callback_throwing)
 
 TEST_F(single_shot_test, callback_multiple_times)
 {
-    const auto start = timers::testing::clock::now();
-
-    EXPECT_TRUE(m_single_shot_timer.start(3s, std::bind(&single_shot_test::callback, this)));
-    EXPECT_TRUE(m_single_shot_timer.start(3s, std::bind(&single_shot_test::callback, this)));
-
-    const auto end = timers::testing::clock::now();
-    const auto elapsed = timers::testing::round_to_seconds(end - start);
+    const auto elapsed = timers::testing::measure_time([this]()
+    {
+        EXPECT_TRUE(m_single_shot_timer.start(3s, std::bind(&single_shot_test::callback, this)));
+        EXPECT_TRUE(m_single_shot_timer.start(3s, std::bind(&single_shot_test::callback, this)));
+    });
 
     timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 6.0, 100.0);
 }

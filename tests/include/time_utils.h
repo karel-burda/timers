@@ -34,7 +34,14 @@ inline double round_to_seconds(const std::chrono::nanoseconds & ns)
 
 inline double measure_time(std::function<void()> action)
 {
-    return 0.0;
+    const auto start = timers::testing::clock::now();
+    if (action)
+    {
+        action();
+    }
+    const auto end = timers::testing::clock::now();
+
+    return timers::testing::round_to_seconds(end - start);
 }
 }
 }

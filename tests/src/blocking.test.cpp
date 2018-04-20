@@ -53,11 +53,10 @@ TEST_F(blocking_test, block_throwing)
 
 TEST_F(blocking_test, block_time)
 {
-    // TODO: move this measuring into some common function (the contents will be in lambda)
-    const auto start = timers::testing::clock::now();
-    EXPECT_TRUE(m_blocking_timer.block(2s));
-    const auto end = timers::testing::clock::now();
-    const auto elapsed = timers::testing::round_to_seconds(end - start);
+    const auto elapsed = timers::testing::measure_time([this]()
+    {
+        EXPECT_TRUE(m_blocking_timer.block(2s));
+    });
 
     timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 2.0, 100.0);
 }
@@ -78,11 +77,11 @@ TEST_F(blocking_test, block_and_stop)
 
 TEST_F(blocking_test, block_multiple_times)
 {
-    const auto start = timers::testing::clock::now();
-    EXPECT_TRUE(m_blocking_timer.block(1s));
-    EXPECT_TRUE(m_blocking_timer.block(4s));
-    const auto end = timers::testing::clock::now();
-    const auto elapsed = timers::testing::round_to_seconds(end - start);
+    const auto elapsed = timers::testing::measure_time([this]()
+    {
+        EXPECT_TRUE(m_blocking_timer.block(1s));
+        EXPECT_TRUE(m_blocking_timer.block(4s));
+    });
 
     timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 5.0, 100.0);
     EXPECT_TRUE(m_blocking_timer.m_terminated);
@@ -90,23 +89,21 @@ TEST_F(blocking_test, block_multiple_times)
 
 TEST_F(blocking_test, block_multiple_times_in_parallel)
 {
-    const auto start = timers::testing::clock::now();
-
-    auto caller1 = std::async(std::launch::async, [this]()
+    const auto elapsed = timers::testing::measure_time([this]()
     {
-        EXPECT_TRUE(m_blocking_timer.block(5s));
+        auto caller1 = std::async(std::launch::async, [this]()
+        {
+            EXPECT_TRUE(m_blocking_timer.block(5s));
+        });
+
+        auto caller2 = std::async(std::launch::async, [this]()
+        {
+            EXPECT_TRUE(m_blocking_timer.block(5s));
+        });
+
+        caller1.get();
+        caller2.get();
     });
-
-    auto caller2 = std::async(std::launch::async, [this]()
-    {
-        EXPECT_TRUE(m_blocking_timer.block(5s));
-    });
-
-    caller1.get();
-    caller2.get();
-
-    const auto end = timers::testing::clock::now();
-    const auto elapsed = timers::testing::round_to_seconds(end - start);
 
     timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 10.0, 100.0);
 }

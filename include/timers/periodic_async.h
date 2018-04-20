@@ -11,12 +11,14 @@ namespace timers
 class periodic_async : public periodic
 {
 public:
-    void start(std::function<void()> callback) override
+    bool start(time_interval interval, timers_callback callback) override
     {
-        m_async_task = std::async(std::launch::async, [this, &callback]
+        m_async_task = std::async(std::launch::async, [this, interval, &callback]
         {
-            periodic::start(std::move(callback));
+            periodic::start(interval, std::move(callback));
         });
+
+        return false;
     }
 
     void stop() override

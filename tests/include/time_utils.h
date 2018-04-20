@@ -31,6 +31,11 @@ inline double round_to_seconds(const std::chrono::nanoseconds & ns)
 {
     return std::round(ns.count() / 1000.0 / 1000.0 / 1000.0);
 }
+
+inline double measure_time(std::function<void()> action)
+{
+    return 0.0;
+}
 }
 }
 }

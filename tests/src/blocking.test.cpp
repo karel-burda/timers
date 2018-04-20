@@ -9,6 +9,7 @@
 #include <timers/exceptions.h>
 
 #include "static_assertions.h"
+#include "test_utils.h"
 #include "time_utils.h"
 
 namespace
@@ -22,19 +23,16 @@ protected:
     timers::blocking m_blocking_timer;
 };
 
-TEST(blocking_test_static, static_assertions)
+TEST_F(blocking_test, static_assertions)
 {
-    assert_properties<timers::blocking>();
+    burda::timers::testing::assert_properties<decltype(m_blocking_timer)>();
 
     SUCCEED();
 }
 
 TEST(blocking_test_construction_destruction, basic_construction_destruction)
 {
-    ASSERT_NO_THROW(timers::blocking blocking_timer);
-
-    timers::blocking blocking_timer;
-    EXPECT_NO_THROW(blocking_timer.timers::blocking::~blocking());
+    burda::timers::testing::assert_construction_and_destruction<burda::timers::blocking>();
 }
 
 TEST_F(blocking_test, default_values)
@@ -55,7 +53,7 @@ TEST_F(blocking_test, block_throwing)
 
 TEST_F(blocking_test, block_time)
 {
-    // TODO: move this measuring into some common macro
+    // TODO: move this measuring into some common function (the contents will be in lambda)
     const auto start = timers::testing::clock::now();
     EXPECT_TRUE(m_blocking_timer.block(2s));
     const auto end = timers::testing::clock::now();

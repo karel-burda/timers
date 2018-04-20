@@ -9,7 +9,7 @@ namespace timers
 class periodic : public single_shot
 {
 public:
-    bool start(time_interval interval, timers_callback callback)
+    bool start(time_interval interval, timers_callback callback) override
     {
         while(single_shot::start(interval, std::move(callback)));
 

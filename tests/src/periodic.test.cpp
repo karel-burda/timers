@@ -9,6 +9,7 @@
 #include <timers/periodic.h>
 
 #include "static_assertions.h"
+#include "test_utils.h"
 #include "time_utils.h"
 
 namespace
@@ -28,19 +29,16 @@ protected:
     timers::periodic m_periodic_timer;
 };
 
-TEST(blocking_test_static, static_assertions)
+TEST_F(periodic_test, static_assertions)
 {
-    assert_properties<timers::periodic>();
+    burda::timers::testing::assert_properties<decltype(m_periodic_timer)>();
 
     SUCCEED();
 }
 
 TEST(periodic_construction_destruction, basic_construction_destruction)
 {
-    ASSERT_NO_THROW(timers::periodic periodic_timer);
-
-    timers::periodic periodic_timer;
-    EXPECT_NO_THROW(periodic_timer.timers::periodic::~periodic());
+    burda::timers::testing::assert_construction_and_destruction<burda::timers::periodic>();
 }
 
 TEST_F(periodic_test, callback)

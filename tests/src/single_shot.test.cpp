@@ -9,6 +9,7 @@
 #include <timers/single_shot.h>
 
 #include "static_assertions.h"
+#include "test_utils.h"
 #include "time_utils.h"
 
 namespace
@@ -28,19 +29,16 @@ protected:
     bool m_callback_called = false;
 };
 
-TEST(blocking_test_static, static_assertions)
+TEST_F(single_shot_test, static_assertions)
 {
-    assert_properties<timers::single_shot>();
+    burda::timers::testing::assert_properties<decltype(m_single_shot_timer)>();
 
     SUCCEED();
 }
 
 TEST(single_shot_construction_destruction, basic_construction_destruction)
 {
-    ASSERT_NO_THROW(timers::single_shot single_shot_timer);
-
-    timers::single_shot single_shot_timer;
-    EXPECT_NO_THROW(single_shot_timer.timers::single_shot::~single_shot());
+    burda::timers::testing::assert_construction_and_destruction<burda::timers::single_shot>();
 }
 
 TEST_F(single_shot_test, callback_called)

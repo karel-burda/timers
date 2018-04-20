@@ -47,8 +47,8 @@ TEST_F(blocking_test, block_not_throwing)
 
 TEST_F(blocking_test, block_throwing)
 {
-    EXPECT_THROW(m_blocking_timer.block(0h), timers::exceptions::time_period_zero);
-    EXPECT_THROW(m_blocking_timer.block(-1ms), timers::exceptions::time_period_negative);
+    EXPECT_THROW(m_blocking_timer.block(0h), timers::exceptions::time_period_is_zero);
+    EXPECT_THROW(m_blocking_timer.block(-1ms), timers::exceptions::time_period_is_negative);
 }
 
 TEST_F(blocking_test, block_time)

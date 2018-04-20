@@ -57,11 +57,11 @@ private:
     {
         if (time == time.zero())
         {
-            throw exceptions::time_period_zero{};
+            throw exceptions::time_period_is_zero{};
         }
         else if (time < time.zero())
         {
-            throw exceptions::time_period_negative{};
+            throw exceptions::time_period_is_negative{};
         }
     }
 

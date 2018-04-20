@@ -52,6 +52,8 @@ TEST_F(single_shot_test, callback_called)
 
 TEST_F(single_shot_test, callback_throwing)
 {
+    EXPECT_THROW(m_single_shot_timer.start(0s, std::bind(&single_shot_test::callback, this)), timers::exceptions::time_period_is_zero);
+    EXPECT_THROW(m_single_shot_timer.start(-1h, std::bind(&single_shot_test::callback, this)), timers::exceptions::time_period_is_negative);
     EXPECT_THROW(m_single_shot_timer.start(3s, nullptr), timers::exceptions::callback_not_callable);
 }
 

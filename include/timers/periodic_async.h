@@ -8,6 +8,7 @@ namespace burda
 {
 namespace timers
 {
+// TODO: inherit from single_shot async? Or create generic abstract class "async"?
 class periodic_async : public periodic
 {
 public:

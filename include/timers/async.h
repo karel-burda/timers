@@ -9,7 +9,7 @@ namespace burda
 namespace timers
 {
 template <typename underlying_timer>
-class async : disable_copy_and_move
+class async : public underlying_timer
 {
 public:
     bool start(time_interval interval, timers_callback callback)

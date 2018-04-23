@@ -7,7 +7,7 @@ namespace burda
 {
 namespace timers
 {
-class single_shot_async : public single_shot, async<single_shot>
+class single_shot_async : public async<single_shot>
 {
 };
 }

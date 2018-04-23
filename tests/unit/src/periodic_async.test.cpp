@@ -25,13 +25,13 @@ protected:
 
 TEST_F(periodic_async_test, static_assertions)
 {
-    burda::timers::testing::assert_properties<decltype(m_periodic_async_timer)>();
+    timers::testing::assert_properties<decltype(m_periodic_async_timer)>();
 
     SUCCEED();
 }
 
 TEST(periodic_async_construction_destruction, basic_construction_destruction)
 {
-    burda::timers::testing::assert_construction_and_destruction<burda::timers::periodic_async>();
+    timers::testing::assert_construction_and_destruction<burda::timers::periodic_async>();
 }
 }

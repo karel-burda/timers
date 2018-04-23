@@ -30,14 +30,14 @@ protected:
 
 TEST_F(single_shot_async_test, static_assertions)
 {
-    burda::timers::testing::assert_properties<decltype(m_single_shot_async_timer)>();
+    timers::testing::assert_properties<decltype(m_single_shot_async_timer)>();
 
     SUCCEED();
 }
 
 TEST(single_shot_async_construction_destruction, basic_construction_destruction)
 {
-    burda::timers::testing::assert_construction_and_destruction<burda::timers::single_shot_async>();
+    timers::testing::assert_construction_and_destruction<burda::timers::single_shot_async>();
 }
 
 TEST_F(single_shot_async_test, callback_called)

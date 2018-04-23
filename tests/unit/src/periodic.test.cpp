@@ -31,14 +31,14 @@ protected:
 
 TEST_F(periodic_test, static_assertions)
 {
-    burda::timers::testing::assert_properties<decltype(m_periodic_timer)>();
+    timers::testing::assert_properties<decltype(m_periodic_timer)>();
 
     SUCCEED();
 }
 
 TEST(periodic_construction_destruction, basic_construction_destruction)
 {
-    burda::timers::testing::assert_construction_and_destruction<burda::timers::periodic>();
+    timers::testing::assert_construction_and_destruction<burda::timers::periodic>();
 }
 
 TEST_F(periodic_test, callback_called)

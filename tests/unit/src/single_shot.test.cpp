@@ -31,14 +31,14 @@ protected:
 
 TEST_F(single_shot_test, static_assertions)
 {
-    burda::timers::testing::assert_properties<decltype(m_single_shot_timer)>();
+    timers::testing::assert_properties<decltype(m_single_shot_timer)>();
 
     SUCCEED();
 }
 
 TEST(single_shot_construction_destruction, basic_construction_destruction)
 {
-    burda::timers::testing::assert_construction_and_destruction<burda::timers::single_shot>();
+    timers::testing::assert_construction_and_destruction<burda::timers::single_shot>();
 }
 
 TEST_F(single_shot_test, callback_called)

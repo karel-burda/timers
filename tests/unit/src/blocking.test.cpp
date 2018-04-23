@@ -25,14 +25,14 @@ protected:
 
 TEST_F(blocking_test, static_assertions)
 {
-    burda::timers::testing::assert_properties<decltype(m_blocking_timer)>();
+    timers::testing::assert_properties<decltype(m_blocking_timer)>();
 
     SUCCEED();
 }
 
 TEST(blocking_test_construction_destruction, basic_construction_destruction)
 {
-    burda::timers::testing::assert_construction_and_destruction<burda::timers::blocking>();
+    timers::testing::assert_construction_and_destruction<burda::timers::blocking>();
 }
 
 TEST_F(blocking_test, default_values)

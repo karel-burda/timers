@@ -42,7 +42,7 @@ TEST(single_shot_async_construction_destruction, basic_construction_destruction)
 
 TEST_F(single_shot_async_test, callback_called)
 {
-    m_single_shot_async_timer.start(2s, std::bind(&single_shot_async_test::callback, this));
+    EXPECT_FALSE(m_single_shot_async_timer.start(2s, std::bind(&single_shot_async_test::callback, this)));
 
     std::this_thread::sleep_for(5s);
 

@@ -13,7 +13,7 @@ file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "README.md")
 include_directories(include)
 
 option(UNIT-TESTS "Build unit tests" OFF)
-option(PERFORMANCE-TESTS "Build unit tests" OFF)
+option(PERFORMANCE-TESTS "Build performance tests" OFF)
 
 if (UNIT-TESTS)
     message(STATUS "Building with unit tests")

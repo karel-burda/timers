@@ -52,6 +52,26 @@ TEST_F(single_shot_async_test, callback_called)
     // TODO: test throwing callbacks
 }
 
+TEST_F(single_shot_async_test, callback_multiple_times)
+{
+    const auto start = timers::testing::clock::now();
+    auto end = timers::testing::clock::now();
+
+    m_single_shot_async_timer.start(2s, [&end]()
+    {
+        end = timers::testing::clock::now();
+    });
+
+    m_single_shot_async_timer.start(2s, [&end]()
+    {
+        end = timers::testing::clock::now();
+    });
+
+    std::this_thread::sleep_for(5s);
+
+    timers::testing::assert_that_elapsed_time_in_tolerance(timers::testing::round_to_seconds(end - start), 4.0, 100.0);
+}
+
 TEST_F(single_shot_async_test, stop)
 {
     m_single_shot_async_timer.start(4s, std::bind(&single_shot_async_test::callback, this));

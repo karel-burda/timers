@@ -38,6 +38,7 @@ TEST(blocking_test_construction_destruction, basic_construction_destruction)
 TEST_F(blocking_test, default_values)
 {
     EXPECT_FALSE(m_blocking_timer.m_terminated);
+    timers::testing::check_whether_mutex_is_owned(m_blocking_timer.m_block_protection, false);
 }
 
 TEST_F(blocking_test, block_not_throwing)
@@ -101,6 +102,8 @@ TEST_F(blocking_test, block_multiple_times_in_parallel)
             EXPECT_TRUE(m_blocking_timer.block(5s));
         });
 
+        timers::testing::check_whether_mutex_is_owned(m_blocking_timer.m_block_protection, true);
+
         caller1.get();
         caller2.get();
     });
@@ -115,5 +118,6 @@ TEST_F(blocking_test, stop)
     m_blocking_timer.m_terminated = false;
     m_blocking_timer.stop();
     EXPECT_TRUE(m_blocking_timer.m_terminated);
+    timers::testing::check_whether_mutex_is_owned(m_blocking_timer.m_block_protection, false);
 }
 }

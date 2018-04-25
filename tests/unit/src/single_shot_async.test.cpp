@@ -40,6 +40,14 @@ TEST(single_shot_async_construction_destruction, basic_construction_destruction)
     timers::testing::assert_construction_and_destruction<burda::timers::single_shot_async>();
 }
 
+TEST_F(single_shot_async_test, default_values)
+{
+    // TODO: find out why this crashes
+    //EXPECT_TRUE(m_single_shot_async_timer.m_async_task.wait_for(0s) == std::future_status::ready);
+
+    timers::testing::check_whether_mutex_is_owned(m_single_shot_async_timer.m_protection, false);
+}
+
 TEST_F(single_shot_async_test, callback_called)
 {
     EXPECT_FALSE(m_single_shot_async_timer.start(2s, std::bind(&single_shot_async_test::callback, this)));

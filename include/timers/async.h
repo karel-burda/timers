@@ -1,6 +1,6 @@
 #pragma once
 
-#include "timers/blocking.h"
+#include "timers/type_definitions.h"
 
 #include <future>
 #include <memory>
@@ -16,16 +16,19 @@ class async : public underlying_timer
 public:
     bool start(time_interval interval, timers_callback callback) override
     {
-        std::lock_guard<decltype(m_protection)> lock{ m_protection };
+        std::lock_guard<decltype(m_protection)> lock { m_protection };
 
-        m_async_task = std::async(std::launch::async, &underlying_timer::start, this, interval, std::move(callback));
+        m_async_task = std::async(std::launch::async, [this, interval, &callback]
+        {
+            underlying_timer::start(interval, std::move(callback));
+        });
 
         return false;
     }
 
     void stop() override
     {
-        std::lock_guard<decltype(m_protection)> lock{ m_protection };
+        std::lock_guard<decltype(m_protection)> lock { m_protection };
 
         underlying_timer::stop();
 
@@ -33,7 +36,7 @@ public:
     }
 
 private:
-    std::future<bool> m_async_task;
+    std::future<void> m_async_task;
     std::mutex m_protection;
 };
 }

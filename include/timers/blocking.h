@@ -6,14 +6,12 @@
 
 #include "timers/disable_copy_and_move.h"
 #include "timers/exceptions.h"
+#include "timers/type_definitions.h"
 
 namespace burda
 {
 namespace timers
 {
-using time_interval = std::chrono::duration<double>;
-using timers_callback = std::function<void()>;
-
 class blocking : disable_copy_and_move
 {
 public:

@@ -102,6 +102,7 @@ TEST_F(blocking_test, block_multiple_times_in_parallel)
             EXPECT_TRUE(m_blocking_timer.block(5s));
         });
 
+        std::this_thread::sleep_for(2s);
         timers::testing::check_whether_mutex_is_owned(m_blocking_timer.m_block_protection, true);
 
         caller1.wait();

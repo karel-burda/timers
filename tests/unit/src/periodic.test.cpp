@@ -49,11 +49,11 @@ TEST_F(periodic_test, callback_called)
     });
 
     std::this_thread::sleep_for(6s);
-    caller.get();
-
-    EXPECT_GE(m_counter, 5);
 
     m_periodic_timer.stop();
+    caller.wait();
+
+    EXPECT_GE(m_counter, 4);
 }
 
 TEST_F(periodic_test, callback_throwing)

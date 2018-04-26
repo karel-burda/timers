@@ -25,7 +25,7 @@ public:
     {
         std::lock_guard<decltype(m_protection)> lock { m_protection };
 
-        m_async_task = std::async(std::launch::async, [this, interval, &callback]
+        m_async_task = std::async(std::launch::async, [this, interval, callback]
         {
             underlying_timer::start(interval, std::move(callback));
         });

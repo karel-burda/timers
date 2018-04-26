@@ -71,7 +71,7 @@ TEST_F(blocking_test, block_and_stop)
     });
 
     EXPECT_FALSE(m_blocking_timer.block(10s));
-    terminator.get();
+    terminator.wait();
 
     EXPECT_TRUE(m_blocking_timer.m_terminated);
 }
@@ -104,8 +104,8 @@ TEST_F(blocking_test, block_multiple_times_in_parallel)
 
         timers::testing::check_whether_mutex_is_owned(m_blocking_timer.m_block_protection, true);
 
-        caller1.get();
-        caller2.get();
+        caller1.wait();
+        caller2.wait();
     });
 
     timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 10.0, 100.0);

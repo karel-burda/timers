@@ -39,7 +39,7 @@ public:
 
         underlying_timer::stop();
 
-        m_async_task.get();
+        m_async_task.wait();
     }
 
 private:

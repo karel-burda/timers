@@ -89,6 +89,6 @@ TEST_F(single_shot_test, stop_before_callback)
 
     EXPECT_FALSE(m_callback_called);
 
-    caller.get();
+    caller.wait();
 }
 }

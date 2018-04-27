@@ -70,7 +70,7 @@ TEST_F(periodic_test, stop)
         m_periodic_timer.start(1s, std::bind(&periodic_test::callback, this));
     });
 
-    std::this_thread::sleep_for(1s);
+    std::this_thread::sleep_for(3s);
 
     EXPECT_NO_THROW(m_periodic_timer.stop());
     EXPECT_TRUE(m_periodic_timer.m_terminated);

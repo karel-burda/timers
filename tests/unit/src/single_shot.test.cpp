@@ -1,4 +1,5 @@
 #include <chrono>
+#include <exception>
 #include <functional>
 #include <future>
 #include <thread>
@@ -50,11 +51,20 @@ TEST_F(single_shot_test, callback_called)
     EXPECT_TRUE(m_callback_called);
 }
 
-TEST_F(single_shot_test, callback_throwing)
+TEST_F(single_shot_test, start_throwing)
 {
     EXPECT_THROW(m_single_shot_timer.start(0s, std::bind(&single_shot_test::callback, this)), timers::exceptions::time_period_is_zero);
     EXPECT_THROW(m_single_shot_timer.start(-1h, std::bind(&single_shot_test::callback, this)), timers::exceptions::time_period_is_negative);
     EXPECT_THROW(m_single_shot_timer.start(3s, nullptr), timers::exceptions::callback_not_callable);
+}
+
+TEST_F(single_shot_test, callback_throwing)
+{
+    EXPECT_ANY_THROW(m_single_shot_timer.start(1s, [](){ throw std::exception{}; }));
+
+    timers::testing::check_if_mutex_is_owned(m_single_shot_timer.m_block_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_single_shot_timer.m_cv_protection, false);
+    EXPECT_TRUE(m_single_shot_timer.m_terminated);
 }
 
 TEST_F(single_shot_test, callback_multiple_times)

@@ -61,6 +61,15 @@ TEST_F(single_shot_async_test, callback_called)
     // TODO: test throwing callbacks
 }
 
+TEST_F(single_shot_async_test, callback_throwing)
+{
+    EXPECT_ANY_THROW(m_single_shot_async_timer.start(1s, [](){ throw std::exception{}; }));
+
+    timers::testing::check_if_mutex_is_owned(m_single_shot_async_timer.m_block_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_single_shot_async_timer.m_cv_protection, false);
+    EXPECT_TRUE(m_single_shot_async_timer.m_terminated);
+}
+
 TEST_F(single_shot_async_test, callback_multiple_times)
 {
     const auto start = timers::testing::clock::now();

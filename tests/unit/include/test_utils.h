@@ -19,16 +19,7 @@ void assert_construction_and_destruction()
     EXPECT_NO_THROW(instance.~class_type());
 }
 
-// TODO: Move this and more utils into the cpp
-inline void check_whether_mutex_is_owned(std::mutex & mutex, bool should_be_owned)
-{
-    const auto is_mutex_owned = !mutex.try_lock();
-    EXPECT_EQ(is_mutex_owned, should_be_owned);
-    if (!is_mutex_owned)
-    {
-        mutex.unlock();
-    }
-}
+void check_if_mutex_is_owned(std::mutex & mutex, bool should_be_owned);
 }
 }
 }

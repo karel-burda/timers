@@ -6,6 +6,7 @@
 #include <type_traits>
 
 #include "timers/type_definitions.h"
+#include "timers/policies.h"
 
 namespace burda
 {
@@ -21,13 +22,13 @@ static_assert(std::is_same<underlying_timer, periodic>::value || std::is_same<un
               "Only periodic or single_shot timers are allowed to behave in an asynchronous way");
 
 public:
-    bool start(time_interval interval, timers_callback callback) override
+    bool start(time_interval interval, timers_callback callback, callback_exception_policy policy = get_default_callback_policy()) override
     {
         std::lock_guard<decltype(m_protection)> lock { m_protection };
 
-        m_async_task = std::async(std::launch::async, [this, interval, callback]
+        m_async_task = std::async(std::launch::async, [this, interval, callback, policy]
         {
-            underlying_timer::start(interval, std::move(callback));
+            underlying_timer::start(interval, std::move(callback), policy);
         });
 
         return false;

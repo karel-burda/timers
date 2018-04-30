@@ -24,13 +24,15 @@ protected:
         m_callback_called = true;
     }
 
-    timers::single_shot_async m_single_shot_async_timer;
+    timers::single_shot_async m_timer;
     bool m_callback_called = false;
 };
 
 TEST_F(single_shot_async_test, static_assertions)
 {
-    timers::testing::assert_properties<decltype(m_single_shot_async_timer)>();
+    timers::testing::assert_default_constructibility<timers::single_shot_async>();
+    timers::testing::assert_copy_constructibility<timers::single_shot_async>();
+    timers::testing::assert_move_constructibility<timers::single_shot_async>();
 
     SUCCEED();
 }
@@ -45,32 +47,30 @@ TEST_F(single_shot_async_test, default_values)
     // TODO: find out why this crashes
     //EXPECT_TRUE(m_single_shot_async_timer.m_async_task.wait_for(0s) == std::future_status::ready);
 
-    timers::testing::check_if_mutex_is_owned(m_single_shot_async_timer.m_protection, false);
-    timers::testing::check_if_mutex_is_owned(m_single_shot_async_timer.m_cv_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_timer.m_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
 }
 
 TEST_F(single_shot_async_test, callback_called)
 {
-    EXPECT_FALSE(m_single_shot_async_timer.start(2s, std::bind(&single_shot_async_test::callback, this)));
+    EXPECT_FALSE(m_timer.start(2s, std::bind(&single_shot_async_test::callback, this)));
 
     std::this_thread::sleep_for(5s);
 
-    EXPECT_TRUE(m_single_shot_async_timer.blocking::m_terminated);
+    EXPECT_TRUE(m_timer.blocking::m_terminated);
     EXPECT_TRUE(m_callback_called);
-
-    // TODO: test throwing callbacks
 }
 
-TEST_F(single_shot_async_test, callback_throwing)
+TEST_F(single_shot_async_test, start_exception_policy_stop)
 {
-    EXPECT_NO_THROW(m_single_shot_async_timer.start(1s, [](){ throw std::exception{}; }));
+    EXPECT_NO_THROW(m_timer.start(1s, [](){ throw std::exception{}; }, timers::callback_exception_policy::stop));
 
-    std::this_thread::sleep_for(2s);
+    std::this_thread::sleep_for(4s);
 
-    timers::testing::check_if_mutex_is_owned(m_single_shot_async_timer.m_protection, false);
-    timers::testing::check_if_mutex_is_owned(m_single_shot_async_timer.m_block_protection, false);
-    timers::testing::check_if_mutex_is_owned(m_single_shot_async_timer.m_cv_protection, false);
-    EXPECT_TRUE(m_single_shot_async_timer.m_terminated);
+    timers::testing::check_if_mutex_is_owned(m_timer.m_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+    EXPECT_TRUE(m_timer.m_terminated);
 }
 
 TEST_F(single_shot_async_test, callback_multiple_times)
@@ -78,11 +78,11 @@ TEST_F(single_shot_async_test, callback_multiple_times)
     const auto start = timers::testing::clock::now();
     auto end = timers::testing::clock::now();
 
-    EXPECT_FALSE(m_single_shot_async_timer.start(1s, [&end]()
+    EXPECT_FALSE(m_timer.start(1s, [&end]()
     {
         end = timers::testing::clock::now();
     }));
-    EXPECT_FALSE(m_single_shot_async_timer.start(3s, [&end]()
+    EXPECT_FALSE(m_timer.start(3s, [&end]()
     {
         end = timers::testing::clock::now();
     }));
@@ -94,13 +94,13 @@ TEST_F(single_shot_async_test, callback_multiple_times)
 
 TEST_F(single_shot_async_test, stop)
 {
-    m_single_shot_async_timer.start(4s, std::bind(&single_shot_async_test::callback, this));
+    m_timer.start(4s, std::bind(&single_shot_async_test::callback, this));
 
     std::this_thread::sleep_for(1s);
 
-    m_single_shot_async_timer.stop();
+    m_timer.stop();
 
-    EXPECT_TRUE(m_single_shot_async_timer.blocking::m_terminated);
+    EXPECT_TRUE(m_timer.blocking::m_terminated);
     EXPECT_FALSE(m_callback_called);
 }
 }

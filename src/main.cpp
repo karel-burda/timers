@@ -1,6 +1,5 @@
 #include <chrono>
 #include <cstdlib>
-#include <iostream>
 #include <thread>
 
 #include "timers/blocking.h"

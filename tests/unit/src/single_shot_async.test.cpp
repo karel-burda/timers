@@ -1,3 +1,4 @@
+#include <atomic>
 #include <chrono>
 #include <future>
 #include <thread>
@@ -90,6 +91,28 @@ TEST_F(single_shot_async_test, callback_multiple_times)
     std::this_thread::sleep_for(5s);
 
     timers::testing::assert_that_elapsed_time_in_tolerance(timers::testing::round_to_seconds(end - start), 4.0, 100.0);
+}
+
+TEST_F(single_shot_async_test, start_in_parallel)
+{
+    std::atomic<unsigned char> counter = 0;
+    bool taskFinished1 = false;
+    bool taskFinished2 = false;
+
+    EXPECT_FALSE(m_timer.start(2s, [&counter, &taskFinished1]()
+    {
+        ++counter;
+        taskFinished1 = true;
+    }));
+    EXPECT_FALSE(m_timer.start(2s, [&counter, &taskFinished2]()
+    {
+        ++counter;
+        taskFinished2 = true;
+    }));
+
+    while (!taskFinished1 && !taskFinished2);
+
+    EXPECT_EQ(counter, 2);
 }
 
 TEST_F(single_shot_async_test, stop)

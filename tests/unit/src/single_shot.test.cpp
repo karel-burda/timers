@@ -80,6 +80,25 @@ TEST_F(single_shot_test, callback_multiple_times)
     timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 6.0, 100.0);
 }
 
+TEST_F(single_shot_test, start_in_parallel)
+{
+    unsigned char counter = 0;
+    auto starter1 = std::async(std::launch::async, [this, &counter]()
+    {
+        EXPECT_TRUE(m_timer.start(2s, [&counter]() { ++counter; }));
+    });
+    auto starter2 = std::async(std::launch::async, [this, &counter]()
+    {
+        EXPECT_TRUE(m_timer.start(2s, [&counter]() { ++counter; }));
+    });
+
+    starter1.wait();
+    starter2.wait();
+    m_timer.stop();
+
+    EXPECT_EQ(counter, 2);
+}
+
 TEST_F(single_shot_test, stop)
 {
     for (size_t i = 0; i < 10; ++i)

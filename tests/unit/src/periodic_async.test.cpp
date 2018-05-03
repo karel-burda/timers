@@ -40,7 +40,7 @@ TEST(periodic_async_construction_destruction, basic_construction_destruction)
 TEST_F(periodic_async_test, start_exception_policy_ignore)
 {
     unsigned char counter = 0;
-    EXPECT_NO_THROW(m_timer.start(1s, [&counter]() { ++counter; std::cout << "CB\n"; throw std::exception{}; }, timers::callback_exception_policy::ignore));
+    EXPECT_NO_THROW(m_timer.start(1s, [&counter]() { ++counter; throw std::exception{}; }, timers::callback_exception_policy::ignore));
 
     std::this_thread::sleep_for(4s);
 
@@ -62,6 +62,18 @@ TEST_F(periodic_async_test, start_exception_policy_stop)
 
     EXPECT_EQ(counter, 1);
     m_timer.stop();
+}
+
+TEST_F(periodic_async_test, start_long_callback)
+{
+    unsigned char callback_counter = 0;
+    EXPECT_NO_THROW(m_timer.start(1s, [&callback_counter]() { ++callback_counter; std::this_thread::sleep_for(10s); }, timers::callback_exception_policy::stop));
+
+    std::this_thread::sleep_for(5s);
+
+    m_timer.stop();
+
+    EXPECT_EQ(callback_counter, 1);
 }
 
 TEST_F(periodic_async_test, stop_in_parallel)

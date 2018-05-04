@@ -110,7 +110,7 @@ TEST_F(single_shot_async_test, start_in_parallel)
         taskFinished2 = true;
     }));
 
-    while (!taskFinished1 && !taskFinished2);
+    while (!taskFinished1 || !taskFinished2);
 
     EXPECT_EQ(counter, 2);
 }

@@ -94,8 +94,8 @@ TEST_F(periodic_test, start_throwing)
     EXPECT_THROW(m_timer.start(3s, nullptr), timers::exceptions::callback_not_callable);
 }
 
-// TODO: Deadlock, FIX
-TEST_F(periodic_test, DISABLED_start_in_parallel)
+// This is causing deadlock
+TEST_F(periodic_test, start_in_parallel)
 {
     bool taskFinished1 = false;
     bool taskFinished2 = false;
@@ -109,8 +109,8 @@ TEST_F(periodic_test, DISABLED_start_in_parallel)
         EXPECT_FALSE(m_timer.start(1s, [&taskFinished2]() { taskFinished2 = true; }));
     });
 
-    std::this_thread::sleep_for(1s);
-    m_timer.stop();
+    std::this_thread::sleep_for(2s);
+
     m_timer.stop();
     starter1.wait();
     starter2.wait();

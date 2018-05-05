@@ -4,12 +4,14 @@ compiler:
 os:
 - linux
 before_install:
-#- echo $LANG
-#- echo $LC_ALL
+- uname
+- cmake --version
+- clang --version
 #- if [ $TRAVIS_OS_NAME == linux ]; then ./scripts/dependencies.sh; fi
 #- if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install llvm38 && brew install openssl && brew link --force --overwrite llvm38; fi
 script:
 - cmake -Bbuild -H. -DUNIT-TESTS:BOOL=ON
+- cmake --build --config Release
 after_success:
 branches:
   only:

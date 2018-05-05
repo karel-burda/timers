@@ -9,7 +9,7 @@ namespace timers
 class periodic : public single_shot
 {
 public:
-    bool start(time_interval interval, timers_callback callback, callback_exception_policy policy = get_default_callback_policy()) override
+    bool start(time_interval interval, timers_callback callback, policies::start::exception policy = policies::start::get_default()) override
     {
         while(single_shot::start(interval, callback, policy));
 

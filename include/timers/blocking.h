@@ -7,6 +7,7 @@
 #include "timers/disable_copy_and_move.h"
 #include "timers/exceptions.h"
 #include "timers/type_definitions.h"
+#include "timers/policies.h"
 
 namespace burda
 {
@@ -19,8 +20,6 @@ public:
     /// Returns false if terminated by the client
     bool block(time_interval time)
     {
-        std::lock_guard<decltype(m_block_protection)> lock_block{ m_block_protection };
-
         throw_if_time_invalid(time);
 
         {
@@ -28,29 +27,29 @@ public:
 
             const auto terminated_after_interval_elapsed = !m_cv.wait_for(lock, time, [&]
             {
-                return m_terminated;
+                return m_terminate_forcefully;
             });
 
-            m_terminated = false;
+            m_terminate_forcefully = false;
 
             return terminated_after_interval_elapsed;
         }
     }
 
-    /// Terminates timer, will set the "m_terminated" to true, so that the cv stops to block
-    virtual void stop()
+    /// Terminates timer, will set the "m_terminate_forcefully" to true, so that the cv stops to block
+    virtual void stop(policies::stop::notification policy = policies::stop::get_default())
     {
         {
             std::lock_guard<decltype(m_cv_protection)> lock{ m_cv_protection };
 
-            m_terminated = true;
+            m_terminate_forcefully = true;
         }
 
-        m_cv.notify_all();
+        notify(policy);
     }
 
 private:
-    void throw_if_time_invalid(time_interval time)
+    void throw_if_time_invalid(time_interval time) const
     {
         if (time == time.zero())
         {
@@ -62,10 +61,21 @@ private:
         }
     }
 
+    void notify(policies::stop::notification policy)
+    {
+        if (policy == policies::stop::notification::one)
+        {
+            m_cv.notify_one();
+        }
+        else if (policy == policies::stop::notification::all)
+        {
+            m_cv.notify_all();
+        }
+    }
+
     std::condition_variable m_cv;
     std::mutex m_cv_protection;
-    std::mutex m_block_protection;
-    bool m_terminated = false;
+    bool m_terminate_forcefully = false;
 };
 }
 }

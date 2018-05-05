@@ -1,7 +1,6 @@
 #pragma once
 
 #include "timers/blocking.h"
-#include "timers/policies.h"
 
 namespace burda
 {
@@ -10,20 +9,20 @@ namespace timers
 class single_shot : public blocking
 {
 public:
-    virtual bool start(time_interval interval, timers_callback callback, callback_exception_policy policy = get_default_callback_policy())
+    virtual bool start(time_interval interval, timers_callback callback, policies::start::exception policy = policies::start::get_default())
     {
         const auto terminated_after_time_elapsed = blocking::block(interval);
 
         if (terminated_after_time_elapsed)
         {
-            call_or_throw_if_callback_is_not_callable(callback, policy);
+            call(callback, policy);
         }
 
         return terminated_after_time_elapsed;
     }
 
 private:
-    void call_or_throw_if_callback_is_not_callable(timers_callback callback, callback_exception_policy policy)
+    void call(timers_callback callback, policies::start::exception policy)
     {
         if (callback)
         {
@@ -33,7 +32,7 @@ private:
             }
             catch (...)
             {
-                if (policy == callback_exception_policy::stop)
+                if (policy == policies::start::exception::stop)
                 {
                     blocking::stop();
 

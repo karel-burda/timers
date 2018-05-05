@@ -22,7 +22,7 @@ static_assert(std::is_same<underlying_timer, periodic>::value || std::is_same<un
               "Only periodic or single_shot timers are allowed to behave in an asynchronous way");
 
 public:
-    bool start(time_interval interval, timers_callback callback, callback_exception_policy policy = get_default_callback_policy()) override
+    bool start(time_interval interval, timers_callback callback, policies::start::exception policy = policies::start::get_default()) override
     {
         std::lock_guard<decltype(m_protection)> lock { m_protection };
 
@@ -34,11 +34,11 @@ public:
         return false;
     }
 
-    void stop() override
+    void stop(policies::stop::notification policy = policies::stop::get_default()) override
     {
         std::lock_guard<decltype(m_protection)> lock { m_protection };
 
-        underlying_timer::stop();
+        underlying_timer::stop(policy);
 
         m_async_task.wait();
     }

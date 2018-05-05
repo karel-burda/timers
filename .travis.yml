@@ -9,7 +9,7 @@ before_install:
 - clang --version
 script:
 - cmake -Bbuild -H. -DUNIT-TESTS:BOOL=ON
-- cmake --build build --config Release
+- cmake --build build --target timers-tests --config Release
 after_success:
 branches:
   only:

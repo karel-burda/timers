@@ -8,6 +8,7 @@ os:
 before_install:
 - uname
 - cmake --version
+- gcc --version
 - clang --version
 script:
 - cmake -Bbuild -H. -DUNIT-TESTS:BOOL=ON

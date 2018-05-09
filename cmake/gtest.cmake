@@ -5,8 +5,7 @@ set(_GTEST_BUILD_VARIANT "Release")
 
 ExternalProject_Add(${_GTEST_TARGET_NAME}
   GIT_REPOSITORY    https://github.com/google/googletest.git
-  GIT_TAG           release-1.7.0
-  GIT_SHALLOW       1
+  GIT_TAG           0957cce368316577aae5ddfffcb67f24621d69e7
   SOURCE_DIR        "${CMAKE_BINARY_DIR}/gtest-src"
   BINARY_DIR        "${CMAKE_BINARY_DIR}/gtest-src"
   CONFIGURE_COMMAND ""

@@ -48,7 +48,7 @@ TEST_F(single_shot_async_test, default_values)
     // TODO: find out why this crashes
     //EXPECT_TRUE(m_single_shot_async_timer.m_async_task.wait_for(0s) == std::future_status::ready);
 
-    timers::testing::check_if_mutex_is_owned(m_timer.m_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
 }
 
@@ -58,20 +58,20 @@ TEST_F(single_shot_async_test, callback_called)
 
     std::this_thread::sleep_for(5s);
 
-    EXPECT_TRUE(m_timer.blocking::m_terminated);
+    EXPECT_FALSE(m_timer.blocking::m_terminate_forcefully);
     EXPECT_TRUE(m_callback_called);
 }
 
 TEST_F(single_shot_async_test, start_exception_policy_stop)
 {
-    EXPECT_NO_THROW(m_timer.start(1s, [](){ throw std::exception{}; }, timers::callback_exception_policy::stop));
+    EXPECT_NO_THROW(m_timer.start(1s, [](){ throw std::exception{}; }, timers::policies::start::exception::stop));
 
     std::this_thread::sleep_for(4s);
 
-    timers::testing::check_if_mutex_is_owned(m_timer.m_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
-    EXPECT_TRUE(m_timer.m_terminated);
+    EXPECT_TRUE(m_timer.m_terminate_forcefully);
 }
 
 TEST_F(single_shot_async_test, callback_multiple_times)
@@ -123,7 +123,7 @@ TEST_F(single_shot_async_test, stop)
 
     m_timer.stop();
 
-    EXPECT_TRUE(m_timer.blocking::m_terminated);
+    EXPECT_TRUE(m_timer.blocking::m_terminate_forcefully);
     EXPECT_FALSE(m_callback_called);
 }
 }

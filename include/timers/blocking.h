@@ -22,15 +22,15 @@ public:
     {
         throw_if_time_invalid(time);
 
-        {
-            std::unique_lock<decltype(m_cv_protection)> lock{ m_cv_protection };
+        std::lock_guard<decltype(m_block_protection)> lock{ m_block_protection };
 
-            const auto terminated_after_interval_elapsed = !m_cv.wait_for(lock, time, [&]
+        {
+            std::unique_lock<decltype(m_cv_protection)> cv_lock{ m_cv_protection };
+
+            const auto terminated_after_interval_elapsed = !m_cv.wait_for(cv_lock, time, [&]
             {
                 return m_terminate_forcefully;
             });
-
-            m_terminate_forcefully = false;
 
             return terminated_after_interval_elapsed;
         }
@@ -75,6 +75,7 @@ private:
 
     std::condition_variable m_cv;
     std::mutex m_cv_protection;
+    std::mutex m_block_protection;
     bool m_terminate_forcefully = false;
 };
 }

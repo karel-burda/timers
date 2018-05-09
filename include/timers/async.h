@@ -24,7 +24,7 @@ static_assert(std::is_same<underlying_timer, periodic>::value || std::is_same<un
 public:
     bool start(time_interval interval, timers_callback callback, policies::start::exception policy = policies::start::get_default()) override
     {
-        std::lock_guard<decltype(m_protection)> lock { m_protection };
+        std::lock_guard<decltype(m_async_protection)> lock { m_async_protection };
 
         m_async_task = std::async(std::launch::async, [this, interval, callback, policy]
         {
@@ -36,7 +36,7 @@ public:
 
     void stop(policies::stop::notification policy = policies::stop::get_default()) override
     {
-        std::lock_guard<decltype(m_protection)> lock { m_protection };
+        std::lock_guard<decltype(m_async_protection)> lock { m_async_protection };
 
         underlying_timer::stop(policy);
 
@@ -45,7 +45,7 @@ public:
 
 private:
     std::future<void> m_async_task;
-    std::mutex m_protection;
+    std::mutex m_async_protection;
 };
 }
 }

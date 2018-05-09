@@ -66,7 +66,7 @@ TEST_F(single_shot_test, callback_throwing)
 
     timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
-    EXPECT_TRUE(m_timer.m_terminated);
+    EXPECT_TRUE(m_timer.m_terminate_forcefully);
 }
 
 TEST_F(single_shot_test, callback_multiple_times)
@@ -104,7 +104,7 @@ TEST_F(single_shot_test, stop)
     for (size_t i = 0; i < 10; ++i)
     {
         EXPECT_NO_THROW(m_timer.stop());
-        ASSERT_TRUE(m_timer.m_terminated);
+        ASSERT_TRUE(m_timer.m_terminate_forcefully);
     }
 }
 

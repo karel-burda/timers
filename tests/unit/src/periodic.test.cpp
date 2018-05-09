@@ -63,7 +63,7 @@ TEST_F(periodic_test, start_exception_policy_stop)
 {
     auto caller = std::async(std::launch::async, [this]()
     {
-        m_timer.start(1s, [this](){ ++m_counter; throw std::exception{}; }, timers::callback_exception_policy::stop);
+        m_timer.start(1s, [this](){ ++m_counter; throw std::exception{}; }, timers::policies::start::exception::stop);
     });
 
     std::this_thread::sleep_for(4s);
@@ -77,7 +77,7 @@ TEST_F(periodic_test, start_exception_policy_ignore)
 {
     auto caller = std::async(std::launch::async, [this]()
     {
-        m_timer.start(1s, [this](){ ++m_counter; throw std::exception{}; }, timers::callback_exception_policy::ignore);
+        m_timer.start(1s, [this](){ ++m_counter; throw std::exception{}; }, timers::policies::start::exception::ignore);
     });
 
     std::this_thread::sleep_for(4s);
@@ -111,7 +111,7 @@ TEST_F(periodic_test, start_in_parallel)
 
     std::this_thread::sleep_for(2s);
 
-    m_timer.stop();
+    m_timer.stop(timers::policies::stop::notification::all);
     starter1.wait();
     starter2.wait();
 
@@ -129,7 +129,7 @@ TEST_F(periodic_test, stop)
     std::this_thread::sleep_for(3s);
 
     EXPECT_NO_THROW(m_timer.stop());
-    EXPECT_TRUE(m_timer.m_terminated);
+    EXPECT_TRUE(m_timer.m_terminate_forcefully);
 
     for (size_t i = 0; i < 100; ++i)
     {

@@ -40,7 +40,7 @@ TEST(periodic_async_construction_destruction, basic_construction_destruction)
 TEST_F(periodic_async_test, start_exception_policy_ignore)
 {
     unsigned char counter = 0;
-    EXPECT_NO_THROW(m_timer.start(1s, [&counter]() { ++counter; throw std::exception{}; }, timers::callback_exception_policy::ignore));
+    EXPECT_NO_THROW(m_timer.start(1s, [&counter]() { ++counter; throw std::exception{}; }, timers::policies::start::exception::ignore));
 
     std::this_thread::sleep_for(4s);
 
@@ -51,14 +51,14 @@ TEST_F(periodic_async_test, start_exception_policy_ignore)
 TEST_F(periodic_async_test, start_exception_policy_stop)
 {
     unsigned char counter = 0;
-    EXPECT_NO_THROW(m_timer.start(1s, [&counter]() { ++counter; throw std::exception{}; }, timers::callback_exception_policy::stop));
+    EXPECT_NO_THROW(m_timer.start(1s, [&counter]() { ++counter; throw std::exception{}; }, timers::policies::start::exception::stop));
 
     std::this_thread::sleep_for(3s);
 
-    timers::testing::check_if_mutex_is_owned(m_timer.m_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
-    EXPECT_TRUE(m_timer.m_terminated);
+    EXPECT_TRUE(m_timer.m_terminate_forcefully);
 
     EXPECT_EQ(counter, 1);
     m_timer.stop();
@@ -67,7 +67,7 @@ TEST_F(periodic_async_test, start_exception_policy_stop)
 TEST_F(periodic_async_test, start_long_callback)
 {
     unsigned char callback_counter = 0;
-    EXPECT_NO_THROW(m_timer.start(2s, [&callback_counter]() { ++callback_counter; std::this_thread::sleep_for(10s); }, timers::callback_exception_policy::stop));
+    EXPECT_NO_THROW(m_timer.start(2s, [&callback_counter]() { ++callback_counter; std::this_thread::sleep_for(10s); }, timers::policies::start::exception::stop));
 
     std::this_thread::sleep_for(5s);
 
@@ -93,9 +93,9 @@ TEST_F(periodic_async_test, stop_in_parallel)
     stopper1.wait();
     stopper2.wait();
 
-    timers::testing::check_if_mutex_is_owned(m_timer.m_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
-    EXPECT_TRUE(m_timer.m_terminated);
+    EXPECT_TRUE(m_timer.m_terminate_forcefully);
 }
 }

@@ -3,17 +3,12 @@ compiler:
 - gcc
 - clang
 os:
-- linux
 - osx
-before_install:
-- cmake --version
-- gcc --version
-- clang --version
 jobs:
   include:
-    - stage: build-example
+    - stage: build example
       script:
         - echo "a"
-    - stage: build-tests
+    - stage: build tests
       script:
         - echo "b"

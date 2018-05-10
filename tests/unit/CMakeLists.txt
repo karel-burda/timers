@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.0)
 
 project(tests VERSION 0.9.5 LANGUAGES CXX)
 
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    message(FATAL_ERROR "This CMAKE is meant to be run from the top-level CMake in the root directory, run the top-level CMake instead")
+endif()
+
 include("${CMAKE_SOURCE_DIR}/cmake/gtest.cmake")
 include("${CMAKE_SOURCE_DIR}/cmake/settings.cmake")
 include("${CMAKE_SOURCE_DIR}/cmake/warnings.cmake")

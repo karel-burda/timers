@@ -1,13 +1,19 @@
 language: cpp
-compiler: 
-  - gcc
-  - clang
-os: 
-  - osx
-jobs: 
-  include: 
-    script: echo "build_example"
-    stage: build_example
-stages: 
-  - build_example
-  - build_tests
+compiler:
+- gcc
+- clang
+os:
+- linux
+- osx
+before_install:
+- cmake --version
+- gcc --version
+- clang --version
+jobs:
+  include:
+    - stage: build-example
+      script:
+        - echo "a"
+    - stage: build-tests
+      script:
+        - echo "b"

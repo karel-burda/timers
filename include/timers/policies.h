@@ -4,15 +4,21 @@ namespace burda
 {
 namespace timers
 {
-enum class callback_exception_policy : unsigned char
+namespace policies
+{
+namespace start
+{
+enum class exception : unsigned char
 {
     stop,
     ignore
 };
 
-constexpr callback_exception_policy get_default_callback_policy()
+constexpr exception get_default()
 {
-    return callback_exception_policy::stop;
+    return exception::stop;
+}
+}
 }
 }
 }

@@ -18,4 +18,3 @@ target_link_libraries(${PROJECT_NAME} gtest gtest_main)
 
 add_test(${PROJECT_NAME} ${PROJECT_NAME})
 add_custom_target(run-all-tests-verbose COMMAND ${CMAKE_CTEST_COMMAND} -V DEPENDS ${PROJECT_NAME})
-

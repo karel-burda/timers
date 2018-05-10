@@ -95,7 +95,7 @@ TEST_F(single_shot_async_test, callback_multiple_times)
 
 TEST_F(single_shot_async_test, start_in_parallel)
 {
-    std::atomic<unsigned char> counter = 0;
+    std::atomic<unsigned char> counter = { 0 };
     bool taskFinished1 = false;
     bool taskFinished2 = false;
 

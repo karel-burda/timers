@@ -19,20 +19,6 @@ constexpr exception get_default()
     return exception::stop;
 }
 }
-
-namespace stop
-{
-enum class notification : unsigned char
-{
-    one,
-    all
-};
-
-constexpr notification get_default()
-{
-    return notification::all;
-}
-}
 }
 }
 }

@@ -111,7 +111,7 @@ TEST_F(periodic_test, start_in_parallel)
 
     std::this_thread::sleep_for(2s);
 
-    m_timer.stop(timers::policies::stop::notification::all);
+    m_timer.stop();
     starter1.wait();
     starter2.wait();
 

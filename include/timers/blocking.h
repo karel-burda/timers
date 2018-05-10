@@ -37,7 +37,7 @@ public:
     }
 
     /// Terminates timer, will set the "m_terminate_forcefully" to true, so that the cv stops to block
-    virtual void stop(policies::stop::notification policy = policies::stop::get_default())
+    virtual void stop()
     {
         {
             std::lock_guard<decltype(m_cv_protection)> lock{ m_cv_protection };
@@ -45,7 +45,7 @@ public:
             m_terminate_forcefully = true;
         }
 
-        notify(policy);
+        m_cv.notify_all();
     }
 
 private:
@@ -58,18 +58,6 @@ private:
         else if (time < time.zero())
         {
             throw exceptions::time_period_is_negative{};
-        }
-    }
-
-    void notify(policies::stop::notification policy)
-    {
-        if (policy == policies::stop::notification::one)
-        {
-            m_cv.notify_one();
-        }
-        else if (policy == policies::stop::notification::all)
-        {
-            m_cv.notify_all();
         }
     }
 

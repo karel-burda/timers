@@ -34,11 +34,11 @@ public:
         return false;
     }
 
-    void stop(policies::stop::notification policy = policies::stop::get_default()) override
+    void stop() override
     {
         std::lock_guard<decltype(m_async_protection)> lock { m_async_protection };
 
-        underlying_timer::stop(policy);
+        underlying_timer::stop();
 
         m_async_task.wait();
     }

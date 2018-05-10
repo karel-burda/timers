@@ -1,22 +1,18 @@
+stages:
+    - build-example
+    - build-tests
+
 language: cpp
 compiler:
-- gcc
-- clang
+    - gcc
+    - clang
 os:
-- linux
-- osx
-before_install:
-- uname
-- cmake --version
-- gcc --version
-- clang --version
-script:
-- cmake -Bbuild -H. -DUNIT-TESTS:BOOL=ON
-- cmake --build build --target timers-tests --config Release
-after_success:
-branches:
-  only:
-notifications:
-  email: false
-env:
-  global:
+    - osx
+jobs:
+    include:
+        - stage: build-example
+        script:
+        #- echo make -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF
+        - stage: build-tests
+        script:
+        #- ./deploy

@@ -1,18 +1,13 @@
-stages:
-    - build-example
-    - build-tests
-
+ compiler: 
+  - gcc
+  - clang
+jobs: 
+  include: 
+    script: echo "build_example"
+    stage: build_example
 language: cpp
-compiler:
-    - gcc
-    - clang
-os:
-    - osx
-jobs:
-    include:
-        - stage: build-example
-        script:
-        #- echo make -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF
-        - stage: build-tests
-        script:
-        #- ./deploy
+os: 
+  - osx
+stages: 
+  - build_example
+  - build_tests

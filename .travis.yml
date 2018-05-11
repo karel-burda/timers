@@ -1,11 +1,10 @@
 stages:
-  - build example
-  - build tests
-  - run tests
+  - build and run example
+  - build and run tests
 
 jobs:
   include:
-    - stage: build example
+    - stage: build and run example
       language: cpp
       compiler:
         - clang
@@ -14,8 +13,10 @@ jobs:
       script:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
         - cmake --build ./build --target example --config Release
+      after_script:
+        - echo "TODO: Run with memory checker"
 
-    - stage: build tests
+    - stage: build and run tests
       language: cpp
       compiler:
         - clang
@@ -23,12 +24,6 @@ jobs:
         - osx
       script:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=Release
-        - cmake --build ./build --target tests --config Release
-
-    - stage: run tests
-      language: cpp
-      os:
-        - osx
-      script:
-        - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=Release
+      after_script:
         - cmake --build ./build --target run-all-tests-verbose --config Release
+

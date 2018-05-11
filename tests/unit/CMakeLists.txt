@@ -24,4 +24,4 @@ target_link_libraries(${PROJECT_NAME} gtest gtest_main)
 add_test(NAME ${PROJECT_NAME} COMMAND $<TARGET_FILE:${PROJECT_NAME}>)
 add_custom_target(run-all-tests-verbose
                   COMMAND
-                  ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 300 DEPENDS ${PROJECT_NAME})
+                  ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 600 DEPENDS ${PROJECT_NAME})

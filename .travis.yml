@@ -8,7 +8,21 @@ jobs:
       os:
         - osx
       script:
-        - echo "a"
+        - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF
+ 
     - stage: build tests
+      language: cpp
+      compiler:
+        - gcc
+        - clang
+      os:
+        - osx
       script:
-        - echo "b"
+        - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON
+  
+      - stage: run tests
+      language: cpp
+      os:
+        - osx
+      script:
+        - echo "run tests"

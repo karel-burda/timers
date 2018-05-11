@@ -32,4 +32,5 @@ jobs:
       os:
         - osx
       script:
-        - echo "run tests"
+        - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON
+        - cmake --build ./build --target run-all-tests-verbose --config Release

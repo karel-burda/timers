@@ -22,7 +22,6 @@ endif()
 if (UNIT-TESTS)
     message(STATUS "Building with unit tests")
 
-    # "enable_testing()" has to be called in the top-level cmake
     enable_testing()
     add_subdirectory(tests/unit)
 endif()

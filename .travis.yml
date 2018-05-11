@@ -9,7 +9,7 @@ jobs:
         - osx
       script:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF
- 
+
     - stage: build tests
       language: cpp
       compiler:
@@ -19,8 +19,8 @@ jobs:
         - osx
       script:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON
-  
-      - stage: run tests
+
+    - stage: run tests
       language: cpp
       os:
         - osx

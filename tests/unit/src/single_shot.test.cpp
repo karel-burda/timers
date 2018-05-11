@@ -66,7 +66,7 @@ TEST_F(single_shot_test, callback_throwing)
 
     timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
-    EXPECT_TRUE(m_timer.m_terminated);
+    EXPECT_TRUE(m_timer.m_terminate_forcefully);
 }
 
 TEST_F(single_shot_test, callback_multiple_times)
@@ -80,12 +80,31 @@ TEST_F(single_shot_test, callback_multiple_times)
     timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 6.0, 100.0);
 }
 
+TEST_F(single_shot_test, start_in_parallel)
+{
+    unsigned char counter = 0;
+    auto starter1 = std::async(std::launch::async, [this, &counter]()
+    {
+        EXPECT_TRUE(m_timer.start(2s, [&counter]() { ++counter; }));
+    });
+    auto starter2 = std::async(std::launch::async, [this, &counter]()
+    {
+        EXPECT_TRUE(m_timer.start(2s, [&counter]() { ++counter; }));
+    });
+
+    starter1.wait();
+    starter2.wait();
+    m_timer.stop();
+
+    EXPECT_EQ(counter, 2);
+}
+
 TEST_F(single_shot_test, stop)
 {
     for (size_t i = 0; i < 10; ++i)
     {
         EXPECT_NO_THROW(m_timer.stop());
-        ASSERT_TRUE(m_timer.m_terminated);
+        ASSERT_TRUE(m_timer.m_terminate_forcefully);
     }
 }
 

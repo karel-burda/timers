@@ -26,7 +26,10 @@ Implementation might throw these exceptions:
 See `exceptions.h` for more info, if interested.
 
 # Usage
-TODO
+In order to use the `timers`, it's only the `include` directory that matters. Just make sure that the header search
+path is pointing to the `include` directory located in the root directory.
+
+TODO: Some most simple code in here
 
 For full use case, see `main.cpp` or implementation of unit tests at `tests/unit`.
 
@@ -55,6 +58,10 @@ Then, you can run the default test target (e.g. `make test` or `RUN_TESTS` in th
 or own custom target `run-all-tests-verbose` (which is recommended).
 
 If you want to debug tests and beyond, run the target `timers-tests` manually.
+
+It is also possible to turn off build of the example, and build just the tests:
+
+`cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON`
 
 # Branch Model
 Project is using git workflow, this includes `master`, `develop`, feature (prefix `feature/`)

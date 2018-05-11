@@ -1,12 +1,12 @@
-language: cpp
-compiler:
-- gcc
-- clang
-os:
-- osx
 jobs:
   include:
     - stage: build example
+      language: cpp
+      compiler:
+        - gcc
+        - clang
+      os:
+        - osx
       script:
         - echo "a"
     - stage: build tests

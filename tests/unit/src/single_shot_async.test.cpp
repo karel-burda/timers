@@ -110,7 +110,10 @@ TEST_F(single_shot_async_test, start_in_parallel)
         taskFinished2 = true;
     }));
 
-    while (!taskFinished1 || !taskFinished2);
+    while (!taskFinished1 || !taskFinished2)
+    {
+        std::this_thread::sleep_for(2s);
+    }
 
     EXPECT_EQ(counter, 2);
 }

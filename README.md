@@ -1,5 +1,6 @@
-# Introduction
 [![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=feature%2Fci)](https://travis-ci.org/karel-burda/timers)
+
+# Introduction
 **This is only alpha version that's just being developed**
 
 `timers` features a header-only library that's implementing timer-related functionality and provides following features:

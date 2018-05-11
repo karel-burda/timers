@@ -8,7 +8,6 @@ jobs:
     - stage: build example
       language: cpp
       compiler:
-        - gcc
         - clang
       os:
         - osx
@@ -19,7 +18,6 @@ jobs:
     - stage: build tests
       language: cpp
       compiler:
-        - gcc
         - clang
       os:
         - osx

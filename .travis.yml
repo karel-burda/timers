@@ -1,3 +1,8 @@
+stages:
+  - build example
+  - build tests
+  - run tests
+
 jobs:
   include:
     - stage: build example

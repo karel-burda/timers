@@ -7,8 +7,6 @@ if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
 endif()
 
 include("${CMAKE_SOURCE_DIR}/cmake/gtest.cmake")
-include("${CMAKE_SOURCE_DIR}/cmake/settings.cmake")
-include("${CMAKE_SOURCE_DIR}/cmake/warnings.cmake")
 
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB_RECURSE SOURCES src/*.c*)

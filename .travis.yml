@@ -12,9 +12,9 @@ jobs:
         - clang
       os:
         - osx
-      script:
-        - scan-build -v cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
-        - scan-build -v cmake --build ./build --target example --config Release
+      #script:
+        #- scan-build -v cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
+        #- scan-build -v cmake --build ./build --target example --config Release
 
     - stage: static analysis (cppcheck)
       language: cpp

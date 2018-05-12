@@ -1,13 +1,25 @@
 stages:
-  - static analysis
+  - static analysis (clang)
+  - static analysis (cppcheck)
   - build and run example
   - build and run tests
 
 jobs:
   include:
-    - stage: static analysis
+    - stage: static analysis (clang)
+      os:
+        - osx
+      script:
+        - scan-build -v cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
+        - scan-build -v cmake --build ./build --target example --config Release
+
+    - stage: static analysis (cppcheck)
       os:
         - linux
+      sudo: required
+      before_install:
+        - sudo apt-get update
+        - sudo apt-get install -y cppcheck
       script:
         - bash <(curl -s https://raw.githubusercontent.com/bang-olufsen/github-cppcheck/master/cppcheck.sh) .
 

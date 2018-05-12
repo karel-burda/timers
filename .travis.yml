@@ -14,17 +14,17 @@ jobs:
         - brew update
         - brew install valgrind
         - brew tap mgrebenets/scan-build
-        - brew install scan-build
+        #- brew install scan-build
       before_script:
-        - cppcheck -j 4 -I include ./example
+        - cppcheck --enable=all -j 4 -I include ./example
       script:
-        - scan-build -v cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
-        - scan-build -v cmake --build ./build --target example --config Release
+        - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
+        - cmake --build ./build --target example --config Release
       after_script:
         - ls -la ./build/bin
-        - valgrind --leak-check=yes ./build/bin/Release/example
+        - valgrind --leak-check=full ./build/bin/Release/example
 
-    - stage: build and run tests
+    - stage: tests -- build, run
       language: cpp
       compiler:
         - clang

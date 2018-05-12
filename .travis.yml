@@ -7,6 +7,9 @@ stages:
 jobs:
   include:
     - stage: static analysis (clang)
+      language: cpp
+      compiler:
+        - clang
       os:
         - osx
       script:
@@ -14,6 +17,7 @@ jobs:
         - scan-build -v cmake --build ./build --target example --config Release
 
     - stage: static analysis (cppcheck)
+      language: cpp
       os:
         - linux
       sudo: required

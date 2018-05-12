@@ -1,21 +1,10 @@
 stages:
-  - static analysis (clang)
   - static analysis (cppcheck)
   - build and run example
   - build and run tests
 
 jobs:
   include:
-    - stage: static analysis (clang)
-      language: cpp
-      compiler:
-        - clang
-      os:
-        - osx
-      #script:
-        #- scan-build -v cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
-        #- scan-build -v cmake --build ./build --target example --config Release
-
     - stage: static analysis (cppcheck)
       language: cpp
       os:

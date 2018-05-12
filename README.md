@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=feature%2Fci)](https://travis-ci.org/karel-burda/timers)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/27e08eaa6aa64eddbe4a79085e95ebcc)](https://www.codacy.com/app/karel-burda/timers?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=karel-burda/timers&amp;utm_campaign=Badge_Grade)
+[![Coverity](https://scan.coverity.com/projects/15747/badge.svg)](https://scan.coverity.com/projects/karel-burda-timers)
 
 # Introduction
 **This is only alpha version that's just being developed**

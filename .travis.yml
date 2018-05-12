@@ -1,21 +1,9 @@
 stages:
-  - static analysis (cppcheck)
   - example -- analyze, build, memcheck
-  - build and run tests
+  - tests -- build, run
 
 jobs:
   include:
-    - stage: static analysis (cppcheck)
-      language: cpp
-      os:
-        - linux
-      sudo: required
-      before_install:
-        - sudo apt-get update
-        - sudo apt-get install -y cppcheck
-      script:
-        - cppcheck -j 4 -I include ./example
-
     - stage: example -- analyze, build, memcheck
       language: cpp
       compiler:
@@ -25,6 +13,7 @@ jobs:
       before_install:
         - brew update
         - brew install valgrind
+        - brew tap mgrebenets/scan-build
         - brew install scan-build
       before_script:
         - cppcheck -j 4 -I include ./example

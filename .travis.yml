@@ -14,7 +14,7 @@ jobs:
         - sudo apt-get update
         - sudo apt-get install -y cppcheck
       script:
-        - bash <(curl -s https://raw.githubusercontent.com/bang-olufsen/github-cppcheck/master/cppcheck.sh) .
+        - cppcheck -j 4 -I include ./example
 
     - stage: build and run example
       language: cpp
@@ -22,6 +22,9 @@ jobs:
         - clang
       os:
         - osx
+      before_install:
+        - brew update
+        - brew install valgrind
       script:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
         - cmake --build ./build --target example --config Release

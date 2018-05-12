@@ -12,6 +12,7 @@ jobs:
         - osx
       before_install:
         - brew update
+        - brew install cppcheck
         - brew install valgrind
         - brew tap mgrebenets/scan-build
         #- brew install scan-build

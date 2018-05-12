@@ -11,17 +11,19 @@ jobs:
       os:
         - osx
       before_install:
-        - brew update
+        #- brew update
         - brew install cppcheck
         - brew install valgrind
         - brew tap mgrebenets/scan-build
         #- brew install scan-build
       before_script:
+        - ls -la
         - cppcheck --enable=all -j 4 -I include ./example
       script:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
         - cmake --build ./build --target example --config Release
       after_script:
+        - pwd && ls -la
         - ls -la ./build/bin
         - valgrind --leak-check=full ./build/bin/Release/example
 

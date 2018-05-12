@@ -1,9 +1,16 @@
 stages:
+  - static analysis
   - build and run example
   - build and run tests
 
 jobs:
   include:
+    - stage: static analysis
+      os:
+        - linux
+      script:
+        - bash <(curl -s https://raw.githubusercontent.com/bang-olufsen/github-cppcheck/master/cppcheck.sh) .
+
     - stage: build and run example
       language: cpp
       compiler:
@@ -28,4 +35,3 @@ jobs:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=Release
       after_script:
         - cmake --build ./build --target run-all-tests-verbose --config Release
-

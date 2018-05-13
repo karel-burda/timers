@@ -15,12 +15,12 @@ jobs:
         - brew install cppcheck valgrind
       before_script:
         - ls -la
-        - cppcheck --enable=all -I include -v ./example
+        - cppcheck --enable=all -I include --check-config  -v ./example
       script:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
         - cmake --build ./build --target example --config RelWithDebInfo
       after_script:
-        - valgrind --leak-check=full -v ./build/bin/example
+        - valgrind --leak-check=full --error-exitcode=255 -v ./build/bin/example
 
     - stage: tests -- build, run
       language: cpp

@@ -34,7 +34,20 @@ path is pointing to the `include` directory located in the root directory.
 On some systems, you may need to link POSIX pthreads.
 The project is using it in the build of example and unit tests using CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake)
 
-TODO: Some most simple code in here
+```cpp
+// blocking timer
+{
+    timers::blocking timer;
+
+    // passing 5 seconds here, you can pass any chrono literal or std::chrono::duration manually
+    timer.block(5s);
+
+    // from other thread you can terminate the timer (using timer.stop()),
+    // although this is not usually the case, since the main aim is the blocking behaviour itself
+}
+
+// TODO
+```
 
 For full use case, [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 

@@ -23,7 +23,7 @@ void demonstrate_blocking_timer()
     // passing 5 seconds here, you can pass any chrono literal or std::chrono::duration manually
     timer.block(5s);
 
-    // from other thread you can terminate the timer (using timer_blocking.terminate()),
+    // from other thread you can terminate the timer (using timer.stop()),
     // although this is not usually the case, since the main aim is the blocking behaviour itself
 }
 

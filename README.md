@@ -68,8 +68,8 @@ It is also possible to turn off build of the example, and build just the tests:
 
 `cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON`
 
-# Continuos Integration
-Continuos Integration is now being run OS X (clang 8.x) and Linux (gcc 5.x) on Travis: https://travis-ci.org/karel-burda/timers
+# Continuous Integration
+Continuous Integration is now being run OS X (clang 8.x) and Linux (gcc 5.x) on Travis: https://travis-ci.org/karel-burda/timers
 
 Compilers are set-up to treat warnings as errors and compiler with the pedantic warning level.
 

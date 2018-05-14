@@ -23,3 +23,6 @@ add_test(NAME ${PROJECT_NAME} COMMAND $<TARGET_FILE:${PROJECT_NAME}>)
 add_custom_target(run-all-tests-verbose
                   COMMAND
                   ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 300 DEPENDS ${PROJECT_NAME})
+
+link_pthreads_if_available()
+

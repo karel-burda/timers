@@ -1,37 +1,43 @@
 stages:
-  - example -- analyze, build, memcheck
-  - tests -- build, run
+  - example -- cppcheck, build (linux, gcc5), valgrind
+  - tests -- cppcheck, build (osx, clang8), run
 
 jobs:
   include:
-    - stage: example -- analyze, build, memcheck
+    - stage: example -- cppcheck, build (linux, gcc5), valgrind
+      sudo: required
+      dist: trusty
       language: cpp
-      compiler:
-        - clang
-      os:
-        - osx
+      compiler: g++
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
       before_install:
-        #- brew update
-        - brew install cppcheck valgrind
+        - sudo apt-get update -qq
+        - sudo apt-get -y install valgrind cppcheck
+      install: export CXX="g++-5"
       before_script:
-        - ls -la
         - cppcheck --enable=all -I include --check-config  -v ./example
       script:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
         - cmake --build ./build --target example --config RelWithDebInfo
       after_script:
-        # There's currently issue with the valgrind on os x that it reports leaks upon std::launch::async
-        # that is implemented via pthread_detach(). We'll use the Linux for the CI
-        - valgrind --leak-check=full --error-exitcode=255 -v ./build/bin/example
+        -  valgrind --leak-check=full --error-exitcode=255 -v ./build/bin/example
 
-    - stage: tests -- build, run
+    - stage: tests -- cppcheck, build (osx, clang8), run
       language: cpp
-      compiler:
-        - clang
-      os:
-        - osx
-      env:
-        - GTEST_COLOR=1
+      compiler: clang
+      os: osx
+      env: GTEST_COLOR=1
+      before_install:
+        - brew update
+        - brew install cppcheck
+      before_script:
+        - cppcheck --enable=all -I include -I tests/unit/include/ --check-config  -v ./tests/unit/
       script:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=Release
       after_script:

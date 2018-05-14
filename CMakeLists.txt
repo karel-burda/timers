@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(timers VERSION 0.9.5 LANGUAGES CXX)
 
+include("cmake-helpers/pthreads.cmake")
 include("cmake-helpers/settings.cmake")
 include("cmake-helpers/warnings.cmake")
 

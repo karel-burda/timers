@@ -1,0 +1,38 @@
+stages:
+  - example -- analyze, build, memcheck
+  - tests -- build, run
+
+jobs:
+  include:
+    - stage: example -- analyze, build, memcheck
+      language: cpp
+      compiler:
+        - clang
+      os:
+        - osx
+      before_install:
+        #- brew update
+        - brew install cppcheck valgrind
+      before_script:
+        - ls -la
+        - cppcheck --enable=all -I include --check-config  -v ./example
+      script:
+        - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
+        - cmake --build ./build --target example --config RelWithDebInfo
+      after_script:
+        # There's currently issue with the valgrind on os x that it reports leaks upon std::launch::async
+        # that is implemented via pthread_detach(). We'll use the Linux for the CI
+        - valgrind --leak-check=full --error-exitcode=255 -v ./build/bin/example
+
+    - stage: tests -- build, run
+      language: cpp
+      compiler:
+        - clang
+      os:
+        - osx
+      env:
+        - GTEST_COLOR=1
+      script:
+        - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=Release
+      after_script:
+        - cmake --build ./build --target run-all-tests-verbose --config Release

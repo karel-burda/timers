@@ -7,8 +7,6 @@ if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
 endif()
 
 include("${CMAKE_SOURCE_DIR}/cmake-helpers/gtest.cmake")
-include("${CMAKE_SOURCE_DIR}/cmake-helpers/settings.cmake")
-include("${CMAKE_SOURCE_DIR}/cmake-helpers/warnings.cmake")
 
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB_RECURSE SOURCES src/*.c*)
@@ -21,5 +19,7 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 add_dependencies(${PROJECT_NAME} gtest-build)
 target_link_libraries(${PROJECT_NAME} gtest gtest_main)
 
-add_test(${PROJECT_NAME} ${PROJECT_NAME})
-add_custom_target(run-all-tests-verbose COMMAND ${CMAKE_CTEST_COMMAND} -V DEPENDS ${PROJECT_NAME})
+add_test(NAME ${PROJECT_NAME} COMMAND $<TARGET_FILE:${PROJECT_NAME}>)
+add_custom_target(run-all-tests-verbose
+                  COMMAND
+                  ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 300 DEPENDS ${PROJECT_NAME})

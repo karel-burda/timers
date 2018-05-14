@@ -1,10 +1,10 @@
 stages:
-  - example -- analyze, build, memcheck
-  - tests -- build, run
+  - example -- static analysis (cppcheck), build (linux, gcc5), dynamic analysis (valgrind)
+  - tests -- build (osx, clang8), run
 
 jobs:
   include:
-    - stage: example -- analyze, build (linux, gcc5), memcheck
+    - stage: example -- static analysis (cppcheck), build (linux, gcc5), dynamic analysis (valgrind)
       sudo: required
       dist: trusty
       language: cpp
@@ -19,7 +19,9 @@ jobs:
             - g++-5
       before_install:
         - sudo apt-get update -qq
-        - sudo apt-get -y install valgrind
+        - sudo apt-get -y install valgrind cppcheck
+      before_script:
+        - cppcheck --enable=all -I include --check-config  -v ./example  
       script:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
         - cmake --build ./build --target example --config RelWithDebInfo
@@ -28,12 +30,9 @@ jobs:
 
     - stage: tests -- build (osx, clang8), run
       language: cpp
-      compiler:
-        - clang
-      os:
-        - osx
-      env:
-        - GTEST_COLOR=1
+      compiler: clang
+      os: osx
+      env: GTEST_COLOR=1
       script:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=Release
       after_script:

@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/license-MIT_License-blue.svg?style=flat)](LICENSE)
 
 # Introduction
-`timers` features a header-only library that's implementing timer-related functionality and provides following features:
+`timers` features a thread-safe and header-only library that's implementing timer-related functionality and provides following features:
 * General blocking timer: `block`
 * Single-shot timer that does given action after period expires: `single_shot`
 * Its asynchronous version `single_shot_async`
@@ -34,7 +34,7 @@ path is pointing to the `include` directory located in the root directory.
 On some systems, you may need to link POSIX pthreads.
 The project is using it in the build of example and unit tests using CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake)
 
-```cpp
+```c++
 // blocking timer
 {
     timers::blocking timer;
@@ -46,7 +46,39 @@ The project is using it in the build of example and unit tests using CMake: [pth
     // although this is not usually the case, since the main aim is the blocking behaviour itself
 }
 
-// TODO
+
+// single-shot timer
+{
+    timers::single_shot timer;
+    timers::single_shot_async timer_async;
+
+    // this call is blocking
+    timer.start(2s, [](){ std::cout << "demonstrate_single_shot_timer(): Hello from single shot callback" << std::endl; });
+
+    // this call is asynchronous
+    timer.start(2s, [](){ std::cout << "demonstrate_single_shot_timer(): Hello from single shot async callback" << std::endl; });
+
+    // we could even "stack" the start() commands in a row, e.g.:
+    //timer.start(1s, []() { std::cout << "1\n"; });
+    //timer.start(2s, []() { std::cout << "1\n"; });
+    //timer.start(3s, []() { std::cout << "1\n"; });
+}
+
+// periodic
+{
+    timers::periodic timer;
+    timers::periodic_async timer_async;
+
+    // blocking call
+    timer.start(3s, []() { std::cout << "Hi there" << std::endl; });
+    // we should call "timer.stop()" from some other thread
+
+    // asynchronous call
+    timer_async.start(3s, []() { std::cout << "Hi there" << std::endl; });
+    timer_async.stop();
+}
+
+// TODO: policies
 ```
 
 For full use case, [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).

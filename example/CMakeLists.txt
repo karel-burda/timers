@@ -14,3 +14,9 @@ include_directories(include)
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
+if (CMAKE_COMPILER_IS_GNUXX)
+    message(STATUS "gcc detected, trying to link pthreads")
+    find_package (Threads)
+    target_link_libraries (${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
+endif()
+

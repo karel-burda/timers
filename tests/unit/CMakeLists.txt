@@ -6,7 +6,7 @@ if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     message(FATAL_ERROR "This CMAKE is meant to be run from the top-level CMake in the root directory, run the top-level CMake instead")
 endif()
 
-include("${CMAKE_SOURCE_DIR}/cmake/gtest.cmake")
+include("${CMAKE_SOURCE_DIR}/cmake-helpers/gtest.cmake")
 
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB_RECURSE SOURCES src/*.c*)

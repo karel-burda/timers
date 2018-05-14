@@ -1,10 +1,10 @@
 stages:
-  - example -- static analysis (cppcheck), build (linux, gcc5), dynamic analysis (valgrind)
+  - example -- cppcheck, build (linux, gcc5), valgrind
   - tests -- build (osx, clang8), run
 
 jobs:
   include:
-    - stage: example -- static analysis (cppcheck), build (linux, gcc5), dynamic analysis (valgrind)
+    - stage: example -- cppcheck, build (linux, gcc5), valgrind
       sudo: required
       dist: trusty
       language: cpp

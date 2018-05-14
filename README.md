@@ -33,6 +33,9 @@ See `exceptions.h` for more info, if interested.
 In order to use the `timers`, it's only the `include` directory that matters. Just make sure that the header search
 path is pointing to the `include` directory located in the root directory.
 
+On systems that are using GNU compilers, you may need to link POSIX pthreads.
+The project is using it in the build of example and unit tests using CMake: cmake-helpers/pthreads.cmake
+
 TODO: Some most simple code in here
 
 For full use case, see `main.cpp` or implementation of unit tests at `tests/unit`.

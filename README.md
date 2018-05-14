@@ -32,16 +32,16 @@ In order to use the `timers`, it's only the `include` directory that matters. Ju
 path is pointing to the `include` directory located in the root directory.
 
 On some systems, you may need to link POSIX pthreads.
-The project is using it in the build of example and unit tests using CMake: pthreads.cmake(../blob/develop/cmake-helpers/pthreads.cmake)
+The project is using it in the build of example and unit tests using CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake)
 
 TODO: Some most simple code in here
 
-For full use case, see `main.cpp` or implementation of unit tests at `tests/unit`.
+For full use case, [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](../blob/develop/tests/unit).
 
 # Build Process
 Library itself is just header-only, so no need for linking.
 
-In order to build the usage example (main.cpp(../blob/develop/example/src/main.cpp)) run the cmake in the top-level directory:
+In order to build the usage example ([main.cpp](example/src/main.cpp)) run the cmake in the top-level directory:
 
 `cmake .`
 

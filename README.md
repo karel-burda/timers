@@ -36,7 +36,7 @@ The project is using it in the build of example and unit tests using CMake: [pth
 
 TODO: Some most simple code in here
 
-For full use case, [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](../blob/develop/tests/unit).
+For full use case, [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
 # Build Process
 Library itself is just header-only, so no need for linking.

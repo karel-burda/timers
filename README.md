@@ -71,6 +71,8 @@ It is also possible to turn off build of the example, and build just the tests:
 # Continuos Integration
 Continuos Integration is now being run OS X (clang 8.x) and Linux (gcc 5.x) on Travis: https://travis-ci.org/karel-burda/timers
 
+Compilers are set-up to treat warnings as errors and compiler with the pedantic warning level.
+
 The project is using free Travis services, so the CI process is (because of overhead and expense) broken up into just 2 steps (both with different OS & compiler):
 * `example` -- perform cppcheck on example usage (including `timers themselves`), build on gcc 5.x, run example under the valgrind
 * `tests` -- perform cppcheck on unit tests, build tests on clang 8.x, run tests

@@ -14,5 +14,5 @@ include_directories(include)
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
-link_pthreads_if_needed()
+link_pthreads_if_available()
 

@@ -4,27 +4,25 @@ stages:
 
 jobs:
   include:
-    - stage: example -- analyze, build, memcheck
+    - stage: example -- analyze, build (linux, gcc5), memcheck
+      sudo: required
+      dist: trusty
       language: cpp
-      compiler:
-        - clang
-      os:
-        - osx
-      before_install:
-        #- brew update
-        - brew install cppcheck valgrind
-      before_script:
-        - ls -la
-        - cppcheck --enable=all -I include --check-config  -v ./example
+      compiler: g++
+      os: linux
+      install: export CXX="g++-5"
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      before_install: sudo apt-get update -qq
       script:
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
         - cmake --build ./build --target example --config RelWithDebInfo
-      after_script:
-        # There's currently issue with the valgrind on os x that it reports leaks upon std::launch::async
-        # that is implemented via pthread_detach(). We'll use the Linux for the CI
-        - valgrind --leak-check=full --error-exitcode=255 -v ./build/bin/example
 
-    - stage: tests -- build, run
+    - stage: tests -- build (osx, clang8), run
       language: cpp
       compiler:
         - clang

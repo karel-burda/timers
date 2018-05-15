@@ -87,10 +87,14 @@ TEST_F(single_shot_async_test, callback_multiple_times)
     {
         end = timers::testing::clock::now();
     }));
+    EXPECT_FALSE(m_timer.start(3s, [&end]()
+    {
+        end = timers::testing::clock::now();
+    }));
 
-    std::this_thread::sleep_for(5s);
+    std::this_thread::sleep_for(7s);
 
-    timers::testing::assert_that_elapsed_time_in_tolerance(timers::testing::round_to_seconds(end - start), 4.0, 100.0);
+    timers::testing::assert_that_elapsed_time_in_tolerance(timers::testing::round_to_seconds(end - start), 7.0, 100.0);
 }
 
 TEST_F(single_shot_async_test, start_in_parallel)

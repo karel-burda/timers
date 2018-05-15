@@ -5,7 +5,6 @@ macro(add_cxx_compiler_flag FLAG)
 endmacro()
 
 # Set pedantic warnings on all platforms
-# TODO: Remove code duplication
 if (MSVC)
     if (CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
         string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -15,7 +14,7 @@ if (MSVC)
 
     add_cxx_compiler_flag("/Wall")
     # Hardly usable on MSVC without excluding stdlib
-    add_cxx_compiler_flag("/WX")
+    # add_cxx_compiler_flag("/WX")
 else()
      add_cxx_compiler_flag("-Wall")
      add_cxx_compiler_flag("-Wno-long-long")

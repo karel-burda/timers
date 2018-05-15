@@ -23,7 +23,7 @@ void demonstrate_blocking_timer()
     // passing 5 seconds here, you can pass any chrono literal or std::chrono::duration manually
     timer.block(5s);
 
-    // from other thread you can terminate the timer (using timer_blocking.terminate()),
+    // from other thread you can terminate the timer (using timer.stop()),
     // although this is not usually the case, since the main aim is the blocking behaviour itself
 }
 
@@ -41,6 +41,11 @@ void demonstrate_single_shot_timer()
     // this call is asynchronous
     std::cout << "demonstrate_single_shot_timer(): starting the single shot async timer with 2 seconds timeout and simple callback" << std::endl;
     timer.start(2s, [](){ std::cout << "demonstrate_single_shot_timer(): Hello from single shot async callback" << std::endl; });
+
+    // we could even "stack" the start() commands in a row, e.g.:
+    //timer.start(1s, []() { std::cout << "1\n"; });
+    //timer.start(2s, []() { std::cout << "1\n"; });
+    //timer.start(3s, []() { std::cout << "1\n"; });
 }
 
 void demonstrate_periodic_timer()

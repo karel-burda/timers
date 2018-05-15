@@ -20,13 +20,13 @@ jobs:
         - sudo apt-get update -qq
         - sudo apt-get -y install valgrind cppcheck
       install: export CXX="g++-5"
-      before_script:
-        - cppcheck --enable=all -I include --check-config  -v ./example
       script:
+        - cppcheck --enable=all -I include --check-config  -v ./example
+        - set -e
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
         - cmake --build ./build --target example --config RelWithDebInfo
-      after_script:
         -  valgrind --leak-check=full --error-exitcode=255 -v ./build/bin/example
+        - set +e
 
     - stage: tests -- cppcheck, build (osx, clang8), run
       language: cpp
@@ -36,9 +36,9 @@ jobs:
       before_install:
         - brew update
         - brew install cppcheck
-      before_script:
-        - cppcheck --enable=all -I include -I tests/unit/include/ --check-config  -v ./tests/unit/
       script:
+        - set -e
+        - cppcheck --enable=all -I include -I tests/unit/include/ --check-config  -v ./tests/unit/
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=Release
-      after_script:
         - cmake --build ./build --target run-all-tests-verbose --config Release
+        - set +e

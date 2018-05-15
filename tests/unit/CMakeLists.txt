@@ -19,10 +19,10 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 add_dependencies(${PROJECT_NAME} gtest-build)
 target_link_libraries(${PROJECT_NAME} gtest gtest_main)
 
-add_test(NAME ${PROJECT_NAME} COMMAND $<TARGET_FILE:${PROJECT_NAME}>)
+add_test(NAME all-unit-tests COMMAND $<TARGET_FILE:${PROJECT_NAME}>)
 add_custom_target(run-all-tests-verbose
                   COMMAND
                   ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 300 DEPENDS ${PROJECT_NAME})
 
+supress_cxx_compiler_warning("keyword-macro")
 link_pthreads_if_available()
-

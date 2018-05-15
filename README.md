@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/license-MIT_License-blue.svg?style=flat)](LICENSE)
 
 # Introduction
-`timers` features a header-only library that's implementing timer-related functionality and provides following features:
+`timers` features a thread-safe and header-only library that's implementing timer-related functionality and provides following features:
 * General blocking timer: `block`
 * Single-shot timer that does given action after period expires: `single_shot`
 * Its asynchronous version `single_shot_async`
@@ -34,7 +34,52 @@ path is pointing to the `include` directory located in the root directory.
 On some systems, you may need to link POSIX pthreads.
 The project is using it in the build of example and unit tests using CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake)
 
-TODO: Some most simple code in here
+```c++
+// blocking timer
+{
+    timers::blocking timer;
+
+    // passing 5 seconds here, you can pass any chrono literal or std::chrono::duration manually
+    timer.block(5s);
+
+    // from other thread you can terminate the timer (using timer.stop()),
+    // although this is not usually the case, since the main aim is the blocking behaviour itself
+}
+
+
+// single-shot timer
+{
+    timers::single_shot timer;
+    timers::single_shot_async timer_async;
+
+    // this call is blocking
+    timer.start(2s, [](){ std::cout << "demonstrate_single_shot_timer(): Hello from single shot callback" << std::endl; });
+
+    // this call is asynchronous
+    timer.start(2s, [](){ std::cout << "demonstrate_single_shot_timer(): Hello from single shot async callback" << std::endl; });
+
+    // we could even "stack" the start() commands in a row, e.g.:
+    //timer.start(1s, []() { std::cout << "1\n"; });
+    //timer.start(2s, []() { std::cout << "1\n"; });
+    //timer.start(3s, []() { std::cout << "1\n"; });
+}
+
+// periodic
+{
+    timers::periodic timer;
+    timers::periodic_async timer_async;
+
+    // blocking call
+    timer.start(3s, []() { std::cout << "Hi there" << std::endl; });
+    // we should call "timer.stop()" from some other thread
+
+    // asynchronous call
+    timer_async.start(3s, []() { std::cout << "Hi there" << std::endl; });
+    timer_async.stop();
+}
+
+// TODO: policies
+```
 
 For full use case, [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
@@ -68,8 +113,10 @@ It is also possible to turn off build of the example, and build just the tests:
 
 `cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON`
 
-# Continuos Integration
-Continuos Integration is now being run OS X (clang 8.x) and Linux (gcc 5.x) on Travis: https://travis-ci.org/karel-burda/timers
+# Continuous Integration
+Continuous Integration is now being run OS X (clang 8.x) and Linux (gcc 5.x) on Travis: https://travis-ci.org/karel-burda/timers
+
+Compilers are set-up to treat warnings as errors and compiler with the pedantic warning level.
 
 The project is using free Travis services, so the CI process is (because of overhead and expense) broken up into just 2 steps (both with different OS & compiler):
 * `example` -- perform cppcheck on example usage (including `timers themselves`), build on gcc 5.x, run example under the valgrind

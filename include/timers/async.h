@@ -29,7 +29,7 @@ public:
         m_async_task = std::async(std::launch::async, &underlying_timer::start, this, interval, std::move(callback), policy);
     }
 
-    void stop() override
+    void stop()
     {
         std::lock_guard<decltype(m_async_protection)> lock { m_async_protection };
 
@@ -39,8 +39,7 @@ public:
     }
 
 private:
-    // TODO: deduce type in compile time using decltype, declval, result_of
-    std::future<bool> m_async_task;
+    std::future<void> m_async_task;
     std::mutex m_async_protection;
 };
 }

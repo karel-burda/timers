@@ -13,9 +13,10 @@
 
 # Requirements
 * `timers` are implemented compatible with the C++11 standard and higher
-* Example usage (`main.cpp`) is implemented on top of the C++14,
+* Example usage and unit tests is implemented on top of the C++14,
 because it uses neat `std::chrono_literals` which makes time specifications easy and read-able
-* The above also applies for unit tests
+* Example usage and unit tests are using CMake (3.0 and higher required)
+* On some systems, you may need to link POSIX pthreads.
 
 # Technical Info
 Implemented using C++11 with the use of `std::conditional_variable`, `std::promise` and `std::async`.
@@ -25,16 +26,15 @@ Implementation might throw these exceptions:
 * `time_period_is_zero`
 * `time_period_is_negative`
 
-See `exceptions.h` for more info, if interested.
+See [exceptions.h](include/timers/exceptions.h) for more info, if interested.
 
 # Usage
 In order to use the `timers`, it's only the `include` directory that matters. Just make sure that the header search
-path is pointing to the `include` directory located in the root directory.
+path is pointing to the [include](include) directory located in the root directory.
 
-On some systems, you may need to link POSIX pthreads.
-The project is using it in the build of example and unit tests using CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake)
+POSIX threads are being linked via CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake)
 
-```c++
+```cpp
 // blocking timer
 {
     timers::blocking timer;
@@ -53,10 +53,10 @@ The project is using it in the build of example and unit tests using CMake: [pth
     timers::single_shot_async timer_async;
 
     // this call is blocking
-    timer.start(2s, [](){ std::cout << "demonstrate_single_shot_timer(): Hello from single shot callback" << std::endl; });
+    timer.start(2s, [](){ std::cout << "Hi there" << std::endl; });
 
     // this call is asynchronous
-    timer.start(2s, [](){ std::cout << "demonstrate_single_shot_timer(): Hello from single shot async callback" << std::endl; });
+    timer.start(2s, [](){ std::cout << "Hi there" << std::endl; });
 
     // we could even "stack" the start() commands in a row, e.g.:
     //timer.start(1s, []() { std::cout << "1\n"; });
@@ -86,15 +86,15 @@ For full use case, [main.cpp](example/src/main.cpp) or implementation of unit te
 # Build Process
 Library itself is just header-only, so no need for linking.
 
-In order to build the usage example ([main.cpp](example/src/main.cpp)) run the cmake in the top-level directory:
+In order to build the usage example ([main.cpp](example/src/main.cpp)) run the cmake in the top-level directory like this:
 
 `cmake .`
 
-I personally prefer to specify the separate build directory explicitly:
+I personally prefer to specify a separate build directory explicitly:
 
 `cmake -Bbuild -H.`
 
-You can of course specify ordinary cmake options like build type (debug, release, ...), used generator, etc.
+You can of course specify ordinary cmake options like build type (debug, release with debug info, ...), used generator, etc.
 
 # Unit Tests
 For building tests, run cmake with the option `UNIT-TESTS=ON`:
@@ -116,7 +116,7 @@ It is also possible to turn off build of the example, and build just the tests:
 # Continuous Integration
 Continuous Integration is now being run OS X (clang 8.x) and Linux (gcc 5.x) on Travis: https://travis-ci.org/karel-burda/timers
 
-Compilers are set-up to treat warnings as errors and compiler with the pedantic warning level.
+Compilers are set-up to treat warnings as errors and compiler with the pedantic warning level and build targets as a release type of build (`example` is built as a release with debug symbols because of the valgrind).
 
 The project is using free Travis services, so the CI process is (because of overhead and expense) broken up into just 2 steps (both with different OS & compiler):
 * `example` -- perform cppcheck on example usage (including `timers themselves`), build on gcc 5.x, run example under the valgrind

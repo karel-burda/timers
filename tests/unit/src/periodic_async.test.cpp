@@ -78,7 +78,7 @@ TEST_F(periodic_async_test, start_long_callback)
 
 TEST_F(periodic_async_test, stop_in_parallel)
 {
-    EXPECT_FALSE(m_timer.start(2s, [](){}));
+    m_timer.start(2s, [](){});
 
     auto stopper1 = std::async(std::launch::async, [this]()
     {

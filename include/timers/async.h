@@ -5,8 +5,9 @@
 #include <mutex>
 #include <type_traits>
 
-#include "timers/type_definitions.h"
 #include "timers/policies.h"
+#include "timers/return_type_traits.h"
+#include "timers/type_definitions.h"
 
 namespace burda
 {
@@ -39,7 +40,7 @@ public:
     }
 
 private:
-    std::future<void> m_async_task;
+    std::future<traits::return_type<decltype(&underlying_timer::start)>> m_async_task;
     std::mutex m_async_protection;
 };
 }

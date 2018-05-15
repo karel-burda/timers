@@ -54,7 +54,7 @@ TEST_F(single_shot_async_test, default_values)
 
 TEST_F(single_shot_async_test, callback_called)
 {
-    EXPECT_FALSE(m_timer.start(2s, std::bind(&single_shot_async_test::callback, this)));
+    m_timer.start(2s, std::bind(&single_shot_async_test::callback, this));
 
     std::this_thread::sleep_for(5s);
 
@@ -79,18 +79,18 @@ TEST_F(single_shot_async_test, callback_multiple_times)
     const auto start = timers::testing::clock::now();
     auto end = timers::testing::clock::now();
 
-    EXPECT_FALSE(m_timer.start(1s, [&end]()
+    m_timer.start(1s, [&end]()
     {
         end = timers::testing::clock::now();
-    }));
-    EXPECT_FALSE(m_timer.start(3s, [&end]()
+    });
+    m_timer.start(3s, [&end]()
     {
         end = timers::testing::clock::now();
-    }));
-    EXPECT_FALSE(m_timer.start(3s, [&end]()
+    });
+    m_timer.start(3s, [&end]()
     {
         end = timers::testing::clock::now();
-    }));
+    });
 
     std::this_thread::sleep_for(7s);
 
@@ -103,16 +103,16 @@ TEST_F(single_shot_async_test, start_in_parallel)
     bool taskFinished1 = false;
     bool taskFinished2 = false;
 
-    EXPECT_FALSE(m_timer.start(2s, [&counter, &taskFinished1]()
+    m_timer.start(2s, [&counter, &taskFinished1]()
     {
         ++counter;
         taskFinished1 = true;
-    }));
-    EXPECT_FALSE(m_timer.start(2s, [&counter, &taskFinished2]()
+    });
+    m_timer.start(2s, [&counter, &taskFinished2]()
     {
         ++counter;
         taskFinished2 = true;
-    }));
+    });
 
     while (!taskFinished1 || !taskFinished2)
     {

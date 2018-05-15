@@ -102,11 +102,11 @@ TEST_F(periodic_test, start_in_parallel)
 
     auto starter1 = std::async(std::launch::async, [this, &taskFinished1]()
     {
-        EXPECT_FALSE(m_timer.start(1s, [&taskFinished1]() { taskFinished1 = true; }));
+        m_timer.start(1s, [&taskFinished1]() { taskFinished1 = true; });
     });
     auto starter2 = std::async(std::launch::async, [this, &taskFinished2]()
     {
-        EXPECT_FALSE(m_timer.start(1s, [&taskFinished2]() { taskFinished2 = true; }));
+        m_timer.start(1s, [&taskFinished2]() { taskFinished2 = true; });
     });
 
     std::this_thread::sleep_for(2s);

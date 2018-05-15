@@ -45,9 +45,7 @@ TEST(single_shot_async_construction_destruction, basic_construction_destruction)
 
 TEST_F(single_shot_async_test, default_values)
 {
-    // TODO: find out why this crashes
-    //EXPECT_TRUE(m_single_shot_async_timer.m_async_task.wait_for(0s) == std::future_status::ready);
-
+    EXPECT_FALSE(m_timer.m_async_task.valid());
     timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
 }

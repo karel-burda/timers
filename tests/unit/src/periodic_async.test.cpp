@@ -37,6 +37,13 @@ TEST(periodic_async_construction_destruction, basic_construction_destruction)
     timers::testing::assert_construction_and_destruction<burda::timers::periodic_async>();
 }
 
+TEST_F(periodic_async_test, default_values)
+{
+    EXPECT_FALSE(m_timer.m_async_task.valid());
+    timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+}
+
 TEST_F(periodic_async_test, start_exception_policy_ignore)
 {
     unsigned char counter = 0;

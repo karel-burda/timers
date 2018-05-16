@@ -6,7 +6,7 @@
 # Introduction
 `timers` features a thread-safe and header-only library that's implementing timer-related functionality and provides following features:
 * General blocking timer: `block`
-* Single-shot timer that does given action after period expires: `single_shot`
+* Single-shot timer that does given action after timer period expires: `single_shot`
 * Its asynchronous version `single_shot_async`
 * Timer that does some action periodically: `periodic`
 * Its asynchronous version `periodic_async`
@@ -16,19 +16,26 @@
 * Example usage and unit tests is implemented on top of the C++14,
 because it uses neat `std::chrono_literals` which makes time specifications easy and read-able
 * Example usage and unit tests are using CMake (3.0 and higher required)
-* On some systems, you may need to link POSIX pthreads.
+* On most systems, you'll probably need to link POSIX pthreads (`pthreads`)
 
 # Implementation Info
 Implemented using C++11 with the use of `std::conditional_variable`, `std::promise` and `std::async`.
 
-Implementation might throw these exceptions:
+Client defines timer's action that should be of type `timers::callback`, thus `std::function<void()>`.
+Time intervals are being defined as `timers::interval` = `std::chrono::duration<double>`.
+
+Implementation might throw these exceptions upon the `start(...)`:
 * `callback_not_callable`
 * `time_period_is_zero`
 * `time_period_is_negative`
 
 See [exceptions.h](include/timers/exceptions.h) for more info, if interested.
- 
- TODO: policies
+
+Policies specifies how timer class will behave when exception is thrown from the user's callback:
+* `stop` -- causes the timer to call `stop()` on itself and re-throws the catched exception
+* `ignore` -- causes the timer to ignore catched exception and keep on
+
+See [policies](include/timers/policies).
 
 # Usage
 In order to use the `timers`, it's only the `include` directory that matters. Just make sure that the header search
@@ -36,54 +43,82 @@ path is pointing to the [include](include) directory located in the root directo
 
 POSIX threads are being linked via CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake)
 
+## Blocking
 ```cpp
-// blocking timer
-{
-    timers::blocking timer;
+timers::blocking timer;
 
-    // passing 5 seconds here, you can pass any chrono literal or std::chrono::duration manually
-    timer.block(5s);
+// blocks current thread using condition_variable
+// passing 5 seconds here, you can pass any chrono literal or std::chrono::duration manually
+timer.block(5s);
+// also possible to "stack" block() calls in a row (but from different thrads)
 
-    // from other thread you can terminate the timer (using timer.stop()),
-    // although this is not usually the case, since the main aim is the blocking behaviour itself
-}
-
-
-// single-shot timer
-{
-    timers::single_shot timer;
-    timers::single_shot_async timer_async;
-
-    // this call is blocking
-    timer.start(2s, [](){ std::cout << "Hi there" << std::endl; });
-
-    // this call is asynchronous
-    timer.start(2s, [](){ std::cout << "Hi there" << std::endl; });
-
-    // we could even "stack" the start() commands in a row, e.g.:
-    //timer.start(1s, []() { std::cout << "1\n"; });
-    //timer.start(2s, []() { std::cout << "1\n"; });
-    //timer.start(3s, []() { std::cout << "1\n"; });
-}
-
-// periodic
-{
-    timers::periodic timer;
-    timers::periodic_async timer_async;
-
-    // blocking call
-    timer.start(3s, []() { std::cout << "Hi there" << std::endl; });
-    // we should call "timer.stop()" from some other thread
-
-    // asynchronous call
-    timer_async.start(3s, []() { std::cout << "Hi there" << std::endl; });
-    timer_async.stop();
-}
-
-// TODO: policies
+// from other thread you can terminate the timer (using timer.stop()),
+// although this is not usually the case, since the main aim is the blocking behaviour itself
 ```
 
-For full use case, [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
+## Single-shot
+```cpp
+timers::single_shot timer;
+
+// this call is blocking
+timer.start(2s, [](){ std::cout << "Hi there" << std::endl; });
+
+// ignore when exception is thrown
+timer.start(2s, []()
+{
+    std::cout << "Gonna throw exception" << std::endl;
+    throw std::runtime_error{};
+}, timers::policies::start::ignore);
+
+// these calls will throw exception:
+timer.start(0s, [](){});
+timer.start(-1h, [](){});
+timer.start(2m, nullptr);
+```
+
+## Asynchronous single-shot
+```cpp
+timers::single_shot_async timer_async;
+
+// this call is asynchronous
+timer.start(2s, [](){ std::cout << "Hi there" << std::endl; });
+
+// we can stack the commands
+timer.start(1s, [](){ std::cout << "Action1" << std::endl; });
+timer.start(1s, [](){ std::cout << "Action2" << std::endl; });
+timer.start(1s, [](){ std::cout << "Action3" << std::endl; });
+
+// will throw
+timer.start(-5s, [](){});
+```
+
+## Periodic
+```cpp
+timers::periodic timer;
+
+// blocking call
+timer.start(3s, []() { std::cout << "This is being called regularly" << std::endl; });
+// we should call "timer.stop()" from some other thread
+
+// we can specify exception policy as well
+ timer.start(3s, []() {}, timers::policies::start::ignore);
+
+// will throw
+timer.start(5s, nullptr);
+}
+```
+
+## Asynchronous periodic
+```cpp
+timers::periodic_async timer;
+
+// non-blocking call
+// we can explicitly specify exception policy
+timer.start(3s, []() { std::cout << "This is being called regularly" << std::endl; });
+// we can call "timer.stop()" right here theoretically
+```
+
+For full use cases, [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
 # Build Process
 Library itself is just header-only, so no need for linking.
@@ -121,7 +156,7 @@ Continuous Integration is now being run OS X (clang 8.x) and Linux (gcc 5.x) on 
 Compilers are set-up to treat warnings as errors and compiler with the pedantic warning level and build targets as a release type of build (`example` is built as a release with debug symbols because of the valgrind).
 
 The project is using free Travis services, so the CI process is (because of overhead and expense) broken up into just 2 steps (both with different OS & compiler):
-* `example` -- perform cppcheck on example usage (including `timers themselves`), build on gcc 5.x, run example under the valgrind
+* `example` -- perform cppcheck on example usage (including `timers` themselves), build on gcc 5.x, run example under the valgrind
 * `tests` -- perform cppcheck on unit tests, build tests on clang 8.x, run tests
 
 Project also uses https://app.codacy.com/app/karel-burda/timers/dashboard.

@@ -44,6 +44,13 @@ TEST(periodic_construction_destruction, basic_construction_destruction)
     timers::testing::assert_construction_and_destruction<burda::timers::periodic>();
 }
 
+TEST_F(periodic_test, default_values)
+{
+    timers::testing::check_if_mutex_is_owned(m_timer.m_start_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+}
+
 TEST_F(periodic_test, callback_called)
 {
     auto caller = std::async(std::launch::async, [this]()

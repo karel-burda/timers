@@ -7,7 +7,7 @@ namespace burda
 {
 namespace timers
 {
-using time_interval = std::chrono::duration<double>;
-using timers_callback = std::function<void()>;
+using interval = std::chrono::duration<double>;
+using callback = std::function<void()>;
 }
 }

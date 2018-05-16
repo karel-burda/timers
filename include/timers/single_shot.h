@@ -15,7 +15,7 @@ public:
     /// @returns true if terminated "naturally", false if terminated forcefully using the "stop()"
     /// @see "blocking::start"
     /// @see "policies::start::exception::start" for information about policies
-    bool start(time_interval interval, timers_callback callback, policies::start::exception policy = policies::start::get_default())
+    bool start(interval interval, callback callback, policies::start::exception policy = policies::start::get_default())
     {
         const auto terminated_after_time_elapsed = blocking::block(interval);
 
@@ -28,7 +28,7 @@ public:
     }
 
 private:
-    void call(timers_callback callback, policies::start::exception policy)
+    void call(callback callback, policies::start::exception policy)
     {
         if (callback)
         {

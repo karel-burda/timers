@@ -20,7 +20,7 @@ public:
     /// Waits and blocks current thread until the "time" elapses OR client code calls "stop()"
     /// @throws callback_is_not_callable, time_period_is_negative, time_period_is_zero
     /// @returns true if terminated "naturally", false if terminated forcefully using the "stop()"
-    bool block(time_interval time)
+    bool block(interval time)
     {
         throw_if_time_invalid(time);
 
@@ -51,7 +51,7 @@ public:
     }
 
 private:
-    void throw_if_time_invalid(time_interval time) const
+    void throw_if_time_invalid(interval time) const
     {
         if (time == time.zero())
         {

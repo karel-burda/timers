@@ -29,7 +29,7 @@ public:
     /// Callback is performed in separate thread
     /// @throws callback_is_not_callable, time_period_is_negative, time_period_is_zero, std::system_error
     /// @see "single_shot::start" and "periodic::start"
-    void start(time_interval interval, timers_callback callback, policies::start::exception policy = policies::start::get_default())
+    void start(interval interval, callback callback, policies::start::exception policy = policies::start::get_default())
     {
         std::lock_guard<decltype(m_async_protection)> lock { m_async_protection };
 

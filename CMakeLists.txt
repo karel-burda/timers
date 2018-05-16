@@ -7,7 +7,7 @@ include("cmake-helpers/settings.cmake")
 include("cmake-helpers/warnings.cmake")
 
 file(GLOB_RECURSE HEADERS include/*.h*)
-file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "README.md")
+file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "README.md" ".travis.yml")
 
 option(EXAMPLE "Build example usage" ON)
 option(UNIT-TESTS "Build unit tests" OFF)

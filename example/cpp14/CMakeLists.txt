@@ -2,9 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(example VERSION 0.9.5 LANGUAGES CXX)
 
-if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
-    message(FATAL_ERROR "This CMAKE is meant to be run from the top-level CMake in the root directory, run the top-level CMake instead")
-endif()
+message(STATUS "timers: building with the example")
 
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB_RECURSE SOURCES src/*.c*)

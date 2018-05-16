@@ -2,9 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(tests VERSION 0.9.5 LANGUAGES CXX)
 
-if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
-    message(FATAL_ERROR "This CMAKE is meant to be run from the top-level CMake in the root directory, run the top-level CMake instead")
-endif()
+message(STATUS "timers: building with unit tests")
 
 include("${CMAKE_SOURCE_DIR}/cmake-helpers/gtest.cmake")
 
@@ -26,3 +24,4 @@ add_custom_target(run-all-tests-verbose
 
 supress_cxx_compiler_warning("keyword-macro")
 link_pthreads_if_available()
+

@@ -15,9 +15,9 @@ ExternalProject_Add(${_GTEST_TARGET_NAME}
 )
 ExternalProject_Get_Property(${_GTEST_TARGET_NAME} source_dir binary_dir install_dir)
 
-message(STATUS "Running the cmake for the ${_GTEST_TARGET_NAME}")
+message(STATUS "timers: Running the cmake for the ${_GTEST_TARGET_NAME}")
 add_custom_command(TARGET ${_GTEST_TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=${_GTEST_BUILD_VARIANT} . WORKING_DIRECTORY ${source_dir})
-message(STATUS "Running the make for the ${_GTEST_TARGET_NAME}")
+message(STATUS "timers: Running the make for the ${_GTEST_TARGET_NAME}")
 add_custom_command(TARGET ${_GTEST_TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} --build . --config ${_GTEST_BUILD_VARIANT} WORKING_DIRECTORY ${source_dir})
 
 include_directories(${source_dir}/googletest/include)

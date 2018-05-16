@@ -13,11 +13,13 @@ namespace burda
 {
 namespace timers
 {
+/// Timer that blocks current thread for given amount of time
 class blocking : disable_copy_and_move
 {
 public:
-    /// Waits and blocks current thread until the "time" elapses OR client code calls "terminate()"
-    /// Returns false if terminated by the client
+    /// Waits and blocks current thread until the "time" elapses OR client code calls "stop()"
+    /// @throws callback_is_not_callable, time_period_is_negative, time_period_is_zero
+    /// @returns true if terminated "naturally", false if terminated forcefully using the "stop()"
     bool block(time_interval time)
     {
         throw_if_time_invalid(time);
@@ -36,7 +38,7 @@ public:
         }
     }
 
-    /// Terminates timer, will set the "m_terminate_forcefully" to true, so that the cv stops to block
+    /// Stops the timer, will set the "m_terminate_forcefully" to true, so that the cv stops to block
     void stop()
     {
         {

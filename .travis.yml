@@ -1,10 +1,21 @@
 stages:
-  - example -- cppcheck, build (linux, gcc5), valgrind
-  - tests -- cppcheck, build (osx, clang8), run
+  - example (C++11) -- build (linux, gcc4)
+  - example (C++14) -- cppcheck, build (linux, gcc5), valgrind
+  - tests (C++14) -- cppcheck, build (osx, clang8), run
 
 jobs:
   include:
-    - stage: example -- cppcheck, build (linux, gcc5), valgrind
+    - stage: example (C++11) -- build (linux, gcc4)
+      language: cpp
+      compiler: gcc
+      os: linux
+      script:
+        - set -e
+        - cmake -Bbuild -H. -DEXAMPLE-CPP11:BOOL=ON DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
+        - cmake --build ./build --target example-cpp11 --config
+        - set +e
+
+    - stage: example (C++14) -- cppcheck, build (linux, gcc5), valgrind
       sudo: required
       dist: trusty
       language: cpp
@@ -28,7 +39,7 @@ jobs:
         -  valgrind --leak-check=full --error-exitcode=255 -v ./build/bin/example
         - set +e
 
-    - stage: tests -- cppcheck, build (osx, clang8), run
+    - stage: tests (C++14) -- cppcheck, build (osx, clang8), run
       language: cpp
       compiler: clang
       os: osx

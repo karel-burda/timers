@@ -6,8 +6,8 @@
 #include <type_traits>
 
 #include "timers/policies.h"
-#include "timers/return_type_traits.h"
 #include "timers/type_definitions.h"
+#include "timers/type_traits.h"
 
 namespace burda
 {

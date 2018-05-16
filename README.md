@@ -30,10 +30,13 @@ Policies specifies how timer class will behave when exception is thrown from the
 See [policies.h](include/timers/policies.h).
 
 # Usage
-In order to use the `timers`, it's only the `include` directory that matters. Just make sure that the header search
-path is pointing to the [include](include) directory located in the root directory.
+In order to use the `timers`, it's only the `include` directory that matters. Just make sure that the header search path is pointing to the [include](include) directory located in the root directory.
 
-POSIX threads are being linked via CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake)
+Implementation resides in the `burda::timers` namespace, so it might be useful to do `namespace timers = burda::timers;` in your project.
+
+POSIX threads in the example usage and tests are being linked via CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake)
+
+See also section [Requirements](#Requirements).
 
 ### Blocking
 ```cpp
@@ -105,19 +108,11 @@ timer.start(5s, nullptr);
 timers::periodic_async timer;
 
 // non-blocking call
-// we can explicitly specify exception policy
 timer.start(3s, []() { std::cout << "This is being called regularly" << std::endl; });
 // we can call "timer.stop()" right here theoretically
 ```
 
 For full use cases, [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
-
-# Requirements
-* `timers` are implemented compatible with the C++11 standard and higher
-* Example usage and unit tests is implemented on top of the C++14,
-because it uses neat `std::chrono_literals` which makes time specifications easy and read-able
-* Example usage and unit tests are using CMake (3.0 and higher required)
-* On most systems, you'll probably need to link POSIX pthreads (`pthreads`)
 
 # Build Process
 Library itself is just header-only, so no need for linking.

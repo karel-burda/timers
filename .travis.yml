@@ -1,5 +1,5 @@
 stages:
-  - example (C++11) -- build (linux, clang)
+  - example (C++11) -- build (linux, clang5)
   - example (C++14) -- cppcheck, build (linux, gcc5), valgrind
   - tests (C++14) -- cppcheck, build (osx, clang8), run
 
@@ -7,7 +7,7 @@ jobs:
   fail_fast: true
 
   include:
-    - stage: example (C++11) -- build (linux, clang)
+    - stage: example (C++11) -- build (linux, clang5)
       language: cpp
       compiler: clang
       os: linux

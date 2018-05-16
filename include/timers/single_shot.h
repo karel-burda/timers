@@ -9,7 +9,7 @@ namespace timers
 class single_shot : public blocking
 {
 public:
-    virtual bool start(time_interval interval, timers_callback callback, policies::start::exception policy = policies::start::get_default())
+    bool start(time_interval interval, timers_callback callback, policies::start::exception policy = policies::start::get_default())
     {
         const auto terminated_after_time_elapsed = blocking::block(interval);
 

@@ -45,16 +45,14 @@ TEST(single_shot_async_construction_destruction, basic_construction_destruction)
 
 TEST_F(single_shot_async_test, default_values)
 {
-    // TODO: find out why this crashes
-    //EXPECT_TRUE(m_single_shot_async_timer.m_async_task.wait_for(0s) == std::future_status::ready);
-
+    EXPECT_FALSE(m_timer.m_async_task.valid());
     timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
 }
 
 TEST_F(single_shot_async_test, callback_called)
 {
-    EXPECT_FALSE(m_timer.start(2s, std::bind(&single_shot_async_test::callback, this)));
+    m_timer.start(2s, std::bind(&single_shot_async_test::callback, this));
 
     std::this_thread::sleep_for(5s);
 
@@ -79,18 +77,22 @@ TEST_F(single_shot_async_test, callback_multiple_times)
     const auto start = timers::testing::clock::now();
     auto end = timers::testing::clock::now();
 
-    EXPECT_FALSE(m_timer.start(1s, [&end]()
+    m_timer.start(1s, [&end]()
     {
         end = timers::testing::clock::now();
-    }));
-    EXPECT_FALSE(m_timer.start(3s, [&end]()
+    });
+    m_timer.start(3s, [&end]()
     {
         end = timers::testing::clock::now();
-    }));
+    });
+    m_timer.start(3s, [&end]()
+    {
+        end = timers::testing::clock::now();
+    });
 
-    std::this_thread::sleep_for(5s);
+    std::this_thread::sleep_for(7s);
 
-    timers::testing::assert_that_elapsed_time_in_tolerance(timers::testing::round_to_seconds(end - start), 4.0, 100.0);
+    timers::testing::assert_that_elapsed_time_in_tolerance(timers::testing::round_to_seconds(end - start), 7.0, 100.0);
 }
 
 TEST_F(single_shot_async_test, start_in_parallel)
@@ -99,16 +101,16 @@ TEST_F(single_shot_async_test, start_in_parallel)
     bool taskFinished1 = false;
     bool taskFinished2 = false;
 
-    EXPECT_FALSE(m_timer.start(2s, [&counter, &taskFinished1]()
+    m_timer.start(2s, [&counter, &taskFinished1]()
     {
         ++counter;
         taskFinished1 = true;
-    }));
-    EXPECT_FALSE(m_timer.start(2s, [&counter, &taskFinished2]()
+    });
+    m_timer.start(2s, [&counter, &taskFinished2]()
     {
         ++counter;
         taskFinished2 = true;
-    }));
+    });
 
     while (!taskFinished1 || !taskFinished2)
     {

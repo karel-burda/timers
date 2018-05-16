@@ -18,7 +18,7 @@ because it uses neat `std::chrono_literals` which makes time specifications easy
 * Example usage and unit tests are using CMake (3.0 and higher required)
 * On some systems, you may need to link POSIX pthreads.
 
-# Technical Info
+# Implementation Info
 Implemented using C++11 with the use of `std::conditional_variable`, `std::promise` and `std::async`.
 
 Implementation might throw these exceptions:
@@ -27,6 +27,8 @@ Implementation might throw these exceptions:
 * `time_period_is_negative`
 
 See [exceptions.h](include/timers/exceptions.h) for more info, if interested.
+ 
+ TODO: policies
 
 # Usage
 In order to use the `timers`, it's only the `include` directory that matters. Just make sure that the header search

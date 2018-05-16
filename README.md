@@ -165,3 +165,4 @@ Following boost and STL coding guidelines with these exceptions:
 * Placing a space before and after the `*` or `&`
 * Using `{}` instead of `()` to denote constructors, using `()` only for function calls
 * Include order is: interface file, standard includes, internal ones
+* Documentation of public interface is Doxygen-like

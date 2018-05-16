@@ -11,7 +11,7 @@ jobs:
       os: linux
       script:
         - set -e
-        - cmake -Bbuild -H. -DEXAMPLE-CPP11:BOOL=ON DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
+        - cmake -Bbuild -H. -DEXAMPLE-CPP11:BOOL=ON -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
         - cmake --build ./build --target example-cpp11 --config
         - set +e
 

@@ -40,12 +40,18 @@ void demonstrate_single_shot_timer()
 
     // this call is asynchronous
     std::cout << "demonstrate_single_shot_timer(): starting the single shot async timer with 2 seconds timeout and simple callback" << std::endl;
-    timer.start(std::chrono::seconds{ 2 }, []() { std::cout << "demonstrate_single_shot_timer(): Hello from single shot async callback" << std::endl; });
+    timer_async.start(std::chrono::seconds{ 2 }, []() { std::cout << "demonstrate_single_shot_timer(): Hello from single shot async callback" << std::endl; });
 
     // we could even "stack" the start() commands in a row, e.g.:
     //timer.start(1s, []() { std::cout << "1\n"; });
     //timer.start(2s, []() { std::cout << "1\n"; });
     //timer.start(3s, []() { std::cout << "1\n"; });
+
+    // stop artificially after some time
+    std::cout << "demonstrate_single_shot_timer(): We'll stop the single_shot async 'artificially' after 5 seconds" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds{ 5 });
+    std::cout << "demonstrate_single_shot_timer(): Going to stop the async single_shot timer" << std::endl;
+    timer_async.stop();
 }
 
 void demonstrate_periodic_timer()
@@ -74,6 +80,7 @@ void demonstrate_periodic_timer()
     std::cout << "demonstrate_periodic_timer(): Starting async periodic timer with 3 seconds interval" << std::endl;
     // asynchronous call
     timer_async.start(std::chrono::seconds{ 3 }, []() { std::cout << "demonstrate_periodic_timer(): Hello from periodic async callback" << std::endl; });
+
     // stop artificially after some time
     std::cout << "demonstrate_periodic_timer(): We'll stop the periodic async 'artificially' after 10 seconds" << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds{ 10 });

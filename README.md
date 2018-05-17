@@ -34,7 +34,7 @@ In order to use the `timers`, it's only the `include` directory that matters. Ju
 
 Implementation resides in the `burda::timers` namespace, so it might be useful to do `namespace timers = burda::timers;` in your project.
 
-POSIX threads in the example usage and tests are being linked via CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake)
+POSIX threads in the example usage and tests are being linked via CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake).
 
 See also section [Requirements](#Requirements).
 

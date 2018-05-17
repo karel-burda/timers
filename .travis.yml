@@ -56,7 +56,15 @@ jobs:
       before_install:
         - brew update
         - brew install cppcheck lcov
+        - brew install pyenv
+        - eval "$(pyenv init -)"
+        - pyenv install 2.7.6
+        - pyenv global 2.7.6
+        - pyenv rehash
+        - pip install cpp-coveralls
+        - pyenv rehash
       script:
         - cppcheck --enable=all -I include -I tests/unit/include/ --check-config  -v ./tests/unit/
-        - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=Release
-        - cmake --build ./build --target run-all-tests-verbose --config Release
+        - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
+        - cmake --build ./build --target run-all-tests-verbose --config RelWithDebInfo
+        - find ./ -iname "*.gcda"

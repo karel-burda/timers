@@ -83,9 +83,9 @@ void demonstrate_periodic_timer()
 
 int main(int /*argc*/, char ** /*argv*/)
 {
-    //demonstrate_blocking_timer();
+    demonstrate_blocking_timer();
     demonstrate_single_shot_timer();
-    //demonstrate_periodic_timer();
+    demonstrate_periodic_timer();
 
     return EXIT_SUCCESS;
 }

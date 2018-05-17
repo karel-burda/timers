@@ -27,8 +27,10 @@ jobs:
         - pip install cpp-coveralls
         - pyenv rehash
       script:
+        - set -e
         - cppcheck --enable=all -I include -I tests/unit/include/ --check-config  -v ./tests/unit/
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCOVERAGE:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
         - cmake --build ./build --target run-all-tests-verbose --config RelWithDebInfo
         - find ./ -iname "*.gcda"
-        - cpp-coverage --help
+        - coveralls --exclude tests/unit/include/ --exclude build/gtest-src --gcov-options '\-lp'
+        - set +e

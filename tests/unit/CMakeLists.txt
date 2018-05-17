@@ -22,7 +22,7 @@ if (COVERAGE)
 
     # TODO: Detect whether is on the GNU
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fcoverage-mapping -fprofile-instr-generate")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage --coverage")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
 endif()
 
 add_test(NAME all-unit-tests COMMAND $<TARGET_FILE:${PROJECT_NAME}>)

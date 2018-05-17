@@ -20,7 +20,7 @@ add_custom_command(TARGET ${_GTEST_TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMA
 message(STATUS "timers: Running the make for the ${_GTEST_TARGET_NAME}")
 add_custom_command(TARGET ${_GTEST_TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} --build . --config ${_GTEST_BUILD_VARIANT} WORKING_DIRECTORY ${source_dir})
 
-include_directories(${source_dir}/googletest/include)
+include_directories(SYSTEM ${source_dir}/googletest/include)
 link_directories(${PROJECT_NAME} ${binary_dir}/googlemock/gtest)
 link_directories(${PROJECT_NAME} ${binary_dir}/googlemock/gtest/${_GTEST_BUILD_VARIANT})
 

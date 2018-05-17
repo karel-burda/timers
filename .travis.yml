@@ -11,43 +11,6 @@ jobs:
   fail_fast: true
 
   include:
-    - stage: example (C++11) -- build (linux, clang5), valgrind
-      sudo: required
-      dist: trusty
-      language: cpp
-      compiler: clang
-      os: linux
-      before_install:
-        - sudo apt-get update -qq
-        - sudo apt-get -y install valgrind
-      script:
-        - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
-        - cmake --build ./build --target example --config RelWithDebInfo
-        - valgrind --leak-check=full --error-exitcode=255 -v ./build/bin/example
-
-    - stage: example (C++14) -- cppcheck, build (linux, gcc5), valgrind
-      sudo: required
-      dist: trusty
-      language: cpp
-      compiler: g++
-      os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-            - valgrind
-            - cppcheck
-      before_install:
-        - sudo apt-get update -qq
-      install: export CXX="g++-5"
-      script:
-        - cppcheck --enable=all -I include --check-config  -v ./example
-        - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
-        - cmake --build ./build --target example --config RelWithDebInfo
-        - valgrind --leak-check=full --error-exitcode=255 -v ./build/bin/example
-
     - stage: tests (C++14) -- cppcheck, build (osx, clang8), run
       language: cpp
       compiler: clang
@@ -56,7 +19,7 @@ jobs:
       before_install:
         - brew update
         - brew install cppcheck lcov
-        - brew install pyenv
+        - brew upgrade pyenv
         - eval "$(pyenv init -)"
         - pyenv install 2.7.6
         - pyenv global 2.7.6

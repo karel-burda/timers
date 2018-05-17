@@ -35,7 +35,7 @@ jobs:
         - cppcheck --enable=all -I include --check-config  -v ./example
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
         - cmake --build ./build --target example --config RelWithDebInfo
-        - valgrind --leak-check=full --error-exitcode=255 -v ./build/bin/example
+        - valgrind --leak-check=full --error-exitcode=255 --sim-hints=no-nptl-pthread-stackcache -v ./build/bin/example
 
     - stage: tests (C++14) -- cppcheck, build (osx, clang8), run
       language: cpp

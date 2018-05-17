@@ -4,6 +4,7 @@ namespace burda
 {
 namespace timers
 {
+/// Helper class that enables default construction and disables copy and move operations
 struct disable_copy_and_move
 {
     disable_copy_and_move() = default;

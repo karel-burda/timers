@@ -7,23 +7,24 @@ include("cmake-helpers/settings.cmake")
 include("cmake-helpers/warnings.cmake")
 
 file(GLOB_RECURSE HEADERS include/*.h*)
-file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "README.md")
+file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "README.md" ".travis.yml")
 
 option(EXAMPLE "Build example usage" ON)
+option(EXAMPLE-CPP11 "Build C++11 of the example usage (intended for testing build-ability of timers themselves)" OFF)
 option(UNIT-TESTS "Build unit tests" OFF)
 option(PERFORMANCE-TESTS "Build performance tests" OFF)
 
 add_subdirectory(cmake-helpers)
 
 if (EXAMPLE)
-    message(STATUS "Building with example")
+    add_subdirectory(example/cpp14)
+endif()
 
-    add_subdirectory(example)
+if (EXAMPLE-CPP11)
+    add_subdirectory(example/cpp11)
 endif()
 
 if (UNIT-TESTS)
-    message(STATUS "Building with unit tests")
-
     enable_testing()
     add_subdirectory(tests/unit)
 endif()

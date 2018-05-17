@@ -1,5 +1,5 @@
 stages:
-  - example (C++11) -- build (linux, clang5)
+  - example (C++11) -- build (linux, clang5), valgrind
   - example (C++14) -- cppcheck, build (linux, gcc5), valgrind
   - tests (C++14) -- cppcheck, build (osx, clang8), run
 
@@ -7,13 +7,19 @@ jobs:
   fail_fast: true
 
   include:
-    - stage: example (C++11) -- build (linux, clang5)
+    - stage: example (C++11) -- build (linux, clang5), valgrind
+      sudo: required
+      dist: trusty
       language: cpp
       compiler: clang
       os: linux
+      before_install:
+        - sudo apt-get update -qq
+        - sudo apt-get -y install valgrind
       script:
-        - cmake -Bbuild -H. -DEXAMPLE-CPP11:BOOL=ON -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=Release
-        - cmake --build ./build --target example-cpp11 --config
+        - cmake -Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
+        - cmake --build ./build --target example --config RelWithDebInfo
+        - valgrind --leak-check=full --error-exitcode=255 -v ./build/bin/example
 
     - stage: example (C++14) -- cppcheck, build (linux, gcc5), valgrind
       sudo: required

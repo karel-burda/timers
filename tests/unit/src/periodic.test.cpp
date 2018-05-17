@@ -47,7 +47,6 @@ TEST(periodic_construction_destruction, basic_construction_destruction)
 TEST_F(periodic_test, default_values)
 {
     timers::testing::check_if_mutex_is_owned(m_timer.m_start_protection, false);
-    timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
 }
 

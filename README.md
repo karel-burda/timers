@@ -100,7 +100,6 @@ timer.start(3s, []() { std::cout << "This is being called regularly" << std::end
 
 // will throw
 timer.start(5s, nullptr);
-}
 ```
 
 ### Asynchronous periodic
@@ -150,7 +149,7 @@ Continuous Integration is now being run OS X (clang 8.x) and Linux (gcc 5.x and 
 Compilers are set-up to treat warnings as errors and compiler with the pedantic warning level and build targets as a release type of build (`example` is built as a release with debug symbols because of the valgrind).
 
 The project is using free Travis services, so the CI process is (because of overhead and expense) broken up into just 3 steps (both with different OS & compiler):
-* `example (C++11)` -- testing core build-ability of `timers` in the older C++11
+* `example (C++11)` -- testing core build-ability of `timers` in the older C++11 (backwards compatibility)
 * `example` -- perform cppcheck on example usage (including `timers` themselves), build on gcc 5.x, run example under the valgrind
 * `tests` -- perform cppcheck on unit tests, build tests on clang 8.x, run tests
 

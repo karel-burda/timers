@@ -15,7 +15,7 @@ include_directories(include)
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
 add_dependencies(${PROJECT_NAME} gtest-build)
-target_link_libraries(${PROJECT_NAME} gtest gtest_main)
+target_link_libraries(${PROJECT_NAME} gtestd gtest_maind)
 
 if (COVERAGE)
     message(STATUS "timers: building unit tests with code coverage")

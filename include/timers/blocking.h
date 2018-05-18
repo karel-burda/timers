@@ -17,6 +17,11 @@ namespace timers
 class blocking : disable_copy_and_move
 {
 public:
+    void method_to_be_deleted()
+    {
+         throw std::runtime_error{"dsfsdfsdf"};
+    }
+
     /// Waits and blocks current thread until the "time" elapses OR client code calls "stop()"
     /// @throws callback_is_not_callable, time_period_is_negative, time_period_is_zero
     /// @returns true if terminated "naturally", false if terminated forcefully using the "stop()"

@@ -21,8 +21,8 @@ if (COVERAGE)
     message(STATUS "timers: building unit tests with code coverage")
 
     # TODO: Detect whether is on the GNU
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fcoverage-mapping -fprofile-instr-generate")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -fcoverage-mapping -fprofile-instr-generate")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs")
 endif()
 
 add_test(NAME all-unit-tests COMMAND $<TARGET_FILE:${PROJECT_NAME}>)

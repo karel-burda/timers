@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "timers/policies.h"
+#include <timers/policies.h>
 
 namespace
 {

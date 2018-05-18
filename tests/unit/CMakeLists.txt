@@ -17,6 +17,15 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 add_dependencies(${PROJECT_NAME} gtest-build)
 target_link_libraries(${PROJECT_NAME} gtest gtest_main)
 
+if (COVERAGE)
+    message(STATUS "timers: building unit tests with code coverage")
+
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fcoverage-mapping -fprofile-instr-generate")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+    endif()
+endif()
+
 add_test(NAME all-unit-tests COMMAND $<TARGET_FILE:${PROJECT_NAME}>)
 add_custom_target(run-all-tests-verbose
                   COMMAND
@@ -24,4 +33,3 @@ add_custom_target(run-all-tests-verbose
 
 supress_cxx_compiler_warning("keyword-macro")
 link_pthreads_if_available()
-

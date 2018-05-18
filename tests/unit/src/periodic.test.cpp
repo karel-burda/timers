@@ -39,7 +39,7 @@ TEST_F(periodic_test, static_assertions)
     SUCCEED();
 }
 
-TEST(periodic_construction_destruction, basic_construction_destruction)
+TEST(periodic_construction_destruction, construction_destruction)
 {
     timers::testing::assert_construction_and_destruction<burda::timers::periodic>();
 }

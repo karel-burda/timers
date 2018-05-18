@@ -32,7 +32,7 @@ TEST_F(blocking_test, static_assertions)
     SUCCEED();
 }
 
-TEST(blocking_test_construction_destruction, basic_construction_destruction)
+TEST(blocking_construction_destruction, construction_destruction)
 {
     timers::testing::assert_construction_and_destruction<burda::timers::blocking>();
 }

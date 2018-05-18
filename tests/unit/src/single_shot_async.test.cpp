@@ -38,7 +38,7 @@ TEST_F(single_shot_async_test, static_assertions)
     SUCCEED();
 }
 
-TEST(single_shot_async_construction_destruction, basic_construction_destruction)
+TEST(single_shot_async_construction_destruction, construction_destruction)
 {
     timers::testing::assert_construction_and_destruction<burda::timers::single_shot_async>();
 }

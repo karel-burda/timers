@@ -1,7 +1,7 @@
 include(ExternalProject)
 
 set(_GTEST_TARGET_NAME "gtest-build")
-set(_GTEST_BUILD_VARIANT ${CMAKE_BUILD_TYPE})
+set(_GTEST_BUILD_VARIANT "Release")
 
 ExternalProject_Add(${_GTEST_TARGET_NAME}
   GIT_REPOSITORY    https://github.com/google/googletest.git

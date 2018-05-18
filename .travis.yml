@@ -19,6 +19,7 @@ jobs:
       before_install:
         - brew update
         - brew install cppcheck lcov
+        # hacks because of the "cpp-coveralls" for osx :(
         - brew upgrade pyenv
         - eval "$(pyenv init -)"
         - pyenv install 2.7.6
@@ -28,9 +29,9 @@ jobs:
         - pyenv rehash
       script:
         - set -e
-        - cppcheck --enable=all -I include -I tests/unit/include/ --check-config  -v ./tests/unit/
+        - cppcheck --enable=all -I include -I tests/unit/include/ --check-config -v ./tests/unit/
         - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCOVERAGE:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
         - cmake --build ./build --target run-all-tests-verbose --config RelWithDebInfo
         - find ./ -iname "*.gcda"
-        - coveralls -e ./build/gtest-src -e build/CMakeFiles/ -e tests/unit/ --gcov-options '\-lp'
+        - coveralls -e ./build/gtest-src -e ./build/CMakeFiles -e ./tests/unit -e ./example --gcov-options '\-lp'
         - set +e

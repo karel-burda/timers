@@ -20,9 +20,10 @@ target_link_libraries(${PROJECT_NAME} gtest gtest_main)
 if (COVERAGE)
     message(STATUS "timers: building unit tests with code coverage")
 
-    # TODO: Detect whether is on the GNU
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fcoverage-mapping -fprofile-instr-generate")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fcoverage-mapping -fprofile-instr-generate")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+    endif()
 endif()
 
 add_test(NAME all-unit-tests COMMAND $<TARGET_FILE:${PROJECT_NAME}>)

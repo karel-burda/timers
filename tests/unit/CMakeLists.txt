@@ -21,8 +21,9 @@ if (COVERAGE)
     message(STATUS "timers: building unit tests with code coverage")
 
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-        set_target_properties(${PROJECT_NAME} COMPILE_FLAGS "-fprofile-arcs" "-ftest-coverage" "-fcoverage-mapping" "-fprofile-instr-generate")
-        set_target_properties(${PROJECT_NAME} LINK_FLAGS "-fprofile-arcs" "-ftest-coverage")
+        target_compile_options(${PROJECT_NAME} PUBLIC "-fprofile-arcs" "-ftest-coverage" "-fcoverage-mapping" "-fprofile-instr-generate")
+        set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-fprofile-arcs")
+        set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-ftest-coverage")
     endif()
 endif()
 

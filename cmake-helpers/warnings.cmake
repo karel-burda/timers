@@ -13,7 +13,7 @@ macro(add_pedantic_warning_level)
     endforeach()
 endmacro()
 
-macro(supress_cxx_compiler_warning WARNING)
+macro(supress_cxx_compiler_warning FLAG)
     if (MSVC)
     else()
         if (NOT CMAKE_CXX_FLAGS MATCHES ${FLAG})

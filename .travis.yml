@@ -17,9 +17,10 @@ jobs:
        language: cpp
        compiler: clang
        os: linux
-       before_install:
-         - sudo apt-get update -qq
-         - sudo apt-get -y install valgrind
+       addons:
+         apt:
+           packages: 
+             - valgrind
        script:
          - set -e
          - cmake $CMAKE_ARGS_GENERATE_EXAMPLE
@@ -39,9 +40,8 @@ jobs:
              - ubuntu-toolchain-r-test
            packages:
              - g++-5
-       before_install:
-         - sudo apt-get update -qq
-         - sudo apt-get -y install valgrind cppcheck
+             - valgrind
+             - cppcheck
        install: export CXX="g++-5"
        script:
          - set -e

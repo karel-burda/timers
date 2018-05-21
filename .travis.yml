@@ -9,6 +9,11 @@ env:
     - CMAKE_ARGS_BUILD_EXAMPLE="--build ./build --target example --config RelWithDebInfo"
     - VALGRIND_ARGS="--leak-check=full --error-exitcode=255 -v ./build/bin/example"
 
+notifications:
+  email:
+    on_success: always
+    on_failure: always
+
 jobs:
   include:
      - stage: example (C++11) -- build (linux, clang5), valgrind

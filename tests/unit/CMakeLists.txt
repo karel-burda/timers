@@ -21,8 +21,8 @@ if (COVERAGE)
     message(STATUS "timers: building unit tests with code coverage")
 
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -fcoverage-mapping -fprofile-instr-generate")
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+        set_target_properties(${PROJECT_NAME} COMPILE_FLAGS "-fprofile-arcs" "-ftest-coverage" "-fcoverage-mapping" "-fprofile-instr-generate")
+        set_target_properties(${PROJECT_NAME} LINK_FLAGS "-fprofile-arcs" "-ftest-coverage")
     endif()
 endif()
 
@@ -31,5 +31,7 @@ add_custom_target(run-all-tests-verbose
                   COMMAND
                   ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 300 DEPENDS ${PROJECT_NAME})
 
+add_gtest_cxx_flags()
+add_pedantic_warning_level()
 supress_cxx_compiler_warning("keyword-macro")
 link_pthreads_if_available()

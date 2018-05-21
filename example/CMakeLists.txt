@@ -12,5 +12,5 @@ include_directories(include)
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
+add_pedantic_warning_level()
 link_pthreads_if_available()
-

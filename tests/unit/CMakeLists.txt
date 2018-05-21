@@ -34,6 +34,5 @@ add_custom_target(run-all-tests-verbose
 
 add_gtest_cxx_flags()
 add_pedantic_warning_level()
-#supress_cxx_compiler_warning("keyword-macro")
+supress_cxx_compiler_warning("keyword-macro")
 link_pthreads_if_available()
-

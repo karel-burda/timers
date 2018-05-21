@@ -10,9 +10,10 @@ env:
     - VALGRIND_ARGS="--leak-check=full --error-exitcode=255 -v ./build/bin/example"
 
 notifications:
-  email:
-    on_success: always
-    on_failure: always
+  global:
+    email:
+      on_success: always
+      on_failure: always
 
 jobs:
   include:

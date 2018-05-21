@@ -6,7 +6,7 @@
 
 # Introduction
 `timers` features a thread-safe and header-only library that's implementing timer-related functionality and provides following features:
-* General blocking timer: `block`
+* General blocking timer: `blocking`
 * Single-shot timer that does given action after timer period expires: `single_shot`
 * Its asynchronous version `single_shot_async`
 * Timer that does some action periodically: `periodic`
@@ -136,9 +136,9 @@ The project is using the `gtest` that is automatically downloaded, cmaked and bu
 (the fixed stable revision of the `gtest` is used).
 
 Then, you can run the default test target (e.g. `make test` or `RUN_TESTS` in the Visual Studio)
-or own custom target `run-all-tests-verbose` (which is recommended).
+or the custom target `run-all-tests-verbose` (which is recommended, it's sed in the Continuous Integration).
 
-If you want to debug tests and beyond, run the target `timers-tests` manually.
+If you want to debug tests and implementation, run the target `tests` manually (ideally in the Debug mode).
 
 It is also possible to turn off build of the example, and build just the tests:
 
@@ -147,14 +147,14 @@ It is also possible to turn off build of the example, and build just the tests:
 # Continuous Integration
 Continuous Integration is now being run OS X (clang 8.x) and Linux (gcc 5.x and clang 5.x) on Travis: https://travis-ci.org/karel-burda/timers
 
-Compilers are set-up to treat warnings as errors and compiler with the pedantic warning level and build targets as a release with the debug symbols (because of the valgrind and code coverage).
+Compilers are set-up to treat warnings as errors and compiler with the pedantic warning level and build targets as a release with the debug symbols (because of the (valgrind)[http://valgrind.org/] and code coverage).
 
 The project is using free Travis services, so the CI process is (because of overhead and expense) broken up into just 3 steps (both with different OS & compiler):
 * `example (C++11)` -- testing core build-ability of `timers` in the older C++11 (backwards compatibility), run example under the valgrind
 * `example (C++14)` -- perform cppcheck on example usage (including `timers` themselves), build on gcc 5.x, run example under the valgrind
 * `tests (C++14)` -- perform cppcheck on unit tests, build tests on clang 8.x, run tests, code coverage (using codecov)
 
-Project uses https://coveralls.io/github/karel-burda/timers for code coverage summary and uses https://app.codacy.com/app/karel-burda/timers/dashboard for the coding style.
+Project uses [coveralls.io](https://coveralls.io/github/karel-burda/timers) for code coverage summary and [codacy](https://app.codacy.com/app/karel-burda/timers/dashboard) for the coding style and static analysis.
 
 # Branch Model
 Project is using git workflow, this includes `master`, `develop`, feature (prefix `feature/`)

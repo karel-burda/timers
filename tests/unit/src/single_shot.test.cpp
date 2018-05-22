@@ -77,7 +77,7 @@ TEST_F(single_shot_test, callback_multiple_times)
         EXPECT_TRUE(m_timer.start(3s, std::bind(&single_shot_test::callback, this)));
     });
 
-    timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 6.0, 100.0);
+    timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 6s, 100s);
 }
 
 TEST_F(single_shot_test, start_in_parallel)

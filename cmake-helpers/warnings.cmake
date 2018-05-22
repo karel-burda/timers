@@ -1,30 +1,20 @@
-macro(add_cxx_compiler_flag FLAG)
-    if (NOT CMAKE_CXX_FLAGS MATCHES ${FLAG})
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAG}")
+macro(add_pedantic_warning_level)
+    set(CXX_WARNING_FLAGS "")
+
+    if (MSVC)
+            # "/Wall" Hardly usable on MSVC without excluding stdlib
+        list(APPEND CXX_WARNING_FLAGS "/W4")
+    else()
+        list(APPEND CXX_WARNING_FLAGS "-Wall" "-Werror" "-pedantic" "-Wno-long-long")
     endif()
+
+    foreach(FLAG IN LISTS CXX_WARNING_FLAGS)
+        target_compile_options(${PROJECT_NAME} PUBLIC ${FLAG})
+    endforeach()
 endmacro()
 
-# Set pedantic warnings on all platforms
-if (MSVC)
-    if (CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
-        string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    else()
-        add_cxx_compiler_flag("/W4")
-    endif()
-
-    add_cxx_compiler_flag("/Wall")
-    # Hardly usable on MSVC without excluding stdlib
-    # add_cxx_compiler_flag("/WX")
-else()
-     add_cxx_compiler_flag("-Wall")
-     add_cxx_compiler_flag("-Wno-long-long")
-     add_cxx_compiler_flag("-pedantic")
-     add_cxx_compiler_flag("-Werror")
-endif()
-
 macro(supress_cxx_compiler_warning WARNING)
-    if (MSVC)
-    else()
-        add_cxx_compiler_flag("-Wno-${WARNING}")
+    if (NOT MSVC)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-${WARNING}")
     endif()
 endmacro()

@@ -62,7 +62,7 @@ TEST_F(blocking_test, block_time)
         EXPECT_TRUE(m_timer.block(2s));
     });
 
-    timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 2.0, 100.0);
+    timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 2s, 100s);
 }
 
 TEST_F(blocking_test, block_and_stop)
@@ -88,7 +88,7 @@ TEST_F(blocking_test, block_multiple_times)
         EXPECT_TRUE(m_timer.block(4s));
     });
 
-    timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 5.0, 100.0);
+    timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 5s, 100s);
     EXPECT_FALSE(m_timer.m_terminate_forcefully);
 }
 
@@ -113,7 +113,7 @@ TEST_F(blocking_test, block_multiple_times_in_parallel)
     });
 
     timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
-    timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 10.0, 100.0);
+    timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 10s, 100s);
 }
 
 TEST_F(blocking_test, stop)

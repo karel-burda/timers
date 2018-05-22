@@ -1,6 +1,7 @@
-#include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <future>
+#include <mutex>
 #include <thread>
 
 #include <gtest/gtest.h>
@@ -54,7 +55,7 @@ TEST_F(single_shot_async_test, callback_called)
 {
     m_timer.start(2s, std::bind(&single_shot_async_test::callback, this));
 
-    std::this_thread::sleep_for(5s);
+    std::this_thread::sleep_for(3s);
 
     EXPECT_FALSE(m_timer.blocking::m_terminate_forcefully);
     EXPECT_TRUE(m_callback_called);
@@ -64,7 +65,7 @@ TEST_F(single_shot_async_test, start_exception_policy_stop)
 {
     EXPECT_NO_THROW(m_timer.start(1s, [](){ throw std::exception{}; }, timers::policies::start::exception::stop));
 
-    std::this_thread::sleep_for(4s);
+    std::this_thread::sleep_for(3s);
 
     timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
@@ -81,43 +82,52 @@ TEST_F(single_shot_async_test, callback_multiple_times)
     {
         end = timers::testing::clock::now();
     });
-    m_timer.start(3s, [&end]()
+    m_timer.start(2s, [&end]()
     {
         end = timers::testing::clock::now();
     });
-    m_timer.start(3s, [&end]()
+    m_timer.start(2s, [&end]()
     {
         end = timers::testing::clock::now();
     });
 
-    std::this_thread::sleep_for(7s);
+    std::this_thread::sleep_for(5s);
 
-    timers::testing::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(end - start), 7s, 100s);
+    timers::testing::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(end - start), 5s, 100s);
 }
 
 TEST_F(single_shot_async_test, start_in_parallel)
 {
-    std::atomic<unsigned char> counter = { 0 };
     bool taskFinished1 = false;
     bool taskFinished2 = false;
 
-    m_timer.start(2s, [&counter, &taskFinished1]()
+    std::condition_variable m_cv;
+    std::mutex m_cv_protection;
+
+    m_timer.start(2s, [&taskFinished1, &m_cv_protection, &m_cv]()
     {
-        ++counter;
+        std::lock_guard<decltype(m_cv_protection)> lock { m_cv_protection };
+
         taskFinished1 = true;
+        m_cv.notify_one();
     });
-    m_timer.start(2s, [&counter, &taskFinished2]()
+    m_timer.start(2s, [&taskFinished2, &m_cv_protection, &m_cv]()
     {
-        ++counter;
+        std::lock_guard<decltype(m_cv_protection)> lock { m_cv_protection };
+
         taskFinished2 = true;
+        m_cv.notify_one();
     });
 
-    while (!taskFinished1 || !taskFinished2)
-    {
-        std::this_thread::sleep_for(2s);
-    }
+    std::unique_lock<decltype(m_cv_protection)> cv_lock{ m_cv_protection };
 
-    EXPECT_EQ(counter, 2);
+    const auto expired = m_cv.wait_for(cv_lock, 10s, [&]
+    {
+        return taskFinished1 && taskFinished2;
+    });
+
+    ASSERT_TRUE(expired);
+    EXPECT_TRUE(taskFinished1 && taskFinished2);
 }
 
 TEST_F(single_shot_async_test, stop)

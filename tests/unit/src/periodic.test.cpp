@@ -100,7 +100,6 @@ TEST_F(periodic_test, start_throwing)
     EXPECT_THROW(m_timer.start(3s, nullptr), timers::exceptions::callback_not_callable);
 }
 
-// This is causing deadlock
 TEST_F(periodic_test, start_in_parallel)
 {
     bool taskFinished1 = false;
@@ -121,8 +120,8 @@ TEST_F(periodic_test, start_in_parallel)
     starter1.wait();
     starter2.wait();
 
-    // XOR relationship expected
-    EXPECT_NE(!taskFinished1, !taskFinished2);
+    // XOR relationship expected, because exactly one timer should have been started 
+    EXPECT_XOR(taskFinished1, taskFinished2);
 }
 
 TEST_F(periodic_test, stop)

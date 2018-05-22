@@ -74,7 +74,8 @@ TEST_F(periodic_async_test, start_exception_policy_stop)
 TEST_F(periodic_async_test, start_long_callback)
 {
     unsigned char callback_counter = 0;
-    EXPECT_NO_THROW(m_timer.start(2s, [&callback_counter]() { ++callback_counter; std::this_thread::sleep_for(10s); }, timers::policies::start::exception::stop));
+
+    EXPECT_NO_THROW(m_timer.start(2s, [&callback_counter]() { ++callback_counter; std::this_thread::sleep_for(10s); ++callback_counter; }, timers::policies::start::exception::stop));
 
     std::this_thread::sleep_for(5s);
 

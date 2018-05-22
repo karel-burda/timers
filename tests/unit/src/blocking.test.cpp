@@ -106,12 +106,11 @@ TEST_F(blocking_test, block_multiple_times_in_parallel)
             EXPECT_TRUE(m_timer.block(5s));
         });
 
-        std::this_thread::sleep_for(2s);
-
         caller1.wait();
         caller2.wait();
     });
 
+    EXPECT_FALSE(m_timer.m_terminate_forcefully);
     timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
     timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 10s, 100s);
 }

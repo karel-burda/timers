@@ -54,7 +54,7 @@ TEST_F(single_shot_async_test, callback_called)
 {
     m_timer.start(2s, std::bind(&single_shot_async_test::callback, this));
 
-    std::this_thread::sleep_for(5s);
+    std::this_thread::sleep_for(3s);
 
     EXPECT_FALSE(m_timer.blocking::m_terminate_forcefully);
     EXPECT_TRUE(m_callback_called);
@@ -64,7 +64,7 @@ TEST_F(single_shot_async_test, start_exception_policy_stop)
 {
     EXPECT_NO_THROW(m_timer.start(1s, [](){ throw std::exception{}; }, timers::policies::start::exception::stop));
 
-    std::this_thread::sleep_for(4s);
+    std::this_thread::sleep_for(3s);
 
     timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
     timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
@@ -81,18 +81,18 @@ TEST_F(single_shot_async_test, callback_multiple_times)
     {
         end = timers::testing::clock::now();
     });
-    m_timer.start(3s, [&end]()
+    m_timer.start(2s, [&end]()
     {
         end = timers::testing::clock::now();
     });
-    m_timer.start(3s, [&end]()
+    m_timer.start(2s, [&end]()
     {
         end = timers::testing::clock::now();
     });
 
-    std::this_thread::sleep_for(7s);
+    std::this_thread::sleep_for(5s);
 
-    timers::testing::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(end - start), 7s, 100s);
+    timers::testing::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(end - start), 5s, 100s);
 }
 
 TEST_F(single_shot_async_test, start_in_parallel)
@@ -112,6 +112,7 @@ TEST_F(single_shot_async_test, start_in_parallel)
         taskFinished2 = true;
     });
 
+    // TODO: re-write on condition variable
     while (!taskFinished1 || !taskFinished2)
     {
         std::this_thread::sleep_for(2s);

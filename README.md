@@ -7,7 +7,7 @@
 # Introduction
 `timers` features a thread-safe and header-only library that's implementing timer-related functionality and provides following features:
 * General blocking timer: `blocking`
-* Single-shot timer that does given action after timer period expires: `single_shot`
+* Single-shot timer that does given action after time period expires: `single_shot`
 * Its asynchronous version `single_shot_async`
 * Timer that does some action periodically: `periodic`
 * Its asynchronous version `periodic_async`
@@ -22,20 +22,21 @@ Implementation might throw these exceptions upon the `start(...)`:
 * `time_period_is_zero`
 * `time_period_is_negative`
 
-See [exceptions.h](include/timers/exceptions.h) for more info, if interested.
+See [exceptions.h](include/timers/exceptions.h) for more info.
 
 Policies specifies how timer class will behave when exception is thrown from the user's callback:
-* `stop` -- causes the timer to call `stop()` on itself and re-throws the catched exception
-* `ignore` -- causes the timer to ignore catched exception and keep on
+* `stop` -- causes the timer to call `stop()` on itself and re-throws catched exception
+* `ignore` -- causes the timer to ignore catched exception and keep on working
 
 See [policies.h](include/timers/policies.h).
 
 # Usage
 In order to use the `timers`, it's only the `include` directory that matters. Just make sure that the header search path is pointing to the [include](include) directory located in the root directory.
 
-Implementation resides in the `burda::timers` namespace, so it might be useful to do `namespace timers = burda::timers;` in your project.
+On POSIX systems, the `pthreads` library collection is necessary to link to the final binary (either shared library or executable).
+In the example usage and tests, the `pthreads` are being linked via CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake).
 
-POSIX threads in the example usage and tests are being linked via CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake).
+Implementation resides in the `burda::timers` namespace, so it might be useful to do `namespace timers = burda::timers;` in your project.
 
 See also section [Requirements](#Requirements).
 
@@ -112,10 +113,10 @@ timer.start(3s, []() { std::cout << "This is being called regularly" << std::end
 // we can call "timer.stop()" right here theoretically
 ```
 
-For full use cases, [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
+For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
 # Build Process
-Library itself is just header-only, so no need for linking.
+Library itself is just header-only, so no need for additional linking, just `pthreads` have to be linked to the final executable on POSIX systems.
 
 In order to build the usage example ([main.cpp](example/src/main.cpp)) run the cmake in the top-level directory like this:
 
@@ -136,32 +137,32 @@ The project is using the `gtest` that is automatically downloaded, cmaked and bu
 (the fixed stable revision of the `gtest` is used).
 
 Then, you can run the default test target (e.g. `make test` or `RUN_TESTS` in the Visual Studio)
-or the custom target `run-all-tests-verbose` (which is recommended, it's sed in the Continuous Integration).
+or the custom target `run-all-tests-verbose` (which is recommended and used in the Continuous Integration).
 
-If you want to debug tests and implementation, run the target `tests` manually (ideally in the Debug mode).
+If you want to debug tests and implementation, run the target `tests` target manually (ideally in the Debug mode).
 
 It is also possible to turn off build of the example, and build just the tests:
 
 `cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON`
 
 # Continuous Integration
-Continuous Integration is now being run OS X (clang 8.x) and Linux (gcc 5.x and clang 5.x) on Travis: https://travis-ci.org/karel-burda/timers
+Continuous Integration is now being run on OS X (clang 8.x) and Linux (gcc 5.x and clang 5.x) on Travis: https://travis-ci.org/karel-burda/timers
 
-Compilers are set-up to treat warnings as errors and compiler with the pedantic warning level and build targets as a release with the debug symbols (because of the (valgrind)[http://valgrind.org/] and code coverage).
+Compilers are set-up to treat warnings as errors and with pedantic warning level. Targets are built in a release mode with debug symbols (because of the [valgrind](http://valgrind.org) and code coverage measure).
 
 The project is using free Travis services, so the CI process is (because of overhead and expense) broken up into just 3 steps (both with different OS & compiler):
-* `example (C++11)` -- testing core build-ability of `timers` in the older C++11 (backwards compatibility), run example under the valgrind
-* `example (C++14)` -- perform cppcheck on example usage (including `timers` themselves), build on gcc 5.x, run example under the valgrind
-* `tests (C++14)` -- perform cppcheck on unit tests, build tests on clang 8.x, run tests, code coverage (using codecov)
+* `example (C++11)` -- testing core build-ability of `timers` in the older C++11 standard (backwards compatibility); run example under the valgrind
+* `example (C++14)` -- perform cppcheck on example usage (including `timers` themselves); build on gcc 5.x, run example under the valgrind
+* `tests (C++14)` -- perform cppcheck on unit tests; build tests on clang 8.x; run tests; collect code coverage (using codecov and then coveralls)
 
-Project uses [coveralls.io](https://coveralls.io/github/karel-burda/timers) for code coverage summary and [codacy](https://app.codacy.com/app/karel-burda/timers/dashboard) for the coding style and static analysis.
+Project uses [coveralls.io](https://coveralls.io/github/karel-burda/timers) for code coverage summary and [codacy](https://app.codacy.com/app/karel-burda/timers/dashboard) for the coding style and additional static analysis.
 
 # Branch Model
 Project is using git workflow, this includes `master`, `develop`, feature (prefix `feature/`)
 and bug-fix (`bugfix/`) branches, and `release/` for stable releases. 
 
 # Coding Style
-Following boost and STL coding guidelines with these exceptions:
+Project is following boost and STL coding guidelines with these exceptions:
 * Using `m_` prefix for member variables
 * Placing a space before and after the `*` or `&`
 * Using `{}` instead of `()` to denote constructors, using `()` only for function calls

@@ -81,7 +81,7 @@ TEST_F(periodic_async_test, start_long_callback)
 
     m_timer.stop();
 
-    EXPECT_EQ(callback_counter, 1);
+    EXPECT_EQ(callback_counter, 2);
 }
 
 TEST_F(periodic_async_test, stop_in_parallel)

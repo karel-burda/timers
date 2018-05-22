@@ -1,6 +1,7 @@
-#include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <future>
+#include <mutex>
 #include <thread>
 
 #include <gtest/gtest.h>
@@ -97,28 +98,36 @@ TEST_F(single_shot_async_test, callback_multiple_times)
 
 TEST_F(single_shot_async_test, start_in_parallel)
 {
-    std::atomic<unsigned char> counter = { 0 };
     bool taskFinished1 = false;
     bool taskFinished2 = false;
 
-    m_timer.start(2s, [&counter, &taskFinished1]()
+    std::condition_variable m_cv;
+    std::mutex m_cv_protection;
+
+    m_timer.start(2s, [&taskFinished1, &m_cv_protection, &m_cv]()
     {
-        ++counter;
+        std::lock_guard<decltype(m_cv_protection)> lock { m_cv_protection };
+
         taskFinished1 = true;
+        m_cv.notify_one();
     });
-    m_timer.start(2s, [&counter, &taskFinished2]()
+    m_timer.start(2s, [&taskFinished2, &m_cv_protection, &m_cv]()
     {
-        ++counter;
+        std::lock_guard<decltype(m_cv_protection)> lock { m_cv_protection };
+
         taskFinished2 = true;
+        m_cv.notify_one();
     });
 
-    // TODO: re-write on condition variable
-    while (!taskFinished1 || !taskFinished2)
-    {
-        std::this_thread::sleep_for(2s);
-    }
+    std::unique_lock<decltype(m_cv_protection)> cv_lock{ m_cv_protection };
 
-    EXPECT_EQ(counter, 2);
+    const auto expired = m_cv.wait_for(cv_lock, 10s, [&]
+    {
+        return taskFinished1 && taskFinished2;
+    });
+
+    ASSERT_TRUE(expired);
+    EXPECT_TRUE(taskFinished1 && taskFinished2);
 }
 
 TEST_F(single_shot_async_test, stop)

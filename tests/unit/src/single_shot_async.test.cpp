@@ -92,7 +92,7 @@ TEST_F(single_shot_async_test, callback_multiple_times)
 
     std::this_thread::sleep_for(7s);
 
-    timers::testing::assert_that_elapsed_time_in_tolerance(timers::testing::round_to_seconds(end - start), 7.0, 100.0);
+    timers::testing::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(end - start), 7s, 100s);
 }
 
 TEST_F(single_shot_async_test, start_in_parallel)

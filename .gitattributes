@@ -1,0 +1,2 @@
+# Normalizes all textual files to the LF line endings
+* text=auto eol=lf

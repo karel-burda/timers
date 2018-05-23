@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.0)
 project(example VERSION 0.9.5 LANGUAGES CXX)
 
 message(STATUS "timers: building with the example")
+print_project_version()
 
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB_RECURSE SOURCES src/*.c*)

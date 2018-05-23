@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.0)
 project(tests VERSION 0.9.5 LANGUAGES CXX)
 
 message(STATUS "timers: building with unit tests")
+print_project_version()
 
 include("${CMAKE_SOURCE_DIR}/cmake-helpers/gtest.cmake")
 

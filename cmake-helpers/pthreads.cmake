@@ -7,4 +7,3 @@ macro(link_pthreads_if_available)
         target_link_libraries (${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
      endif()
 endmacro()
-

@@ -18,7 +18,7 @@ void assert_that_elapsed_time_in_tolerance(const std::chrono::seconds elapsed, c
 
 std::chrono::seconds measure_time(std::function<void()> action)
 {
-    const auto start = timers::testing::clock::now();
+    const auto start = clock::now();
 
     if (action)
     {
@@ -29,7 +29,7 @@ std::chrono::seconds measure_time(std::function<void()> action)
         throw std::runtime_error{"Given action is not callable"};
     }
 
-    const auto end = timers::testing::clock::now();
+    const auto end = clock::now();
 
     return std::chrono::duration_cast<std::chrono::seconds>(end - start);
 }

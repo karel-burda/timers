@@ -75,20 +75,22 @@ TEST_F(single_shot_async_test, start_exception_policy_stop)
 
 TEST_F(single_shot_async_test, callback_multiple_times)
 {
-    const auto start = timers::testing::clock::now();
-    auto end = timers::testing::clock::now();
+    using namespace burda::timers::testing;
+
+    const auto start = clock::now();
+    auto end = clock::now();
 
     m_timer.start(1s, [&end]()
     {
-        end = timers::testing::clock::now();
+        end = clock::now();
     });
     m_timer.start(2s, [&end]()
     {
-        end = timers::testing::clock::now();
+        end = clock::now();
     });
     m_timer.start(2s, [&end]()
     {
-        end = timers::testing::clock::now();
+        end = clock::now();
     });
 
     std::this_thread::sleep_for(5s);

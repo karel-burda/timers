@@ -14,7 +14,7 @@
 
 namespace timers = burda::timers;
 
-void demonstrate_blocking_timer()
+static void demonstrate_blocking_timer()
 {
     std::cout << "demonstrate_blocking_timer()" << std::endl;
 
@@ -29,7 +29,7 @@ void demonstrate_blocking_timer()
     // although this is not usually the case, since the main aim is the blocking behaviour itself
 }
 
-void demonstrate_single_shot_timer()
+static void demonstrate_single_shot_timer()
 {
     std::cout << "demonstrate_single_shot_timer()" << std::endl;
 
@@ -56,7 +56,7 @@ void demonstrate_single_shot_timer()
     timer_async.stop();
 }
 
-void demonstrate_periodic_timer()
+static void demonstrate_periodic_timer()
 {
     std::cout << "demonstrate_periodic_timer()" << std::endl;
 

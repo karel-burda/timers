@@ -4,6 +4,6 @@ macro(_link_pthreads_if_available)
 
     if (Threads_FOUND)
         _print_status_message("pthreads found, going to link these")
-        target_link_libraries (${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
+        target_link_libraries (${PROJECT_NAME} PUBLIC ${CMAKE_THREAD_LIBS_INIT})
      endif()
 endmacro()

@@ -16,13 +16,13 @@ include_directories(include)
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
 add_dependencies(${PROJECT_NAME} gtest-build)
-target_link_libraries(${PROJECT_NAME} gtest gtest_main)
+target_link_libraries(${PROJECT_NAME} PUBLIC gtest gtest_main)
 
 if (COVERAGE)
     _print_status_message("building unit tests with code coverage")
 
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-        target_compile_options(${PROJECT_NAME} PUBLIC "-fprofile-arcs" "-ftest-coverage" "-fcoverage-mapping" "-fprofile-instr-generate")
+        target_compile_options(${PROJECT_NAME} PRIVATE "-fprofile-arcs" "-ftest-coverage" "-fcoverage-mapping" "-fprofile-instr-generate")
         set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-fprofile-arcs -ftest-coverage")
     endif()
 endif()

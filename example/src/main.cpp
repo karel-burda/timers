@@ -1,7 +1,6 @@
 /// This example is deliberately not using "chrono_literals", because this .cpp gets compiled in both C++11 and C++14
 /// std::endl is being used instead of "\n" because we want to always flush IO because this gets run with vagrind
 
-#include <chrono>
 #include <cstdlib>
 #include <iostream>
 #include <thread>

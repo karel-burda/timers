@@ -4,10 +4,11 @@
 #include <condition_variable>
 #include <mutex>
 
-#include "timers/disable_copy_and_move.h"
 #include "timers/exceptions.h"
 #include "timers/type_definitions.h"
 #include "timers/policies.h"
+
+#include "timers/private/disable_copy_and_move.h"
 
 namespace burda
 {

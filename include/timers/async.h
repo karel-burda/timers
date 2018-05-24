@@ -7,7 +7,8 @@
 
 #include "timers/policies.h"
 #include "timers/type_definitions.h"
-#include "timers/type_traits.h"
+
+#include "timers/private/type_traits.h"
 
 namespace burda
 {

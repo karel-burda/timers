@@ -1,4 +1,3 @@
-#include <chrono>
 #include <future>
 #include <thread>
 
@@ -34,7 +33,7 @@ TEST_F(periodic_async_test, static_assertions)
 
 TEST(periodic_async_construction_destruction, construction_destruction)
 {
-    timers::testing::assert_construction_and_destruction<burda::timers::periodic_async>();
+    timers::testing::assert_construction_and_destruction<timers::periodic_async>();
 }
 
 TEST_F(periodic_async_test, default_values)
@@ -74,14 +73,24 @@ TEST_F(periodic_async_test, start_exception_policy_stop)
 TEST_F(periodic_async_test, start_long_callback)
 {
     unsigned char callback_counter = 0;
+    const auto start = timers::testing::clock::now();
+    auto end = timers::testing::clock::now();
 
-    EXPECT_NO_THROW(m_timer.start(2s, [&callback_counter]() { ++callback_counter; std::this_thread::sleep_for(10s); ++callback_counter; }, timers::policies::start::exception::stop));
+    EXPECT_NO_THROW(m_timer.start(2s, [&callback_counter, &end]()
+    {
+        ++callback_counter;
+        std::this_thread::sleep_for(10s);
+        ++callback_counter;
+        end = timers::testing::clock::now();
+    }, timers::policies::start::exception::stop));
 
     std::this_thread::sleep_for(5s);
 
     m_timer.stop();
+    const auto elapsed = end - start;
 
     EXPECT_EQ(callback_counter, 2);
+    timers::testing::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(elapsed), 12s, 100s);
 }
 
 TEST_F(periodic_async_test, stop_in_parallel)

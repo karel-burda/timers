@@ -1,4 +1,4 @@
-macro(add_pedantic_warning_level)
+macro(_add_pedantic_warning_level)
     set(CXX_WARNING_FLAGS "")
 
     if (MSVC)
@@ -13,7 +13,7 @@ macro(add_pedantic_warning_level)
     endforeach()
 endmacro()
 
-macro(supress_cxx_compiler_warning WARNING)
+macro(_supress_cxx_compiler_warning WARNING)
     if (NOT MSVC)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-${WARNING}")
     endif()

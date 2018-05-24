@@ -2,6 +2,8 @@
 
 #include "timers/blocking.h"
 
+#include "timers/policies.h"
+
 namespace burda
 {
 namespace timers

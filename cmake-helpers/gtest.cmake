@@ -15,16 +15,16 @@ ExternalProject_Add(${_GTEST_TARGET_NAME}
 )
 ExternalProject_Get_Property(${_GTEST_TARGET_NAME} source_dir binary_dir install_dir)
 
-message(STATUS "timers: Running the cmake for the ${_GTEST_TARGET_NAME}")
+_print_status_message("Running the cmake for the ${_GTEST_TARGET_NAME}")
 add_custom_command(TARGET ${_GTEST_TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=${_GTEST_BUILD_VARIANT} . WORKING_DIRECTORY ${source_dir})
-message(STATUS "timers: Running the make for the ${_GTEST_TARGET_NAME}")
+_print_status_message("Running the build for the ${_GTEST_TARGET_NAME}")
 add_custom_command(TARGET ${_GTEST_TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} --build . --config ${_GTEST_BUILD_VARIANT} WORKING_DIRECTORY ${source_dir})
 
 include_directories(SYSTEM ${source_dir}/googletest/include)
 link_directories(${PROJECT_NAME} ${binary_dir}/googlemock/gtest)
 link_directories(${PROJECT_NAME} ${binary_dir}/googlemock/gtest/${_GTEST_BUILD_VARIANT})
 
-macro(add_gtest_cxx_flags)
+macro(_add_gtest_cxx_flags)
     if (UNIT-TESTS)
         if (WIN32)
             target_compile_options(${PROJECT_NAME} PUBLIC "/MT")

@@ -1,4 +1,3 @@
-#include <chrono>
 #include <exception>
 #include <functional>
 #include <future>
@@ -41,7 +40,7 @@ TEST_F(periodic_test, static_assertions)
 
 TEST(periodic_construction_destruction, construction_destruction)
 {
-    timers::testing::assert_construction_and_destruction<burda::timers::periodic>();
+    timers::testing::assert_construction_and_destruction<timers::periodic>();
 }
 
 TEST_F(periodic_test, default_values)

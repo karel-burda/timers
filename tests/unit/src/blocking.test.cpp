@@ -1,4 +1,3 @@
-#include <chrono>
 #include <future>
 #include <thread>
 
@@ -34,7 +33,7 @@ TEST_F(blocking_test, static_assertions)
 
 TEST(blocking_construction_destruction, construction_destruction)
 {
-    timers::testing::assert_construction_and_destruction<burda::timers::blocking>();
+    timers::testing::assert_construction_and_destruction<timers::blocking>();
 }
 
 TEST_F(blocking_test, default_values)

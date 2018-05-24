@@ -34,7 +34,7 @@ TEST_F(periodic_async_test, static_assertions)
 
 TEST(periodic_async_construction_destruction, construction_destruction)
 {
-    timers::testing::assert_construction_and_destruction<burda::timers::periodic_async>();
+    timers::testing::assert_construction_and_destruction<timers::periodic_async>();
 }
 
 TEST_F(periodic_async_test, default_values)

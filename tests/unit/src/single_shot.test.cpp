@@ -41,7 +41,7 @@ TEST_F(single_shot_test, static_assertions)
 
 TEST(single_shot_construction_destruction, construction_destruction)
 {
-    timers::testing::assert_construction_and_destruction<burda::timers::single_shot>();
+    timers::testing::assert_construction_and_destruction<timers::single_shot>();
 }
 
 TEST_F(single_shot_test, callback_called)

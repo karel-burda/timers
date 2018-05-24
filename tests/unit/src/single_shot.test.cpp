@@ -79,6 +79,24 @@ TEST_F(single_shot_test, callback_multiple_times)
     timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 6s, 100s);
 }
 
+TEST_F(single_shot_test, start_long_callback)
+{
+    using namespace timers::testing;
+
+    const auto start = clock::now();
+    auto end = clock::now();
+
+    EXPECT_NO_THROW(m_timer.start(2s, [&end]()
+    {
+        std::this_thread::sleep_for(10s);
+        end = clock::now();
+    }));
+
+    const auto elapsed = end - start;
+
+    timers::testing::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(elapsed), 12s, 100s);
+    }
+
 TEST_F(single_shot_test, start_in_parallel)
 {
     unsigned char counter = 0;

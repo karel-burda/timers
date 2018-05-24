@@ -1,5 +1,7 @@
 #include "time_utils.h"
 
+#include <stdexcept>
+
 #include <gtest/gtest.h>
 
 namespace burda
@@ -21,6 +23,10 @@ std::chrono::seconds measure_time(std::function<void()> action)
     if (action)
     {
         action();
+    }
+    else
+    {
+        throw std::runtime_error{"Given action is not callable"};
     }
 
     const auto end = timers::testing::clock::now();

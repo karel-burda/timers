@@ -29,8 +29,8 @@ endif()
 
 add_test(NAME all-unit-tests COMMAND $<TARGET_FILE:${PROJECT_NAME}>)
 add_custom_target(run-all-tests-verbose
-                  COMMAND
-                  ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 300 DEPENDS ${PROJECT_NAME})
+                  COMMAND ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 300
+                  DEPENDS ${PROJECT_NAME})
 
 add_gtest_cxx_flags()
 add_pedantic_warning_level()

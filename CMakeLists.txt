@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.0)
 
 project(timers VERSION 0.9.9 LANGUAGES CXX)
 
+include("cmake-helpers/messages.cmake")
 include("cmake-helpers/pthreads.cmake")
 include("cmake-helpers/settings.cmake")
-include("cmake-helpers/versions.cmake")
 include("cmake-helpers/warnings.cmake")
 
-print_project_version()
+_print_project_version()
 
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "README.md" ".travis.yml")

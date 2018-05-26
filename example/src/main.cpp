@@ -50,7 +50,7 @@ static void demonstrate_single_shot_timer()
     //timer.start(3s, []() { std::cout << "1\n"; });
 
     // stop artificially after some time
-    std::cout << "demonstrate_single_shot_timer(): We'll stop the single_shot async 'artificially' after 5 seconds" << std::endl;
+    std::cout << "demonstrate_single_shot_timer(): We'll stop the single_shot async artificially after 5 seconds" << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds{ 5 });
     std::cout << "demonstrate_single_shot_timer(): Going to stop the async single_shot timer" << std::endl;
     timer_async.stop();
@@ -71,7 +71,7 @@ static void demonstrate_periodic_timer()
     // and we'll use detached thread for this
     auto stop_timer_after_some_time = std::async(std::launch::async, [&timer]
     {
-        std::cout << "demonstrate_periodic_timer(): We'll stop the periodic 'artificially' after 10 seconds" << std::endl;
+        std::cout << "demonstrate_periodic_timer(): We'll stop the periodic artificially after 10 seconds" << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds{ 10 });
         std::cout << "demonstrate_periodic_timer(): Going to stop the periodic timer" << std::endl;
         timer.stop();
@@ -84,7 +84,7 @@ static void demonstrate_periodic_timer()
     timer_async.start(std::chrono::seconds{ 3 }, []() { std::cout << "demonstrate_periodic_timer(): Hello from periodic async callback" << std::endl; });
 
     // stop artificially after some time
-    std::cout << "demonstrate_periodic_timer(): We'll stop the periodic async 'artificially' after 10 seconds" << std::endl;
+    std::cout << "demonstrate_periodic_timer(): We'll stop the periodic async artificially after 10 seconds" << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds{ 10 });
     std::cout << "demonstrate_periodic_timer(): Going to stop the async periodic timer" << std::endl;
     timer_async.stop();

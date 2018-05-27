@@ -32,7 +32,7 @@ add_custom_target(run-all-tests-verbose
                   COMMAND ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 300
                   DEPENDS ${PROJECT_NAME})
 
-_add_gtest_cxx_flags()
+_add_compile_options_for_gtest()
 _add_pedantic_warning_level()
 _supress_cxx_compiler_warning("keyword-macro")
 _link_pthreads_if_available()

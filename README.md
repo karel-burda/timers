@@ -128,8 +128,7 @@ public:
 
     void work()
     {
-        // some other work...
-
+        // scoped timer has overloaded "->" and "*" operators
         m_timer->start(std::chrono::seconds{ 2 }, [](){ std::cout << "Hello!\n"; });
     }
 

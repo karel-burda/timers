@@ -38,13 +38,17 @@ public:
     }
 
     /// Stops asynchronous timer and waits for the action to complete (if it's just running)
+    /// @throws std::future_error
     void stop()
     {
         std::lock_guard<decltype(m_async_protection)> lock { m_async_protection };
 
         underlying_timer::stop();
 
-        m_async_task.wait();
+        if (m_async_task.valid())
+        {
+            m_async_task.wait();
+        }
     }
 
 private:

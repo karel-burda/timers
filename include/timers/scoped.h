@@ -33,8 +33,6 @@ public:
         return m_timer;
     }
 
-    // TODO: Define copy, move, and swap semantics
-
 private:
     underlying_timer m_timer;
 };

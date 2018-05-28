@@ -1,6 +1,3 @@
-#include <exception>
-#include <functional>
-#include <future>
 #include <thread>
 
 #include <gtest/gtest.h>

@@ -27,7 +27,7 @@ if (COVERAGE)
     endif()
 endif()
 
-add_test(NAME all-unit-tests COMMAND $<TARGET_FILE:${PROJECT_NAME}>)
+add_test(NAME all-unit-tests COMMAND $<TARGET_FILE:${PROJECT_NAME}> --gtest_color=yes --gtest_shuffle)
 add_custom_target(run-all-tests-verbose
                   COMMAND ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 300
                   DEPENDS ${PROJECT_NAME})

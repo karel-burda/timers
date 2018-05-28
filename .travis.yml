@@ -60,7 +60,6 @@ jobs:
        language: cpp
        compiler: clang
        os: osx
-       env: GTEST_COLOR=1
        before_install:
          - set -e
          - brew update

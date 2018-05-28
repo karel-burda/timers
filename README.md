@@ -168,6 +168,7 @@ The project is using the `gtest` that is automatically downloaded, cmaked and bu
 
 Then, you can run the default test target (e.g. `make test` or `RUN_TESTS` in the Visual Studio)
 or the custom target `run-all-tests-verbose` (which is recommended and used in the Continuous Integration).
+This jobs uses the `ctest` for executing the tests binary and has built-in timeout feature (because of e.g. dead-locks).
 
 If you want to debug tests and implementation, run the target `tests` target manually (ideally in the Debug mode).
 

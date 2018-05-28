@@ -11,6 +11,7 @@
 * Its asynchronous version `single_shot_async`
 * Timer that does some action periodically: `periodic`
 * Its asynchronous version `periodic_async`
+* Scoped "RAII" timer that is stops underlying timer automatically upon destruction: `scoped<underlying_timer>` 
 
 Implemented using C++11 with the use of `std::conditional_variable`, `std::promise` and `std::async`.
 
@@ -111,6 +112,34 @@ timers::periodic_async timer;
 // non-blocking call
 timer.start(3s, []() { std::cout << "This is being called regularly" << std::endl; });
 // we can call "timer.stop()" right here theoretically
+```
+
+### Scoped
+```cpp
+class class_that_uses_timers
+{
+public:
+    ~class_that_uses_timers()
+    {
+        // upon destruction, the scoped "m_timer" is destructed and calls "stop()"
+        // on underlying timer (periodic async in this case)
+    }
+
+    void work()
+    {
+        // some other work...
+
+        m_timer->start(std::chrono::seconds{ 2 }, [](){ std::cout << "Hello!\n"; });
+    }
+
+private:
+    timers::scoped<timers::periodic_async> m_timer;
+};
+
+class_that_uses_timers foo;
+foo.work();
+
+// foo goes out of scope, so the scoped timer (member of foo) will be stopped as well
 ```
 
 For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).

@@ -131,7 +131,7 @@ static void demonstrate_scoped_timer()
     std::cout << "demonstrate_scoped_timer(): Going to artificially wait for 6 seconds" << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds{ 6 });
 
-    // foo goes out of scope, so the scoped timer (member of foo) should be stopped as well
+    // foo goes out of scope, so the scoped timer (member of foo) will be stopped as well
 }
 
 int main(int /*argc*/, char ** /*argv*/)

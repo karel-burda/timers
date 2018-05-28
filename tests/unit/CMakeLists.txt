@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(tests VERSION 1.0.0 LANGUAGES CXX)
+project(tests VERSION 1.1.0 LANGUAGES CXX)
 
 _print_status_message("building with unit tests")
 _print_project_version()

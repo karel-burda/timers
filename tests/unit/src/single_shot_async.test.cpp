@@ -133,6 +133,10 @@ TEST_F(single_shot_async_test, start_in_parallel)
 
 TEST_F(single_shot_async_test, stop)
 {
+    // deliberately calling stop() on "empty" std::future
+    m_timer.stop();
+    m_timer.stop();
+
     m_timer.start(4s, std::bind(&single_shot_async_test::callback, this));
 
     std::this_thread::sleep_for(1s);

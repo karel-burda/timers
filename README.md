@@ -34,8 +34,9 @@ See [policies.h](include/timers/policies.h).
 # Usage
 In order to use the `timers`, it's only the `include` directory that matters. Just make sure that the header search path is pointing to the [include](include) directory located in the root directory.
 
-On POSIX systems, the `pthreads` library collection is necessary to link to the final binary (either shared library or executable).
-In the example usage and tests, the `pthreads` are being linked via CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake).
+Threading library collection (e.g. `pthreads` on Linux) might be necessary to link to the final binary (either shared library or executable).
+In the example usage and tests, the threading library are being linked via CMake: [threads.cmake](cmake-helpers/threads.cmake).
+This is not usually necessary on Windows and OS X.
 
 Implementation resides in the `burda::timers` namespace, so it might be useful to do `namespace timers = burda::timers;` in your project.
 

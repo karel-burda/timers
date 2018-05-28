@@ -1,5 +1,5 @@
 # This macro is meant to be executed only after target is created
-macro(_link_pthreads_if_available)
+macro(_link_threads_if_available)
     find_package(Threads QUIET)
 
     if (CMAKE_THREAD_LIBS_INIT)

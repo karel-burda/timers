@@ -21,8 +21,6 @@ namespace timers = burda::timers;
 class scoped_test : public ::testing::Test
 {
 private:
-    bool m_callback_called = false;
-
     timers::scoped<timers::periodic_async> m_periodic_async;
 };
 
@@ -59,12 +57,13 @@ TEST_F(scoped_test, operators)
 
 TEST_F(scoped_test, start)
 {
-    bool s = false;
+    bool callback_called = false;
 
-    m_periodic_async->start(1s, [&s]() { s = true; });
+    m_periodic_async->start(1s, [&callback_called]() { callback_called = true; });
 
-    std::this_thread::sleep_for(5s);
+    std::this_thread::sleep_for(3s);
 
-    EXPECT_TRUE(s);
+    EXPECT_TRUE(callback_called);
+    EXPECT_FALSE(m_periodic_async->m_terminate_forcefully);
 }
 }

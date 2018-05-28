@@ -1,16 +1,17 @@
-![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-green.svg)
+[![License](https://img.shields.io/badge/license-MIT_License-green.svg?style=flat)](LICENSE)
 [![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=develop)](https://travis-ci.org/karel-burda/timers)
 [![Coverage Status](https://coveralls.io/repos/github/karel-burda/timers/badge.svg?branch=develop)](https://coveralls.io/github/karel-burda/timers?branch=develop)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/27e08eaa6aa64eddbe4a79085e95ebcc)](https://www.codacy.com/app/karel-burda/timers?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=karel-burda/timers&amp;utm_campaign=Badge_Grade)
-[![License](https://img.shields.io/badge/license-MIT_License-green.svg?style=flat)](LICENSE)
 
 # Introduction
 `timers` features a thread-safe and header-only library that's implementing timer-related functionality and provides following features:
 * General blocking timer: `blocking`
 * Single-shot timer that does given action after time period expires: `single_shot`
-* Its asynchronous version `single_shot_async`
+* Its asynchronous version: `single_shot_async`
 * Timer that does some action periodically: `periodic`
-* Its asynchronous version `periodic_async`
+* Its asynchronous version: `periodic_async`
+* Scoped "RAII" timer that stops underlying timer automatically upon destruction: `scoped` 
 
 Implemented using C++11 with the use of `std::conditional_variable`, `std::promise` and `std::async`.
 
@@ -33,8 +34,9 @@ See [policies.h](include/timers/policies.h).
 # Usage
 In order to use the `timers`, it's only the `include` directory that matters. Just make sure that the header search path is pointing to the [include](include) directory located in the root directory.
 
-On POSIX systems, the `pthreads` library collection is necessary to link to the final binary (either shared library or executable).
-In the example usage and tests, the `pthreads` are being linked via CMake: [pthreads.cmake](cmake-helpers/pthreads.cmake).
+Threading library collection (e.g. `pthreads` on Linux) might be necessary to link to the final binary (either shared library or executable).
+In the example usage and tests, the threading library is being searched and linked via CMake: [threads.cmake](cmake-helpers/threads.cmake).
+This is not usually necessary on Windows and OS X.
 
 Implementation resides in the `burda::timers` namespace, so it might be useful to do `namespace timers = burda::timers;` in your project.
 
@@ -113,6 +115,34 @@ timer.start(3s, []() { std::cout << "This is being called regularly" << std::end
 // we can call "timer.stop()" right here theoretically
 ```
 
+### Scoped
+```cpp
+class class_that_uses_timers
+{
+public:
+    ~class_that_uses_timers()
+    {
+        // upon destruction, the scoped "m_timer" is destructed and calls "stop()"
+        // on underlying timer (periodic async in this case)
+    }
+
+    void work()
+    {
+        // scoped timer has overloaded "->" and "*" operators
+        m_timer->start(std::chrono::seconds{ 2 }, [](){ std::cout << "Hello!\n"; });
+    }
+
+private:
+    timers::scoped<timers::periodic_async> m_timer;
+};
+
+class_that_uses_timers foo;
+foo.work();
+
+// "foo" goes out of scope, so the scoped timer (member of "foo") and its underlying
+// asynchronous periodic timer will be stopped as well
+```
+
 For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
 # Build Process
@@ -133,11 +163,13 @@ For building tests, run cmake with the option `UNIT-TESTS=ON`:
 
 `cmake -Bbuild -H. -DUNIT-TESTS:BOOL=ON`
 
-The project is using the `gtest` that is automatically downloaded, cmaked and built in its build step
+The project is using the `gtest` that is automatically downloaded, "cmaked" and built in its build step
 (the fixed stable revision of the `gtest` is used).
 
 Then, you can run the default test target (e.g. `make test` or `RUN_TESTS` in the Visual Studio)
 or the custom target `run-all-tests-verbose` (which is recommended and used in the Continuous Integration).
+
+The target `run-all-tests-verbose` uses the `ctest` for executing the tests binary and has built-in timeout feature (useful because of dead-locks for example).
 
 If you want to debug tests and implementation, run the target `tests` target manually (ideally in the Debug mode).
 

@@ -10,9 +10,12 @@ namespace timers
 {
 namespace testing
 {
-void assert_that_elapsed_time_in_tolerance(const std::chrono::duration<double> elapsed, const std::chrono::duration<double> lower_bound, const std::chrono::duration<double> upper_bound)
+void assert_that_elapsed_time_in_tolerance(const std::chrono::duration<double> elapsed,
+                                           const std::chrono::duration<double> lower_bound,
+                                           const std::chrono::duration<double> upper_bound,
+                                           const std::chrono::duration<double> epsilon)
 {
-    ASSERT_GE(elapsed, lower_bound);
+    ASSERT_GE(elapsed + epsilon, lower_bound);
     ASSERT_LE(elapsed, upper_bound);
 }
 

@@ -19,7 +19,7 @@ namespace timers = burda::timers;
 
 class single_shot_test : public ::testing::Test
 {
-protected:
+private:
     void callback()
     {
         m_callback_called = true;
@@ -29,6 +29,11 @@ protected:
     bool m_callback_called = false;
 };
 
+TEST(single_shot_construction_destruction, construction_destruction)
+{
+    timers::testing::assert_construction_and_destruction<timers::single_shot>();
+}
+
 TEST_F(single_shot_test, static_assertions)
 {
     timers::testing::assert_default_constructibility<decltype(m_timer)>();
@@ -36,11 +41,6 @@ TEST_F(single_shot_test, static_assertions)
     timers::testing::assert_move_constructibility<decltype(m_timer)>();
 
     SUCCEED();
-}
-
-TEST(single_shot_construction_destruction, construction_destruction)
-{
-    timers::testing::assert_construction_and_destruction<timers::single_shot>();
 }
 
 TEST_F(single_shot_test, callback_called)

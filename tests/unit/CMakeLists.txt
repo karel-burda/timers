@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(tests VERSION 1.0.0 LANGUAGES CXX)
+project(tests VERSION 1.1.0 LANGUAGES CXX)
 
 _print_status_message("building with unit tests")
 _print_project_version()
@@ -27,12 +27,12 @@ if (COVERAGE)
     endif()
 endif()
 
-add_test(NAME all-unit-tests COMMAND $<TARGET_FILE:${PROJECT_NAME}>)
+add_test(NAME all-unit-tests COMMAND $<TARGET_FILE:${PROJECT_NAME}> --gtest_color=yes --gtest_shuffle)
 add_custom_target(run-all-tests-verbose
                   COMMAND ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 300
                   DEPENDS ${PROJECT_NAME})
 
-_add_gtest_cxx_flags()
+_add_compile_options_for_gtest()
 _add_pedantic_warning_level()
 _supress_cxx_compiler_warning("keyword-macro")
-_link_pthreads_if_available()
+_link_threads_if_available()

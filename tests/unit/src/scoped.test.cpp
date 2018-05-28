@@ -29,14 +29,13 @@ private:
     timers::scoped<timers::periodic_async> m_periodic_async;
 };
 
-// TODO: Enable again after further investigation on other platforms
-TEST(DISABLED_scoped_construction_destruction, construction_destruction)
+TEST(scoped_construction_destruction, construction_destruction)
 {
-    timers::testing::assert_construction_and_destruction<timers::scoped<timers::single_shot>>();
-    timers::testing::assert_construction_and_destruction<timers::scoped<timers::single_shot_async>>();
+    timers::testing::assert_construction_and_destruction<timers::scoped<timers::single_shot>>(false);
+    timers::testing::assert_construction_and_destruction<timers::scoped<timers::single_shot_async>>(false);
 
-    timers::testing::assert_construction_and_destruction<timers::scoped<timers::periodic>>();
-    timers::testing::assert_construction_and_destruction<timers::scoped<timers::periodic_async>>();
+    timers::testing::assert_construction_and_destruction<timers::scoped<timers::periodic>>(false);
+    timers::testing::assert_construction_and_destruction<timers::scoped<timers::periodic_async>>(false);
 }
 
 TEST_F(scoped_test, static_assertions)

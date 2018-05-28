@@ -18,9 +18,14 @@ namespace timers = burda::timers;
 
 class blocking_test : public ::testing::Test
 {
-protected:
+private:
     timers::blocking m_timer;
 };
+
+TEST(blocking_construction_destruction, construction_destruction)
+{
+    timers::testing::assert_construction_and_destruction<timers::blocking>();
+}
 
 TEST_F(blocking_test, static_assertions)
 {
@@ -29,11 +34,6 @@ TEST_F(blocking_test, static_assertions)
     timers::testing::assert_move_constructibility<decltype(m_timer)>();
 
     SUCCEED();
-}
-
-TEST(blocking_construction_destruction, construction_destruction)
-{
-    timers::testing::assert_construction_and_destruction<timers::blocking>();
 }
 
 TEST_F(blocking_test, default_values)

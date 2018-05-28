@@ -18,9 +18,14 @@ namespace timers = burda::timers;
 
 class periodic_async_test : public ::testing::Test
 {
-protected:
+private:
     timers::periodic_async m_timer;
 };
+
+TEST(periodic_async_construction_destruction, construction_destruction)
+{
+    timers::testing::assert_construction_and_destruction<timers::periodic_async>();
+}
 
 TEST_F(periodic_async_test, static_assertions)
 {
@@ -29,11 +34,6 @@ TEST_F(periodic_async_test, static_assertions)
     timers::testing::assert_move_constructibility<decltype(m_timer)>();
 
     SUCCEED();
-}
-
-TEST(periodic_async_construction_destruction, construction_destruction)
-{
-    timers::testing::assert_construction_and_destruction<timers::periodic_async>();
 }
 
 TEST_F(periodic_async_test, default_values)

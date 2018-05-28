@@ -19,7 +19,7 @@ namespace timers = burda::timers;
 
 class single_shot_async_test : public ::testing::Test
 {
-protected:
+private:
     void callback()
     {
         m_callback_called = true;
@@ -29,6 +29,11 @@ protected:
     bool m_callback_called = false;
 };
 
+TEST(single_shot_async_construction_destruction, construction_destruction)
+{
+    timers::testing::assert_construction_and_destruction<timers::single_shot_async>();
+}
+
 TEST_F(single_shot_async_test, static_assertions)
 {
     timers::testing::assert_default_constructibility<timers::single_shot_async>();
@@ -36,11 +41,6 @@ TEST_F(single_shot_async_test, static_assertions)
     timers::testing::assert_move_constructibility<timers::single_shot_async>();
 
     SUCCEED();
-}
-
-TEST(single_shot_async_construction_destruction, construction_destruction)
-{
-    timers::testing::assert_construction_and_destruction<timers::single_shot_async>();
 }
 
 TEST_F(single_shot_async_test, default_values)

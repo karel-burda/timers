@@ -1,5 +1,3 @@
-# We're using "before_script" instead of "script", because it fails the build immediately
-
 stages:
   - example (C++11) -- build (linux, clang5), valgrind
   - example (C++14) -- cppcheck, build (linux, gcc5), valgrind
@@ -28,12 +26,14 @@ jobs:
        os: linux
        addons:
          apt:
-           packages:
+           packages: 
              - valgrind
-       before_script:
+       script:
+         - set -e
          - cmake $CMAKE_ARGS_GENERATE_EXAMPLE
          - cmake $CMAKE_ARGS_BUILD_EXAMPLE
          - valgrind $VALGRIND_ARGS
+         - set +e
 
      - stage: example (C++14) -- cppcheck, build (linux, gcc5), valgrind
        sudo: required
@@ -50,11 +50,13 @@ jobs:
              - valgrind
              - cppcheck
        install: export CXX="g++-5"
-       before_script:
+       script:
+         - set -e
          - cppcheck --enable=all -I include --check-config  -v ./example
          - cmake $CMAKE_ARGS_GENERATE_EXAMPLE
          - cmake $CMAKE_ARGS_BUILD_EXAMPLE
          - valgrind $VALGRIND_ARGS
+         - set +e
 
      - stage: tests (C++14) -- cppcheck, build (osx, clang8), run, coverage
        language: cpp
@@ -73,8 +75,10 @@ jobs:
          - pip install cpp-coveralls
          - pyenv rehash
          - set +e
-       before_script:
-         - cppcheck --enable=all -I include -I tests/unit/include --check-config -v ./tests/unit
+       script:
+         - set -e
+         - cppcheck --enable=all -I include -I tests/unit/include/ --check-config -v ./tests/unit/
          - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCOVERAGE:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
          - cmake --build ./build --target run-all-tests-verbose --config RelWithDebInfo
          - coveralls -e ./build/gtest-src -e ./build/CMakeFiles -e ./tests/unit -e ./example --gcov-options '\-lp'
+         - set +e

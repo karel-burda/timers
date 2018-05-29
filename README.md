@@ -77,7 +77,7 @@ timer.start(2m, nullptr);
 
 ### Asynchronous single-shot
 ```cpp
-timers::single_shot_async timer_async;
+timers::single_shot_async timer;
 
 // this call is asynchronous
 timer.start(2s, [](){ std::cout << "Hi there" << std::endl; });

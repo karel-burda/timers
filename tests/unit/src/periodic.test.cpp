@@ -19,7 +19,7 @@ namespace timers = burda::timers;
 
 class periodic_test : public ::testing::Test
 {
-protected:
+private:
     void callback()
     {
         ++m_counter;
@@ -29,6 +29,11 @@ protected:
     timers::periodic m_timer;
 };
 
+TEST(periodic_construction_destruction, construction_destruction)
+{
+    timers::testing::assert_construction_and_destruction<timers::periodic>();
+}
+
 TEST_F(periodic_test, static_assertions)
 {
     timers::testing::assert_default_constructibility<decltype(m_timer)>();
@@ -36,11 +41,6 @@ TEST_F(periodic_test, static_assertions)
     timers::testing::assert_move_constructibility<decltype(m_timer)>();
 
     SUCCEED();
-}
-
-TEST(periodic_construction_destruction, construction_destruction)
-{
-    timers::testing::assert_construction_and_destruction<timers::periodic>();
 }
 
 TEST_F(periodic_test, default_values)

@@ -1,0 +1,69 @@
+#include <thread>
+
+#include <gtest/gtest.h>
+
+#include "make_all_members_public.h"
+#include <timers/periodic.h>
+#include <timers/periodic_async.h>
+#include <timers/single_shot.h>
+#include <timers/single_shot_async.h>
+#include <timers/scoped.h>
+
+#include "static_assertions.h"
+#include "test_utils.h"
+#include "time_utils.h"
+
+namespace
+{
+using namespace std::chrono_literals;
+namespace timers = burda::timers;
+
+class scoped_test : public ::testing::Test
+{
+private:
+    timers::scoped<timers::periodic_async> m_periodic_async;
+};
+
+TEST(scoped_construction_destruction, construction_destruction)
+{
+    timers::testing::assert_construction_and_destruction<timers::scoped<timers::single_shot>>(false);
+    timers::testing::assert_construction_and_destruction<timers::scoped<timers::single_shot_async>>(false);
+
+    timers::testing::assert_construction_and_destruction<timers::scoped<timers::periodic>>(false);
+    timers::testing::assert_construction_and_destruction<timers::scoped<timers::periodic_async>>(false);
+}
+
+TEST_F(scoped_test, static_assertions)
+{
+    timers::testing::assert_default_constructibility<decltype(m_periodic_async)>();
+    timers::testing::assert_copy_constructibility<decltype(m_periodic_async)>();
+    timers::testing::assert_move_constructibility<decltype(m_periodic_async)>();
+
+    SUCCEED();
+}
+
+TEST_F(scoped_test, default_values)
+{
+    EXPECT_FALSE(m_periodic_async->m_async_task.valid());
+    timers::testing::check_if_mutex_is_owned(m_periodic_async->m_async_protection, false);
+    timers::testing::check_if_mutex_is_owned(m_periodic_async->m_cv_protection, false);
+}
+
+TEST_F(scoped_test, operators)
+{
+    EXPECT_NO_THROW(m_periodic_async.operator*());
+    EXPECT_NO_THROW(m_periodic_async.operator->());
+}
+
+TEST_F(scoped_test, start)
+{
+    bool callback_called = false;
+
+    m_periodic_async->start(1s, [&callback_called]() { callback_called = true; });
+
+    std::this_thread::sleep_for(3s);
+
+    EXPECT_TRUE(callback_called);
+    EXPECT_FALSE(m_periodic_async->m_terminate_forcefully);
+}
+}

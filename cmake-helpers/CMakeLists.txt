@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(cmake-helpers VERSION 1.0.0 LANGUAGES NONE)
+project(cmake-helpers VERSION 1.1.0 LANGUAGES NONE)
 
 _print_project_version()
 

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(example VERSION 1.0.0 LANGUAGES CXX)
+project(example VERSION 1.1.0 LANGUAGES CXX)
 
 _print_status_message("building with example")
 _print_project_version()
@@ -13,4 +13,4 @@ include_directories(include)
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 _add_pedantic_warning_level()
-_link_pthreads_if_available()
+_link_threads_if_available()

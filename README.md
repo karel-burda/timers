@@ -139,14 +139,14 @@ private:
 class_that_uses_timers foo;
 foo.work();
 
-// "foo" goes out of scope, so the scoped timer (member of "foo") and its underlying
-// asynchronous periodic timer will be stopped as well
+// "foo" goes out of scope, so the scoped timer (member of "foo") will go out of scope as well
+// and its underlying asynchronous periodic timer will be stopped
 ```
 
 For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
 # Build Process
-Library itself is just header-only, so no need for additional linking, just `pthreads` have to be linked to the final executable on POSIX systems.
+Library itself is just header-only, so no need for additional linking, just threading library might need to be linked to the final executable on most Linux standard library implementations. See section [Usage](#Usage) for more info.
 
 In order to build the usage example ([main.cpp](example/src/main.cpp)) run the cmake in the top-level directory like this:
 

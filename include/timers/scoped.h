@@ -11,6 +11,8 @@ namespace timers
 {
 class blocking;
 
+/// RAII-like timer wrapper that automatically stops inner timer when going out of scope (during destructor)
+/// @tparam underlying_timer might be whichever one except for the blocking
 template <typename underlying_timer>
 class scoped : private detail::disable_copy, private detail::disable_move
 {
@@ -21,7 +23,7 @@ static_assert(std::is_base_of<blocking, underlying_timer>::value, "Only timers i
 public:
     ~scoped()
     {
-        m_timer.stop();
+        stop();
     }
 
     underlying_timer * operator->()
@@ -35,6 +37,17 @@ public:
     }
 
 private:
+    void stop() noexcept
+    {
+        try
+        {
+            m_timer.stop();
+        }
+        catch (...)
+        {
+        }
+    }
+
     underlying_timer m_timer;
 };
 }

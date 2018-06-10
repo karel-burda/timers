@@ -11,7 +11,7 @@
 * Its asynchronous version: `single_shot_async`
 * Timer that does some action periodically: `periodic`
 * Its asynchronous version: `periodic_async`
-* Scoped "RAII" timer that stops underlying timer automatically upon destruction: `scoped` 
+* Scoped "RAII" timer that stops underlying timer automatically upon destruction: `scoped`
 
 Implemented using C++11 with the use of `std::conditional_variable`, `std::promise` and `std::async`.
 

@@ -6,6 +6,8 @@ namespace burda
 {
 namespace timers
 {
+namespace detail
+{
 namespace traits
 {
 /// Helper structure to deduce return type of given method
@@ -22,6 +24,7 @@ struct return_type_templated<R(C::*)(Args...)>
 
 template <typename T>
 using return_type = typename return_type_templated<T>::type;
+}
 }
 }
 }

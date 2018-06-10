@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-1.1.0-green.svg)
+![Version](https://img.shields.io/badge/version-1.2.0-green.svg)
 [![License](https://img.shields.io/badge/license-MIT_License-green.svg?style=flat)](LICENSE)
 [![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=master)](https://travis-ci.org/karel-burda/timers)
 [![Coverage Status](https://coveralls.io/repos/github/karel-burda/timers/badge.svg?branch=master)](https://coveralls.io/github/karel-burda/timers?branch=master)
@@ -11,7 +11,7 @@
 * Its asynchronous version: `single_shot_async`
 * Timer that does some action periodically: `periodic`
 * Its asynchronous version: `periodic_async`
-* Scoped "RAII" timer that stops underlying timer automatically upon destruction: `scoped` 
+* Scoped "RAII" timer that stops underlying timer automatically upon destruction: `scoped`
 
 Implemented using C++11 with the use of `std::conditional_variable`, `std::promise` and `std::async`.
 
@@ -77,7 +77,7 @@ timer.start(2m, nullptr);
 
 ### Asynchronous single-shot
 ```cpp
-timers::single_shot_async timer_async;
+timers::single_shot_async timer;
 
 // this call is asynchronous
 timer.start(2s, [](){ std::cout << "Hi there" << std::endl; });
@@ -139,14 +139,14 @@ private:
 class_that_uses_timers foo;
 foo.work();
 
-// "foo" goes out of scope, so the scoped timer (member of "foo") and its underlying
-// asynchronous periodic timer will be stopped as well
+// "foo" goes out of scope, so the scoped timer (member of "foo") will go out of scope as well
+// and its underlying asynchronous periodic timer will be stopped
 ```
 
 For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
 # Build Process
-Library itself is just header-only, so no need for additional linking, just `pthreads` have to be linked to the final executable on POSIX systems.
+Library itself is just header-only, so no need for additional linking, just threading library might need to be linked to the final executable on most Linux standard library implementations. See section [Usage](#Usage) for more info.
 
 In order to build the usage example ([main.cpp](example/src/main.cpp)) run the cmake in the top-level directory like this:
 

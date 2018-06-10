@@ -52,7 +52,7 @@ public:
     }
 
 private:
-    std::future<traits::return_type<decltype(&underlying_timer::start)>> m_async_task;
+    std::future<detail::traits::return_type<decltype(&underlying_timer::start)>> m_async_task;
     std::mutex m_async_protection;
 };
 }

@@ -6,14 +6,15 @@
 #include "timers/exceptions.h"
 #include "timers/type_definitions.h"
 
-#include "timers/private/disable_copy_and_move.h"
+#include "timers/private/disable_copy.h"
+#include "timers/private/disable_move.h"
 
 namespace burda
 {
 namespace timers
 {
 /// Timer that blocks current thread for given amount of time
-class blocking : disable_copy_and_move
+class blocking : private detail::disable_copy, private detail::disable_move
 {
 public:
     /// Waits and blocks current thread until the "time" elapses OR client code calls "stop()"

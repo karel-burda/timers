@@ -82,7 +82,7 @@ timers::single_shot_async timer;
 // this call is asynchronous
 timer.start(2s, [](){ std::cout << "Hi there" << std::endl; });
 
-// we can stack the commands
+// we can "stack" the callbacks
 timer.start(1s, [](){ std::cout << "Action1" << std::endl; });
 timer.start(1s, [](){ std::cout << "Action2" << std::endl; });
 timer.start(1s, [](){ std::cout << "Action3" << std::endl; });
@@ -102,7 +102,7 @@ timer.start(3s, []() { std::cout << "This is being called regularly" << std::end
 // we can specify exception policy as well
  timer.start(3s, []() {}, timers::policies::start::ignore);
 
-// will throw
+// this will throw anyway, the callback has to be callable
 timer.start(5s, nullptr);
 ```
 

@@ -44,7 +44,7 @@ public:
             m_terminate_forcefully = true;
         }
 
-        m_cv.notify_all();
+        m_cv.notify_one();
     }
 
 private:

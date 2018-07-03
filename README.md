@@ -184,7 +184,7 @@ Compilers are set-up to treat warnings as errors and with pedantic warning level
 
 The project is using free Travis services, so the CI process is (because of overhead and expense) broken up into just 3 steps (both with different OS & compiler):
 * `example (C++11)` -- testing core build-ability of `timers` in the older C++11 standard (backwards compatibility); run example under the valgrind
-* `example (C++14)` -- perform cppcheck on example usage (including `timers` themselves); build on gcc 5.x, run example under the valgrind
+* `example (C++14)` -- perform cppcheck on example usage (including `timers` themselves); build on gcc 5.x; run example under the valgrind
 * `tests (C++14)` -- perform cppcheck on unit tests; build tests on clang 8.x; run tests; collect code coverage (using codecov and then coveralls)
 
 Project uses [coveralls.io](https://coveralls.io/github/karel-burda/timers) for code coverage summary and [codacy](https://app.codacy.com/app/karel-burda/timers/dashboard) for the coding style and additional static analysis.

@@ -24,7 +24,7 @@ public:
 
         if (terminated_after_time_elapsed)
         {
-            call(callback, policy);
+            call(std::move(callback), policy);
         }
 
         return terminated_after_time_elapsed;

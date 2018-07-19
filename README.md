@@ -1,7 +1,7 @@
 ![Version](https://img.shields.io/badge/version-1.2.0-green.svg)
 [![License](https://img.shields.io/badge/license-MIT_License-green.svg?style=flat)](LICENSE)
-[![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=release/1.2)](https://travis-ci.org/karel-burda/timers)
-[![Coverage Status](https://coveralls.io/repos/github/karel-burda/timers/badge.svg?branch=master)](https://coveralls.io/github/karel-burda/timers?branch=release/1.2)
+[![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=develop)](https://travis-ci.org/karel-burda/timers)
+[![Coverage Status](https://coveralls.io/repos/github/karel-burda/timers/badge.svg?branch=develop)](https://coveralls.io/github/karel-burda/timers?branch=develop)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/27e08eaa6aa64eddbe4a79085e95ebcc)](https://www.codacy.com/app/karel-burda/timers?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=karel-burda/timers&amp;utm_campaign=Badge_Grade)
 
 # Introduction
@@ -82,7 +82,7 @@ timers::single_shot_async timer;
 // this call is asynchronous
 timer.start(2s, [](){ std::cout << "Hi there" << std::endl; });
 
-// we can stack the commands
+// we can "stack" the callbacks
 timer.start(1s, [](){ std::cout << "Action1" << std::endl; });
 timer.start(1s, [](){ std::cout << "Action2" << std::endl; });
 timer.start(1s, [](){ std::cout << "Action3" << std::endl; });
@@ -102,7 +102,7 @@ timer.start(3s, []() { std::cout << "This is being called regularly" << std::end
 // we can specify exception policy as well
  timer.start(3s, []() {}, timers::policies::start::ignore);
 
-// will throw
+// this will throw anyway, the callback has to be callable
 timer.start(5s, nullptr);
 ```
 
@@ -184,7 +184,7 @@ Compilers are set-up to treat warnings as errors and with pedantic warning level
 
 The project is using free Travis services, so the CI process is (because of overhead and expense) broken up into just 3 steps (both with different OS & compiler):
 * `example (C++11)` -- testing core build-ability of `timers` in the older C++11 standard (backwards compatibility); run example under the valgrind
-* `example (C++14)` -- perform cppcheck on example usage (including `timers` themselves); build on gcc 5.x, run example under the valgrind
+* `example (C++14)` -- perform cppcheck on example usage (including `timers` themselves); build on gcc 5.x; run example under the valgrind
 * `tests (C++14)` -- perform cppcheck on unit tests; build tests on clang 8.x; run tests; collect code coverage (using codecov and then coveralls)
 
 Project uses [coveralls.io](https://coveralls.io/github/karel-burda/timers) for code coverage summary and [codacy](https://app.codacy.com/app/karel-burda/timers/dashboard) for the coding style and additional static analysis.

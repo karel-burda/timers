@@ -1,7 +1,7 @@
 ![Version](https://img.shields.io/badge/version-1.2.0-green.svg)
 [![License](https://img.shields.io/badge/license-MIT_License-green.svg?style=flat)](LICENSE)
-[![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=develop)](https://travis-ci.org/karel-burda/timers)
-[![Coverage Status](https://coveralls.io/repos/github/karel-burda/timers/badge.svg?branch=develop)](https://coveralls.io/github/karel-burda/timers?branch=develop)
+[![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=release/1.2)](https://travis-ci.org/karel-burda/timers)
+[![Coverage Status](https://coveralls.io/repos/github/karel-burda/timers/badge.svg?branch=release/1.2)](https://coveralls.io/github/karel-burda/timers?branch=release/1.2)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/27e08eaa6aa64eddbe4a79085e95ebcc)](https://www.codacy.com/app/karel-burda/timers?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=karel-burda/timers&amp;utm_campaign=Badge_Grade)
 
 # Introduction

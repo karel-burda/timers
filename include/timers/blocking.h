@@ -26,16 +26,13 @@ public:
 
         std::lock_guard<decltype(m_block_protection)> lock{ m_block_protection };
 
+        std::unique_lock<decltype(m_cv_protection)> cv_lock{ m_cv_protection };
+        const auto terminated_after_interval_elapsed = !m_cv.wait_for(cv_lock, time, [&]
         {
-            std::unique_lock<decltype(m_cv_protection)> cv_lock{ m_cv_protection };
+            return m_terminate_forcefully;
+        });
 
-            const auto terminated_after_interval_elapsed = !m_cv.wait_for(cv_lock, time, [&]
-            {
-                return m_terminate_forcefully;
-            });
-
-            return terminated_after_interval_elapsed;
-        }
+        return terminated_after_interval_elapsed;
     }
 
     /// Stops the timer, will set the "m_terminate_forcefully" to true, so that the cv stops to block
@@ -47,7 +44,7 @@ public:
             m_terminate_forcefully = true;
         }
 
-        m_cv.notify_all();
+        m_cv.notify_one();
     }
 
 private:

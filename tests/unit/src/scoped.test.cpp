@@ -5,9 +5,9 @@
 #include "make_all_members_public.h"
 #include <timers/periodic.h>
 #include <timers/periodic_async.h>
+#include <timers/scoped.h>
 #include <timers/single_shot.h>
 #include <timers/single_shot_async.h>
-#include <timers/scoped.h>
 
 #include "static_assertions.h"
 #include "test_utils.h"

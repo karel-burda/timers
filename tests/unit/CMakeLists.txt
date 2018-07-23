@@ -10,11 +10,10 @@ include("${CMAKE_SOURCE_DIR}/cmake-helpers/gtest.cmake")
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB_RECURSE SOURCES src/*.c*)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include include)
-
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
 add_dependencies(${PROJECT_NAME} gtest-build)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include include)
 target_link_libraries(${PROJECT_NAME} PUBLIC gtest gtest_main)
 
 if (COVERAGE)

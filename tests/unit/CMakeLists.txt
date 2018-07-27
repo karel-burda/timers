@@ -5,12 +5,14 @@ project(tests VERSION 1.1.0 LANGUAGES CXX)
 _print_status_message("building with unit tests")
 _print_project_version()
 
-include("${CMAKE_SOURCE_DIR}/cmake-helpers/gtest.cmake")
+include("${CMAKE_SOURCE_DIR}/cmake-helpers/cmake-helpers/gtest.cmake")
 
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB_RECURSE SOURCES src/*.c*)
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+
+_download_and_build_gtest("gtest-build" "Release" "gtest-src")
 
 add_dependencies(${PROJECT_NAME} gtest-build)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include include)

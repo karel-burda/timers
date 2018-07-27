@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.0)
 
 project(timers VERSION 1.2.0 LANGUAGES CXX)
 
-include("cmake-helpers/messages.cmake")
-include("cmake-helpers/settings.cmake")
-include("cmake-helpers/threads.cmake")
-include("cmake-helpers/warnings.cmake")
+include("cmake-helpers/cmake-helpers/messages.cmake")
+include("cmake-helpers/cmake-helpers/standard-settings.cmake")
+include("cmake-helpers/cmake-helpers/threads.cmake")
+include("cmake-helpers/cmake-helpers/warnings.cmake")
 
 _print_project_version()
 
@@ -15,8 +15,6 @@ file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "README.md" ".travis.yml")
 option(EXAMPLE "Build example usage" ON)
 option(UNIT-TESTS "Build unit tests" OFF)
 option(PERFORMANCE-TESTS "Build performance tests" OFF)
-
-add_subdirectory(cmake-helpers)
 
 if (EXAMPLE)
     add_subdirectory(example)

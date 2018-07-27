@@ -9,6 +9,9 @@ include("cmake-helpers/cmake-helpers/warnings.cmake")
 
 _print_project_version()
 
+_set_standards("11" "14")
+_set_default_build_type("Debug")
+
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "README.md" ".travis.yml")
 

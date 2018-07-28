@@ -12,6 +12,8 @@ _print_project_version()
 _set_standards("11" "14")
 _set_default_build_type("Debug")
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "README.md" ".travis.yml")
 

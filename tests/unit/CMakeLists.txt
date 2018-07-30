@@ -10,9 +10,9 @@ include("${CMAKE_SOURCE_DIR}/cmake-helpers/cmake-helpers/gtest.cmake")
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB_RECURSE SOURCES src/*.c*)
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+_download_and_build_gtest("gtest-build" "Release" "gtest-src" "0957cce368316577aae5ddfffcb67f24621d69e7")
 
-_download_and_build_gtest("gtest-build" "Release" "gtest-src")
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
 add_dependencies(${PROJECT_NAME} gtest-build)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include include)

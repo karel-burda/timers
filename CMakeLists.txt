@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 
-project(timers VERSION 1.2.0 LANGUAGES CXX)
+project(timers VERSION 1.2.2 LANGUAGES CXX)
 
 include("cmake-helpers/cmake-helpers/messages.cmake")
 include("cmake-helpers/cmake-helpers/standard-settings.cmake")

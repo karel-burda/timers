@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-1.2.0-green.svg)
+![Version](https://img.shields.io/badge/version-1.2.2-green.svg)
 [![License](https://img.shields.io/badge/license-MIT_License-green.svg?style=flat)](LICENSE)
 [![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=develop)](https://travis-ci.org/karel-burda/timers)
 [![Coverage Status](https://coveralls.io/repos/github/karel-burda/timers/badge.svg?branch=develop)](https://coveralls.io/github/karel-burda/timers?branch=develop)

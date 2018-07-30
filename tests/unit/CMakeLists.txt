@@ -1,14 +1,16 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 
-project(tests VERSION 1.1.0 LANGUAGES CXX)
+project(tests VERSION 1.1.1 LANGUAGES CXX)
 
 _print_status_message("building with unit tests")
 _print_project_version()
 
-include("${CMAKE_SOURCE_DIR}/cmake-helpers/gtest.cmake")
+include("${CMAKE_SOURCE_DIR}/cmake-helpers/cmake-helpers/gtest.cmake")
 
 file(GLOB_RECURSE HEADERS include/*.h*)
 file(GLOB_RECURSE SOURCES src/*.c*)
+
+_download_and_build_gtest("gtest-build" "Release" "gtest-src" "0957cce368316577aae5ddfffcb67f24621d69e7")
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 

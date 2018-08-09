@@ -23,7 +23,7 @@ if (COVERAGE)
 
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
         target_compile_options(${PROJECT_NAME} PRIVATE -fprofile-arcs -ftest-coverage -fcoverage-mapping -fprofile-instr-generate)
-        set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS -fprofile-arcs -ftest-coverage)
+        set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-fprofile-arcs -ftest-coverage")
     endif()
 endif()
 

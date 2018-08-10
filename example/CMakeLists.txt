@@ -5,12 +5,11 @@ project(example VERSION 1.1.1 LANGUAGES CXX)
 _print_status_message("building with example")
 _print_project_version()
 
-file(GLOB_RECURSE SOURCES src/*.c*)
-
-include_directories(${CMAKE_SOURCE_DIR}/include)
-include_directories(include)
-
 add_executable(${PROJECT_NAME} ${SOURCES})
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+target_sources(${PROJECT_NAME} PUBLICsrc/main.cpp)
 
 _add_pedantic_warning_level()
 _link_threads_if_available()

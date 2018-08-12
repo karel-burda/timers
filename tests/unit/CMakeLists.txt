@@ -7,9 +7,9 @@ _print_project_version()
 
 include("${CMAKE_SOURCE_DIR}/cmake-helpers/cmake-helpers/gtest.cmake")
 
-_download_and_build_gtest("gtest-build" "Release" "gtest-src" "0957cce368316577aae5ddfffcb67f24621d69e7")
-
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+
+_download_and_build_gtest(${PROJECT_NAME} "gtest-build" "Release" "gtest-src" "0957cce368316577aae5ddfffcb67f24621d69e7")
 
 target_sources(
     ${PROJECT_NAME}
@@ -71,7 +71,7 @@ add_custom_target(run-all-tests-verbose
                     COMMAND ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 300
                     DEPENDS ${PROJECT_NAME})
 
-_add_compile_options_for_gtest()
-_add_pedantic_warning_level()
-_supress_cxx_compiler_warning("keyword-macro")
-_link_threads_if_available()
+_add_compile_options_for_gtest(${PROJECT_NAME})
+_add_pedantic_warning_level(${PROJECT_NAME})
+_supress_cxx_compiler_warning(${PROJECT_NAME} "keyword-macro")
+_link_threads_if_available(${PROJECT_NAME})

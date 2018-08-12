@@ -9,5 +9,5 @@ add_executable(${PROJECT_NAME} src/main.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
-_add_pedantic_warning_level()
-_link_threads_if_available()
+_add_pedantic_warning_level(${PROJECT_NAME})
+_link_threads_if_available(${PROJECT_NAME})

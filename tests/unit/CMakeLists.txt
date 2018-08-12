@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
-project(tests VERSION 1.1.1 LANGUAGES CXX)
+project(tests VERSION 1.1.2 LANGUAGES CXX)
 
 _print_status_message("building with unit tests")
 _print_project_version()

@@ -7,9 +7,9 @@ _print_project_version()
 
 include("${CMAKE_SOURCE_DIR}/cmake-helpers/cmake-helpers/gtest.cmake")
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+_download_and_build_gtest("gtest-build" "Release" "gtest-src" "0957cce368316577aae5ddfffcb67f24621d69e7")
 
-_download_and_build_gtest(${PROJECT_NAME} "gtest-build" "Release" "gtest-src" "0957cce368316577aae5ddfffcb67f24621d69e7")
+add_executable(${PROJECT_NAME})
 
 target_sources(
     ${PROJECT_NAME}

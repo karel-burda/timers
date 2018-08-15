@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
-project(timers VERSION 1.2.2 LANGUAGES CXX)
+project(timers VERSION 1.2.3 LANGUAGES CXX)
 
 include("cmake-helpers/cmake-helpers/messages.cmake")
 include("cmake-helpers/cmake-helpers/standard-settings.cmake")
@@ -27,24 +27,24 @@ if (UNIT-TESTS)
     add_subdirectory(tests/unit)
 endif()
 
-file(GLOB HEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/include/timers
-    async.h
-    blocking.h
-    exceptions.h
-    periodic.h
-    periodic_async.h
-    policies.h
-    scoped.h
-    single_shot.h
-    single_shot_async.h
-    type_definitions.h
+set(HEADERS
+    include/timers/async.h
+    include/timers/blocking.h
+    include/timers/exceptions.h
+    include/timers/periodic.h
+    include/timers/periodic_async.h
+    include/timers/policies.h
+    include/timers/scoped.h
+    include/timers/single_shot.h
+    include/timers/single_shot_async.h
+    include/timers/type_definitions.h
 
-    disable_copy.h
-    disable_move.h
-    type_traits.h)
+    include/timers/private/disable_copy.h
+    include/timers/private/disable_move.h
+    include/timers/private/type_traits.h)
 
-file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+set(OTHER
     README.md
-    .travis.yml) 
+    .travis.yml)
 
-add_custom_target(${PROJECT_NAME} SOURCES ${HEADERS} ${OTHERS})
+add_custom_target(${PROJECT_NAME} SOURCES ${HEADERS} ${OTHER})

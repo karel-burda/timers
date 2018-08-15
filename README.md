@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-1.2.2-green.svg)
+![Version](https://img.shields.io/badge/version-1.2.3-green.svg)
 [![License](https://img.shields.io/badge/license-MIT_License-green.svg?style=flat)](LICENSE)
 [![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=develop)](https://travis-ci.org/karel-burda/timers)
 [![Coverage Status](https://coveralls.io/repos/github/karel-burda/timers/badge.svg?branch=develop)](https://coveralls.io/github/karel-burda/timers?branch=develop)
@@ -190,8 +190,9 @@ The project is using free Travis services, so the CI process is (because of over
 Project uses [coveralls.io](https://coveralls.io/github/karel-burda/timers) for code coverage summary and [codacy](https://app.codacy.com/app/karel-burda/timers/dashboard) for the coding style and additional static analysis.
 
 # Branch Model
-Project is using git workflow, this includes `master`, `develop`, feature (prefix `feature/`)
-and bug-fix (`bugfix/`) branches, and `release/` for stable releases. 
+Project is using git workflow, this includes `master`, `develop`, feature (prefix `feature/`) and bug-fix (`bugfix/`) branches.
+
+`release/` branches are obsolete (overkill for such a small project). 
 
 # Coding Style
 Project is following boost and STL coding guidelines with these exceptions:

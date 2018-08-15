@@ -1,16 +1,13 @@
-cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
 project(example VERSION 1.1.1 LANGUAGES CXX)
 
 _print_status_message("building with example")
 _print_project_version()
 
-file(GLOB_RECURSE SOURCES src/*.c*)
+add_executable(${PROJECT_NAME} src/main.cpp)
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
-include_directories(include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
-
-_add_pedantic_warning_level()
-_link_threads_if_available()
+_add_pedantic_warning_level(${PROJECT_NAME})
+_link_threads_if_available(${PROJECT_NAME})

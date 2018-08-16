@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
-project(timers VERSION 1.2.2 LANGUAGES CXX)
+project(timers VERSION 1.2.3 LANGUAGES CXX)
 
 include("cmake-helpers/cmake-helpers/messages.cmake")
 include("cmake-helpers/cmake-helpers/standard-settings.cmake")
@@ -14,9 +14,6 @@ _set_default_build_type("Debug")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-file(GLOB_RECURSE HEADERS include/*.h*)
-file(GLOB OTHER RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "README.md" ".travis.yml")
-
 option(EXAMPLE "Build example usage" ON)
 option(UNIT-TESTS "Build unit tests" OFF)
 option(PERFORMANCE-TESTS "Build performance tests" OFF)
@@ -29,5 +26,25 @@ if (UNIT-TESTS)
     enable_testing()
     add_subdirectory(tests/unit)
 endif()
+
+set(HEADERS
+    include/timers/async.h
+    include/timers/blocking.h
+    include/timers/exceptions.h
+    include/timers/periodic.h
+    include/timers/periodic_async.h
+    include/timers/policies.h
+    include/timers/scoped.h
+    include/timers/single_shot.h
+    include/timers/single_shot_async.h
+    include/timers/type_definitions.h
+
+    include/timers/private/disable_copy.h
+    include/timers/private/disable_move.h
+    include/timers/private/type_traits.h)
+
+set(OTHER
+    README.md
+    .travis.yml)
 
 add_custom_target(${PROJECT_NAME} SOURCES ${HEADERS} ${OTHER})

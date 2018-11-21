@@ -21,6 +21,15 @@ target_include_directories(${PROJECT_NAME}
                                 INTERFACE
                                     ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+set(CMAKE_THREAD_PREFER_PTHREAD ON)
+find_package(Threads QUIET)
+if (Threads_FOUND)
+    # Cannot use imported target Threads::Threads for interface (header only) library
+    set_target_properties(${PROJECT_NAME}
+                              PROPERTIES
+                                  INTERFACE_LINK_LIBRARIES "${CMAKE_THREAD_LIBS_INIT}")
+endif()
+
 target_compile_features(${PROJECT_NAME}
                             INTERFACE
                                 cxx_std_11)

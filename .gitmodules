@@ -6,3 +6,5 @@
 [submodule "submodules/test-utils"]
 	path = submodules/test-utils
 	url = https://github.com/karel-burda/test-utils.git
+    branch = master
+	shallow = true

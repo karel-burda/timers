@@ -1,8 +1,7 @@
 #pragma once
 
-#include "timers/blocking.h"
-
-#include "timers/policies.h"
+#include "timers/blocking.hpp"
+#include "timers/policies.hpp"
 
 namespace burda
 {

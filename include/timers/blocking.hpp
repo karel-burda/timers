@@ -3,18 +3,19 @@
 #include <condition_variable>
 #include <mutex>
 
-#include "timers/exceptions.h"
-#include "timers/type_definitions.h"
+#include "timers/exceptions.hpp"
+#include "timers/type_definitions.hpp"
 
-#include "timers/private/disable_copy.h"
-#include "timers/private/disable_move.h"
+#include "timers/detail/cpp_utils/primitives/idisable_copy.hpp"
+#include "timers/detail/cpp_utils/primitives/idisable_move.hpp"
 
 namespace burda
 {
 namespace timers
 {
 /// Timer that blocks current thread for given amount of time
-class blocking : private detail::disable_copy, private detail::disable_move
+class blocking : private burda::cpp_utils::primitives::idisable_copy,
+                 private burda::cpp_utils::primitives::idisable_move
 {
 public:
     /// Waits and blocks current thread until the "time" elapses OR client code calls "stop()"

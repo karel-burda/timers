@@ -23,13 +23,13 @@ Implementation might throw these exceptions upon the `start(...)`:
 * `time_period_is_zero`
 * `time_period_is_negative`
 
-See [exceptions.h](include/timers/exceptions.h) for more info.
+See [exceptions.h](include/timers/exceptions.hpp) for more info.
 
 Policies specifies how timer class will behave when exception is thrown from the user's callback:
 * `stop` -- causes the timer to call `stop()` on itself and re-throws catched exception
 * `ignore` -- causes the timer to ignore catched exception and keep on working
 
-See [policies.h](include/timers/policies.h).
+See [policies.h](include/timers/policies.hpp).
 
 # Usage
 In order to use the `timers`, it's only the `include` directory that matters. Just make sure that the header search path is pointing to the [include](include) directory located in the root directory.

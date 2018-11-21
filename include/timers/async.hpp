@@ -5,10 +5,10 @@
 #include <mutex>
 #include <type_traits>
 
-#include "timers/policies.h"
-#include "timers/type_definitions.h"
+#include "timers/policies.hpp"
+#include "timers/type_definitions.hpp"
 
-#include "timers/private/type_traits.h"
+#include "timers/detail/type_traits.hpp"
 
 namespace burda
 {

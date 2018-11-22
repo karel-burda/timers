@@ -1,20 +1,23 @@
-#include <exception>
-#include <functional>
 #include <future>
 #include <thread>
 
 #include <gtest/gtest.h>
 
-#include "make_all_members_public.h"
-#include <timers/single_shot.h>
+#include <test_utils/make_all_members_public.hpp>
+#include <test_utils/lifetime_assertions.hpp>
+#include <test_utils/mutex.hpp>
+#include <test_utils/static_class_assertions.hpp>
+#include <test_utils/time.hpp>
+#include <timers/single_shot.hpp>
 
-#include "static_assertions.h"
-#include "test_utils.h"
-#include "time_utils.h"
+#include "cpp_utils/time/measure_time.hpp"
 
 namespace
 {
 using namespace std::chrono_literals;
+
+namespace cpp_utils = burda::cpp_utils;
+namespace test_utils = burda::test_utils;
 namespace timers = burda::timers;
 
 class single_shot_test : public ::testing::Test
@@ -31,14 +34,14 @@ private:
 
 TEST(single_shot_construction_destruction, construction_destruction)
 {
-    timers::testing::assert_construction_and_destruction<timers::single_shot>();
+    test_utils::assert_construction_and_destruction<timers::single_shot>();
 }
 
 TEST_F(single_shot_test, static_assertions)
 {
-    timers::testing::assert_default_constructibility<decltype(m_timer)>();
-    timers::testing::assert_copy_constructibility<decltype(m_timer)>();
-    timers::testing::assert_move_constructibility<decltype(m_timer)>();
+    test_utils::assert_default_constructibility<decltype(m_timer), true>();
+    test_utils::assert_copy_constructibility<decltype(m_timer), false>();
+    test_utils::assert_move_constructibility<decltype(m_timer), false>();
 
     SUCCEED();
 }
@@ -63,25 +66,25 @@ TEST_F(single_shot_test, callback_throwing)
 {
     EXPECT_ANY_THROW(m_timer.start(1s, [](){ throw std::exception{}; }));
 
-    timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
-    timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+    test_utils::check_if_mutex_is_owned(m_timer.m_block_protection, false);
+    test_utils::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
     EXPECT_TRUE(m_timer.m_terminate_forcefully);
 }
 
 TEST_F(single_shot_test, callback_multiple_times)
 {
-    const auto elapsed = timers::testing::measure_time([this]()
+    const auto elapsed = cpp_utils::time::measure_duration([this]()
     {
         EXPECT_TRUE(m_timer.start(3s, std::bind(&single_shot_test::callback, this)));
         EXPECT_TRUE(m_timer.start(3s, std::bind(&single_shot_test::callback, this)));
     });
 
-    timers::testing::assert_that_elapsed_time_in_tolerance(elapsed, 6s, 100s);
+    test_utils::assert_that_elapsed_time_in_tolerance(elapsed, 6s, 100s);
 }
 
 TEST_F(single_shot_test, start_long_callback)
 {
-    using namespace timers::testing;
+    using clock = std::chrono::steady_clock;
 
     const auto start = clock::now();
     auto end = clock::now();
@@ -94,7 +97,7 @@ TEST_F(single_shot_test, start_long_callback)
 
     const auto elapsed = end - start;
 
-    timers::testing::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(elapsed), 12s, 100s);
+    test_utils::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(elapsed), 12s, 100s);
     }
 
 TEST_F(single_shot_test, start_in_parallel)

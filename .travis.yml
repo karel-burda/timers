@@ -8,7 +8,7 @@ git:
 
 jobs:
   include:
-     - stage: timers, example, tests -- linux, debug, cppcheck, coverage, g++, 64-bit
+     - stage: timers, example, tests -- linux, debug, cppcheck, valgrind, coverage, g++, 64-bit
        os: linux
        dist: xenial
        language: cpp
@@ -42,9 +42,7 @@ jobs:
 
          - cmake -Bbuild/example -Hexample -Dtimers_DIR:PATH=$(pwd)/build -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake --build build/example --config $BUILD_TYPE
-         - pushd build/example
-         - valgrind --error-exitcode=255 -v ./example
-         - popd
+         - valgrind --error-exitcode=255 -v ./build/example/example
 
          - cmake -Bbuild/submodules/test-utils -Hsubmodules/test-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake -Bbuild/tests/unit -Htests/unit
@@ -58,14 +56,12 @@ jobs:
 
          - set +e
 
-     - stage: timers, example, tests -- osx, release with debug info, valgrind, clang++, 64-bit
+     - stage: timers, example, tests -- osx, release with debug info, clang++, 64-bit
        os: osx
        osx_image: xcode10.1
        language: cpp
        env: BUILD_TYPE="RelWithDebInfo"
        compiler: clang
-       before_install:
-         - brew install valgrind
        script:
          - set -e
 
@@ -75,9 +71,6 @@ jobs:
          - cmake --build build/example --config $BUILD_TYPE
          # RVM overrides these shell built-ins for Ruby, but we need to use these
          - unset -f pushd && unset -f popd
-         - pushd build/example
-         - valgrind --error-exitcode=255 -v ./example
-         - popd
 
          - cmake -Bbuild/submodules/test-utils -Hsubmodules/test-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake -Bbuild/tests/unit -Htests/unit
@@ -100,9 +93,7 @@ jobs:
 
          - cmake -Bbuild/example -Hexample -Dtimers_DIR:PATH=$(pwd)/build -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake --build build/example --config $BUILD_TYPE
-         - pushd build/example/$BUILD_TYPE
-         - start example.exe
-         - popd
+         - start build/example/$BUILD_TYPE/example.exe
 
          - cmake -Bbuild/submodules/test-utils -Hsubmodules/test-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake -Bbuild/tests/unit -Htests/unit

@@ -123,17 +123,45 @@ TEST_F(blocking_test, block_multiple_times_in_parallel_and_stop_second)
 {
     const auto elapsed = cpp_utils::time::measure_duration([this]()
     {
-        auto caller1 = std::async(std::launch::async, [this]()
+        std::atomic<bool> caller1_started = { false };
+        std::atomic<bool> caller1_is_called_first = { true };
+
+        auto caller1 = std::async(std::launch::async, [this, &caller1_started, &caller1_is_called_first]()
         {
-            EXPECT_TRUE(m_timer.block(5s));
+            caller1_started = true;
+
+            const auto terminated_naturally = m_timer.block(5s);
+
+            if (caller1_is_called_first)
+            {
+                EXPECT_TRUE(terminated_naturally);
+            }
+            else
+            {
+                EXPECT_FALSE(terminated_naturally);
+            }
         });
 
-        auto caller2 = std::async(std::launch::async, [this]()
+        auto caller2 = std::async(std::launch::async, [this, &caller1_started, &caller1_is_called_first]()
         {
-            EXPECT_FALSE(m_timer.block(5s));
+            if (!caller1_started)
+            {
+                caller1_is_called_first = false;
+            }
+
+            const auto terminated_naturally = m_timer.block(5s);
+
+            if (caller1_is_called_first)
+            {
+                EXPECT_FALSE(terminated_naturally);
+            }
+            else
+            {
+                EXPECT_TRUE(terminated_naturally);
+            }
         });
 
-        auto stopper_of_second = std::async(std::launch::async, [this]()
+        auto stopper_of_second_one = std::async(std::launch::async, [this]()
         {
             std::this_thread::sleep_for(7s);
             m_timer.stop();
@@ -141,7 +169,7 @@ TEST_F(blocking_test, block_multiple_times_in_parallel_and_stop_second)
 
         caller1.wait();
         caller2.wait();
-        stopper_of_second.wait();
+        stopper_of_second_one.wait();
     });
 
     EXPECT_TRUE(m_timer.m_terminate_forcefully);

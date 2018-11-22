@@ -119,6 +119,36 @@ TEST_F(blocking_test, block_multiple_times_in_parallel)
     test_utils::assert_that_elapsed_time_in_tolerance(elapsed, 10s, 100s);
 }
 
+TEST_F(blocking_test, block_multiple_times_in_parallel_and_stop_second)
+{
+    const auto elapsed = cpp_utils::time::measure_duration([this]()
+    {
+        auto caller1 = std::async(std::launch::async, [this]()
+        {
+            EXPECT_TRUE(m_timer.block(5s));
+        });
+
+        auto caller2 = std::async(std::launch::async, [this]()
+        {
+            EXPECT_FALSE(m_timer.block(5s));
+        });
+
+        auto stopper_of_second = std::async(std::launch::async, [this]()
+        {
+            std::this_thread::sleep_for(7s);
+            m_timer.stop();
+        });
+
+        caller1.wait();
+        caller2.wait();
+        stopper_of_second.wait();
+    });
+
+    EXPECT_TRUE(m_timer.m_terminate_forcefully);
+    test_utils::check_if_mutex_is_owned(m_timer.m_block_protection, false);
+    test_utils::assert_that_elapsed_time_in_tolerance(elapsed, 7s, 100s);
+}
+
 TEST_F(blocking_test, stop)
 {
     EXPECT_NO_THROW(m_timer.stop());

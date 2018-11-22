@@ -34,9 +34,9 @@ TEST(blocking_construction_destruction, construction_destruction)
 
 TEST_F(blocking_test, static_assertions)
 {
-    test_utils::assert_default_constructibility<decltype(m_timer), true>;
-    test_utils::assert_copy_constructibility<decltype(m_timer), false>;
-    test_utils::assert_move_constructibility<decltype(m_timer), false>;
+    test_utils::assert_default_constructibility<decltype(m_timer), true>();
+    test_utils::assert_copy_constructibility<decltype(m_timer), false>();
+    test_utils::assert_move_constructibility<decltype(m_timer), false>();
 
     SUCCEED();
 }

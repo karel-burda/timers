@@ -22,6 +22,7 @@ jobs:
            packages:
              - g++-6
              - cppcheck
+             - valgrind
        before_install:
          - pip install --user cpp-coveralls
        install: export CXX="g++-6"
@@ -42,7 +43,7 @@ jobs:
          - cmake -Bbuild/example -Hexample -Dtimers_DIR:PATH=$(pwd)/build -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake --build build/example --config $BUILD_TYPE
          - pushd build/example
-         - ./example
+         - valgrind --error-exitcode=255 -v ./example
          - popd
 
          - cmake -Bbuild/submodules/test-utils -Hsubmodules/test-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE

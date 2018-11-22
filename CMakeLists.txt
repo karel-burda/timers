@@ -24,6 +24,7 @@ target_include_directories(${PROJECT_NAME}
 set(CMAKE_THREAD_PREFER_PTHREAD ON)
 find_package(Threads QUIET)
 if (Threads_FOUND)
+    message(STATUS "Threading library found")
     # Cannot use imported target Threads::Threads for interface (header only) library
     set_target_properties(${PROJECT_NAME}
                               PROPERTIES

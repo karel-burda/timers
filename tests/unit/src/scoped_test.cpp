@@ -2,7 +2,6 @@
 
 #include <gtest/gtest.h>
 
-#include <test_utils/make_all_members_public.hpp>
 #include <test_utils/lifetime_assertions.hpp>
 #include <test_utils/macros.hpp>
 #include <test_utils/mutex.hpp>
@@ -22,7 +21,7 @@ namespace timers = burda::timers;
 
 class scoped_test : public ::testing::Test
 {
-private:
+protected:
     timers::scoped<timers::periodic_async> m_periodic_async;
 };
 
@@ -44,13 +43,6 @@ TEST_F(scoped_test, static_assertions)
     SUCCEED();
 }
 
-TEST_F(scoped_test, default_values)
-{
-    EXPECT_FALSE(m_periodic_async->m_async_task.valid());
-    test_utils::check_if_mutex_is_owned(m_periodic_async->m_async_protection, false);
-    test_utils::check_if_mutex_is_owned(m_periodic_async->m_cv_protection, false);
-}
-
 TEST_F(scoped_test, operators)
 {
     EXPECT_NO_THROW(m_periodic_async.operator*());
@@ -66,6 +58,5 @@ TEST_F(scoped_test, start)
     std::this_thread::sleep_for(3s);
 
     EXPECT_TRUE(callback_called);
-    EXPECT_FALSE(m_periodic_async->m_terminate_forcefully);
 }
 }

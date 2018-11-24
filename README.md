@@ -235,8 +235,8 @@ Targets are built in one stage with debug symbols with code coverage measure and
 Valgrind is being run on the example as well.
 
 The project is using these jobs:
-* `timers, example, tests -- linux, debug, cppcheck, coverage, g++, 64-bit`
-* `timers, example, tests -- osx, release with debug info, valgrind, clang++, 64-bit`
+* `timers, example, tests -- linux, debug, cppcheck, valgrind, coverage, g++, 64-bit`
+* `timers, example, tests -- osx, release with debug info, clang++, 64-bit`
 * `timers, example, tests -- windows, release, msvc, 32-bit`
 
 Project uses [codecov.io](https://codecov.io/gh/karel-burda/timers) for code coverage summary.

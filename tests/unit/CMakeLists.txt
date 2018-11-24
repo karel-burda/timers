@@ -1,72 +1,57 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
-project(tests VERSION 1.2.3 LANGUAGES CXX)
+project(tests LANGUAGES CXX)
 
-_print_status_message("building with unit tests")
-_print_project_version()
+message(STATUS "Building unit tests")
 
-include("${CMAKE_SOURCE_DIR}/cmake-helpers/cmake-helpers/gtest.cmake")
+include(${CMAKE_CURRENT_SOURCE_DIR}/../../submodules/cmake-helpers/cmake-helpers/cpp_coverage.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/../../submodules/cmake-helpers/cmake-helpers/cpp_gtest.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/../../submodules/cmake-helpers/cmake-helpers/cpp_warnings.cmake)
 
-_gtest_download_and_build("gtest-build" "Release" "gtest-src" "0957cce368316577aae5ddfffcb67f24621d69e7")
+add_executable(${PROJECT_NAME} "")
 
-add_executable(${PROJECT_NAME})
+target_sources(${PROJECT_NAME}
+                   PRIVATE
+                       ${CMAKE_CURRENT_SOURCE_DIR}/src/blocking_test.cpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/src/exceptions_test.cpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/src/periodic_test.cpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/src/policies_test.cpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/src/scoped_test.cpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/src/single_shot_test.cpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/src/single_shot_async_test.cpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/src/periodic_test.cpp)
 
-target_sources(
-    ${PROJECT_NAME}
-        PUBLIC
-            include/make_all_members_public.h
-            include/static_assertions.h
-            include/test_utils.h
-            include/time_utils.h
+target_include_directories(${PROJECT_NAME}
+                                PRIVATE
+                                    ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-            src/blocking.test.cpp
-            src/exceptions.test.cpp
-            src/periodic.test.cpp
-            src/periodic_async.test.cpp
-            src/policies.test.cpp
-            src/scoped.test.cpp
-            src/single_shot.test.cpp
-            src/single_shot_async.test.cpp
+find_package(test-utils CONFIG REQUIRED)
+message(STATUS "Found version of test-utils is: ${test-utils_VERSION}")
+target_link_libraries(${PROJECT_NAME} PRIVATE burda::test-utils)
 
-            src/test_utils.cpp
-            src/time_utils.cpp)
+find_package(timers CONFIG REQUIRED)
+message(STATUS "Found version of timers is: ${timers_VERSION}")
+target_link_libraries(${PROJECT_NAME} PRIVATE burda::timers)
 
-add_dependencies(${PROJECT_NAME} gtest-build)
+target_compile_options(${PROJECT_NAME}
+                           PRIVATE
+                               $<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-_gtest_resolve_build_options(${PROJECT_NAME})
-
-target_include_directories(
-    ${PROJECT_NAME}
-        PUBLIC
-            ${CMAKE_SOURCE_DIR}/include
-            include)
+burda_cmake_helpers_cpp_gtest_bootstrap_and_link(${PROJECT_NAME} "release-1.8.1" "Release" PRIVATE)
 
 if (COVERAGE)
-    _print_status_message("building unit tests with code coverage")
-
-    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-        target_compile_options(
-            ${PROJECT_NAME}
-                PRIVATE
-                    -fprofile-arcs
-                    -ftest-coverage
-                    -fcoverage-mapping
-                    -fprofile-instr-generate)
-
-        set_target_properties(
-            ${PROJECT_NAME}
-                PROPERTIES
-                    LINK_FLAGS "-fprofile-arcs -ftest-coverage")
-    endif()
+    message(STATUS "Building unit tests with code coverage")
+    burda_cmake_helpers_cpp_coverage_add_build_options(${PROJECT_NAME} PRIVATE)
 endif()
+
+enable_testing()
 
 add_test(NAME all-unit-tests
          COMMAND $<TARGET_FILE:${PROJECT_NAME}> --gtest_color=yes --gtest_shuffle)
 
 add_custom_target(run-all-tests-verbose
-                    COMMAND ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --timeout 300
-                    DEPENDS ${PROJECT_NAME})
+                  COMMAND ${CMAKE_CTEST_COMMAND} -V -C ${CMAKE_BUILD_TYPE} --build-run-dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} --timeout 300
+                  DEPENDS ${PROJECT_NAME})
 
-_add_pedantic_warning_level(${PROJECT_NAME})
-_supress_cxx_compiler_warning(${PROJECT_NAME} "keyword-macro")
-_link_threads_if_available(${PROJECT_NAME})
+burda_cmake_helpers_cpp_warnings_add_pedantic_level(${PROJECT_NAME} PRIVATE)
+burda_cmake_helpers_cpp_warnings_suppress(${PROJECT_NAME} "keyword-macro" PRIVATE)

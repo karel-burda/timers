@@ -1,13 +1,19 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
-project(example VERSION 1.2.3 LANGUAGES CXX)
+project(example LANGUAGES CXX)
 
-_print_status_message("building with example")
-_print_project_version()
+message(STATUS "Building example")
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+include(${CMAKE_CURRENT_SOURCE_DIR}/../submodules/cmake-helpers/cmake-helpers/cpp_warnings.cmake)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
+add_executable(${PROJECT_NAME} "")
 
-_add_pedantic_warning_level(${PROJECT_NAME})
-_link_threads_if_available(${PROJECT_NAME})
+target_sources(${PROJECT_NAME}
+                   PRIVATE
+                       ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+
+find_package(timers CONFIG REQUIRED)
+message(STATUS "Found version of timers is: ${timers_VERSION}")
+target_link_libraries(${PROJECT_NAME} PRIVATE burda::timers)
+
+burda_cmake_helpers_cpp_warnings_add_pedantic_level(${PROJECT_NAME} PRIVATE)

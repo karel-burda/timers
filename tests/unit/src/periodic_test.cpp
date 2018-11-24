@@ -1,20 +1,20 @@
-#include <exception>
-#include <functional>
 #include <future>
 #include <thread>
 
 #include <gtest/gtest.h>
 
-#include "make_all_members_public.h"
-#include <timers/periodic.h>
-
-#include "static_assertions.h"
-#include "test_utils.h"
-#include "time_utils.h"
+#include <test_utils/make_all_members_public.hpp>
+#include <test_utils/lifetime_assertions.hpp>
+#include <test_utils/macros.hpp>
+#include <test_utils/mutex.hpp>
+#include <test_utils/static_class_assertions.hpp>
+#include <timers/periodic.hpp>
 
 namespace
 {
 using namespace std::chrono_literals;
+
+namespace test_utils = burda::test_utils;
 namespace timers = burda::timers;
 
 class periodic_test : public ::testing::Test
@@ -31,21 +31,21 @@ private:
 
 TEST(periodic_construction_destruction, construction_destruction)
 {
-    timers::testing::assert_construction_and_destruction<timers::periodic>();
+    test_utils::assert_construction_and_destruction<timers::periodic>();
 }
 
 TEST_F(periodic_test, static_assertions)
 {
-    timers::testing::assert_default_constructibility<decltype(m_timer)>();
-    timers::testing::assert_copy_constructibility<decltype(m_timer)>();
-    timers::testing::assert_move_constructibility<decltype(m_timer)>();
+    test_utils::assert_default_constructibility<decltype(m_timer), true>();
+    test_utils::assert_copy_constructibility<decltype(m_timer), false>();
+    test_utils::assert_move_constructibility<decltype(m_timer), false>();
 
     SUCCEED();
 }
 
 TEST_F(periodic_test, default_values)
 {
-    timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+    test_utils::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
 }
 
 TEST_F(periodic_test, callback_called)
@@ -119,7 +119,7 @@ TEST_F(periodic_test, start_in_parallel)
     starter2.wait();
 
     // XOR relationship expected, because exactly one timer should have been started 
-    EXPECT_XOR(taskFinished1, taskFinished2);
+    BURDA_TEST_UTILS_EXPECT_XOR(taskFinished1, taskFinished2);
 }
 
 TEST_F(periodic_test, stop)

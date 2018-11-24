@@ -1,7 +1,7 @@
 #pragma once
 
-#include "timers/async.h"
-#include "timers/single_shot.h"
+#include "timers/async.hpp"
+#include "timers/single_shot.hpp"
 
 namespace burda
 {

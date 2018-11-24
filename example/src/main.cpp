@@ -5,12 +5,12 @@
 #include <iostream>
 #include <thread>
 
-#include "timers/blocking.h"
-#include "timers/periodic.h"
-#include "timers/periodic_async.h"
-#include "timers/scoped.h"
-#include "timers/single_shot.h"
-#include "timers/single_shot_async.h"
+#include <timers/blocking.hpp>
+#include <timers/periodic.hpp>
+#include <timers/periodic_async.hpp>
+#include <timers/scoped.hpp>
+#include <timers/single_shot.hpp>
+#include <timers/single_shot_async.hpp>
 
 namespace timers = burda::timers;
 

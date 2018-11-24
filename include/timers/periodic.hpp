@@ -1,6 +1,6 @@
 #pragma once
 
-#include "timers/single_shot.h"
+#include "timers/single_shot.hpp"
 
 namespace burda
 {

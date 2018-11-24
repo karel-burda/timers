@@ -1,50 +1,49 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
-project(timers VERSION 1.2.3 LANGUAGES CXX)
+project(timers VERSION 1.3.0 LANGUAGES CXX)
 
-include("cmake-helpers/cmake-helpers/messages.cmake")
-include("cmake-helpers/cmake-helpers/standard-settings.cmake")
-include("cmake-helpers/cmake-helpers/threads.cmake")
-include("cmake-helpers/cmake-helpers/warnings.cmake")
+add_library(${PROJECT_NAME} INTERFACE)
 
-_print_project_version()
+target_sources(${PROJECT_NAME}
+                   INTERFACE
+                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/async.hpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/blocking.hpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/exceptions.hpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/periodic.hpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/periodic_async.hpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/policies.hpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/scoped.hpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/single_shot.hpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/single_shot_async.hpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/type_definitions.hpp)
 
-_set_standards("11" "14")
-_set_default_build_type("Debug")
+target_include_directories(${PROJECT_NAME}
+                                INTERFACE
+                                    ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-option(EXAMPLE "Build example usage" ON)
-option(UNIT-TESTS "Build unit tests" OFF)
-option(PERFORMANCE-TESTS "Build performance tests" OFF)
-
-if (EXAMPLE)
-    add_subdirectory(example)
+set(CMAKE_THREAD_PREFER_PTHREAD ON)
+find_package(Threads QUIET)
+if (Threads_FOUND)
+    # Cannot use imported target Threads::Threads for interface (header only) library
+    if (CMAKE_THREAD_LIBS_INIT)
+        message(STATUS "Threading library found, will link to ${CMAKE_THREAD_LIBS_INIT}")
+        set_target_properties(${PROJECT_NAME}
+                                  PROPERTIES
+                                      INTERFACE_LINK_LIBRARIES "${CMAKE_THREAD_LIBS_INIT}")
+    endif()
 endif()
 
-if (UNIT-TESTS)
-    enable_testing()
-    add_subdirectory(tests/unit)
-endif()
+target_compile_features(${PROJECT_NAME}
+                            INTERFACE
+                                cxx_std_11)
 
-set(HEADERS
-    include/timers/async.h
-    include/timers/blocking.h
-    include/timers/exceptions.h
-    include/timers/periodic.h
-    include/timers/periodic_async.h
-    include/timers/policies.h
-    include/timers/scoped.h
-    include/timers/single_shot.h
-    include/timers/single_shot_async.h
-    include/timers/type_definitions.h
+install(TARGETS ${PROJECT_NAME}
+        EXPORT _targets)
 
-    include/timers/private/disable_copy.h
-    include/timers/private/disable_move.h
-    include/timers/private/type_traits.h)
+export(EXPORT _targets
+        NAMESPACE burda::
+        FILE "${PROJECT_NAME}-config.cmake")
 
-set(OTHER
-    README.md
-    .travis.yml)
-
-add_custom_target(${PROJECT_NAME} SOURCES ${HEADERS} ${OTHER})
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake
+                                 COMPATIBILITY ExactVersion)

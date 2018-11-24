@@ -1,84 +1,100 @@
-stages:
-  - example (C++11) -- build (linux, clang5), valgrind
-  - example (C++14) -- cppcheck, build (linux, gcc5), valgrind
-  - tests (C++14) -- cppcheck, build (osx, clang8), run, coverage
+git:
+  depth: 1
 
-env:
-  global:
-    - CMAKE_ARGS_GENERATE_EXAMPLE="-Bbuild -H. -DEXAMPLE:BOOL=ON -DUNIT-TESTS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo"
-    - CMAKE_ARGS_BUILD_EXAMPLE="--build ./build --target example --config RelWithDebInfo"
-    - VALGRIND_ARGS="--leak-check=full --error-exitcode=255 -v ./build/bin/example"
-
-notifications:
-  email:
-    on_success: never
-    on_failure: always
-    recipients:
-      - karelburda89@gmail.com
-
-jobs:
+matrix:
   include:
-     - stage: example (C++11) -- build (linux, clang5), valgrind
-       sudo: required
-       dist: trusty
-       language: cpp
-       compiler: clang
+     - name: "timers, example, tests -- linux, debug, cppcheck, valgrind, coverage, g++, 64-bit"
        os: linux
-       addons:
-         apt:
-           packages: 
-             - valgrind
-       script:
-         - set -e
-         - cmake $CMAKE_ARGS_GENERATE_EXAMPLE
-         - cmake $CMAKE_ARGS_BUILD_EXAMPLE
-         - valgrind $VALGRIND_ARGS
-         - set +e
-
-     - stage: example (C++14) -- cppcheck, build (linux, gcc5), valgrind
-       sudo: required
-       dist: trusty
+       dist: xenial
        language: cpp
+       env: BUILD_TYPE="Debug"
        compiler: g++
-       os: linux
+       sudo: required
        addons:
          apt:
            sources:
              - ubuntu-toolchain-r-test
            packages:
-             - g++-5
-             - valgrind
+             - g++-6
              - cppcheck
-       install: export CXX="g++-5"
+             - valgrind
+       before_install:
+         - pip install --user cpp-coveralls
+       install: export CXX="g++-6"
        script:
          - set -e
-         - cppcheck --enable=all -I include --check-config  -v ./example
-         - cmake $CMAKE_ARGS_GENERATE_EXAMPLE
-         - cmake $CMAKE_ARGS_BUILD_EXAMPLE
-         - valgrind $VALGRIND_ARGS
+
+         - cppcheck --enable=all
+                    -I include
+                    --language=c++
+                    --platform=unix64
+                    --std=c++11
+                    --check-config
+                    --suppress=missingIncludeSystem
+                    -v ./tests
+
+         - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+
+         - cmake -Bbuild/example -Hexample -Dtimers_DIR:PATH=$(pwd)/build -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+         - cmake --build build/example --config $BUILD_TYPE
+         - valgrind --error-exitcode=255 -v ./build/example/example
+
+         - cmake -Bbuild/submodules/test-utils -Hsubmodules/test-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+         - cmake -Bbuild/tests/unit -Htests/unit
+                 -Dtimers_DIR:PATH=$(pwd)/build
+                 -Dtest-utils_DIR:PATH=$(pwd)/build/submodules/test-utils
+                 -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+                 -DCOVERAGE:BOOL=ON
+         - cmake --build build/tests/unit --target run-all-tests-verbose --config $BUILD_TYPE
+
+         - bash <(curl -s https://codecov.io/bash)
+
          - set +e
 
-     - stage: tests (C++14) -- cppcheck, build (osx, clang8), run, coverage
-       language: cpp
-       compiler: clang
+     - name: "timers, example, tests -- osx, release with debug info, clang++, 64-bit"
        os: osx
-       before_install:
-         - set -e
-         - brew update
-         - brew install cppcheck lcov
-         # hacks because of the "cpp-coveralls" for osx :(
-         - brew upgrade pyenv
-         - eval "$(pyenv init -)"
-         - pyenv install 2.7.6
-         - pyenv global 2.7.6
-         - pyenv rehash
-         - pip install cpp-coveralls
-         - pyenv rehash
-         - set +e
+       osx_image: xcode10.1
+       language: cpp
+       env: BUILD_TYPE="RelWithDebInfo"
+       compiler: clang
        script:
          - set -e
-         - cppcheck --enable=all -I include -I tests/unit/include/ --check-config -v ./tests/unit/
-         - cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON -DCOVERAGE:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
-         - cmake --build ./build --target run-all-tests-verbose --config RelWithDebInfo
-         - coveralls -e ./build/gtest-src -e ./build/CMakeFiles -e ./tests/unit -e ./example --gcov-options '\-lp'
+
+         - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+
+         - cmake -Bbuild/example -Hexample -Dtimers_DIR:PATH=$(pwd)/build -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+         - cmake --build build/example --config $BUILD_TYPE
+         # RVM overrides these shell built-ins for Ruby, but we need to use these
+         - unset -f pushd && unset -f popd
+
+         - cmake -Bbuild/submodules/test-utils -Hsubmodules/test-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+         - cmake -Bbuild/tests/unit -Htests/unit
+                 -Dtimers_DIR:PATH=$(pwd)/build
+                 -Dtest-utils_DIR:PATH=$(pwd)/build/submodules/test-utils
+                 -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+                 -DCOVERAGE:BOOL=ON
+         - cmake --build build/tests/unit --target run-all-tests-verbose --config $BUILD_TYPE
+
+         - set +e
+
+     - name: "timers, example, tests -- windows, release, msvc, 32-bit"
+       os: windows
+       language: cpp
+       env: BUILD_TYPE="Release"
+       script:
+         - set -e
+
+         - cmake -Bbuild -H. -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+
+         - cmake -Bbuild/example -Hexample -Dtimers_DIR:PATH=$(pwd)/build -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+         - cmake --build build/example --config $BUILD_TYPE
+         - start build/example/$BUILD_TYPE/example.exe
+
+         - cmake -Bbuild/submodules/test-utils -Hsubmodules/test-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+         - cmake -Bbuild/tests/unit -Htests/unit
+                 -Dtimers_DIR:PATH=$(pwd)/build
+                 -Dtest-utils_DIR:PATH=$(pwd)/build/submodules/test-utils
+                 -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
+         - cmake --build build/tests/unit --target run-all-tests-verbose --config $BUILD_TYPE
+
          - set +e

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "timers/async.h"
-#include "timers/periodic.h"
+#include "timers/async.hpp"
+#include "timers/periodic.hpp"
 
 namespace burda
 {

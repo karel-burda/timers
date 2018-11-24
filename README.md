@@ -1,8 +1,7 @@
-![Version](https://img.shields.io/badge/version-1.2.3-green.svg)
+![Version](https://img.shields.io/badge/version-1.3.0-green.svg)
 [![License](https://img.shields.io/badge/license-MIT_License-green.svg?style=flat)](LICENSE)
 [![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=develop)](https://travis-ci.org/karel-burda/timers)
-[![Coverage Status](https://coveralls.io/repos/github/karel-burda/timers/badge.svg?branch=develop)](https://coveralls.io/github/karel-burda/timers?branch=develop)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/27e08eaa6aa64eddbe4a79085e95ebcc)](https://www.codacy.com/app/karel-burda/timers?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=karel-burda/timers&amp;utm_campaign=Badge_Grade)
+[![Codecov Status](https://codecov.io/gh/karel-burda/timers/branch/develop/graph/badge.svg)](https://codecov.io/gh/karel-burda/timers/branch/develop)
 
 # Important
 This project contains git sub-modules that are needed for building example and tests.
@@ -60,14 +59,14 @@ message(STATUS "Current version of timers is: ${timers_VERSION}")
 
 add_library(burda::timers ALIAS timers)
 
-# this will import search paths, compile definitions and other dependencies of the function-loader as well
+# this will import search paths, compile definitions and other dependencies of the timers as well
 target_link_libraries("my-project" timers)
 # or with private visibility: target_link_libraries("my-project" PRIVATE timers)
 ```
 
 ### B) Generate separately
 
-Generation phase on the function-loader is run separately, that means that you run:
+Generation phase on the timers is run separately, that means that you run:
 ```cmake
 cmake <path-to-timers>
 # example: cmake -Bbuild/timers -Htimers in the root of your project 

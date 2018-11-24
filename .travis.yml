@@ -3,8 +3,7 @@ git:
 
 matrix:
   include:
-     - stage: "build & tests"
-       name: "timers, example, tests -- linux, debug, cppcheck, valgrind, coverage, g++, 64-bit"
+     - name: "timers, example, tests -- linux, debug, cppcheck, valgrind, coverage, g++, 64-bit"
        os: linux
        dist: xenial
        language: cpp
@@ -52,7 +51,7 @@ matrix:
 
          - set +e
 
-       name: "timers, example, tests -- osx, release with debug info, clang++, 64-bit"
+     - name: "timers, example, tests -- osx, release with debug info, clang++, 64-bit"
        os: osx
        osx_image: xcode10.1
        language: cpp
@@ -78,7 +77,7 @@ matrix:
 
          - set +e
 
-       name: "timers, example, tests -- windows, release, msvc, 32-bit"
+     - name: "timers, example, tests -- windows, release, msvc, 32-bit"
        os: windows
        language: cpp
        env: BUILD_TYPE="Release"

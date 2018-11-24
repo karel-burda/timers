@@ -1,7 +1,7 @@
 ![Version](https://img.shields.io/badge/version-1.3.0-green.svg)
 [![License](https://img.shields.io/badge/license-MIT_License-green.svg?style=flat)](LICENSE)
-[![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=develop)](https://travis-ci.org/karel-burda/timers)
-[![Codecov Status](https://codecov.io/gh/karel-burda/timers/branch/develop/graph/badge.svg)](https://codecov.io/gh/karel-burda/timers/branch/develop)
+[![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=master)](https://travis-ci.org/karel-burda/timers)
+[![Codecov Status](https://codecov.io/gh/karel-burda/timers/branch/master/graph/badge.svg)](https://codecov.io/gh/karel-burda/timers/branch/master)
 
 # Important
 This project contains git sub-modules that are needed for building example and tests.

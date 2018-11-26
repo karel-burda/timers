@@ -25,7 +25,7 @@ public:
     {
         throw_if_time_invalid(time);
 
-        std::lock_guard<decltype(m_block_protection)> lock{ m_block_protection };
+        const std::lock_guard<decltype(m_block_protection)> lock{ m_block_protection };
 
         std::unique_lock<decltype(m_cv_protection)> cv_lock{ m_cv_protection };
         const auto terminated_after_interval_elapsed = !m_cv.wait_for(cv_lock, time, [&]

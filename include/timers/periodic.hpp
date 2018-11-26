@@ -15,8 +15,13 @@ public:
     /// @see "single_shot::start"
     void start(interval interval, callback callback, policies::start::exception policy = policies::start::get_default())
     {
+        const std::lock_guard<decltype(m_periodic_protection)> lock{ m_periodic_protection };
+
         while(single_shot::start(interval, callback, policy));
     }
+
+private:
+    std::mutex m_periodic_protection;
 };
 }
 }

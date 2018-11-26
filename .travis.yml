@@ -56,7 +56,7 @@ matrix:
        osx_image: xcode10.1
        language: cpp
        env: BUILD_TYPE="RelWithDebInfo"
-       compiler: clang
+       compiler: clang++
        script:
          - set -e
 

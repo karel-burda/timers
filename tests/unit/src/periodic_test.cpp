@@ -112,7 +112,7 @@ TEST_F(periodic_test, start_in_parallel)
         m_timer.start(1s, [&taskFinished2]() { taskFinished2 = true; });
     });
 
-    std::this_thread::sleep_for(2s);
+    std::this_thread::sleep_for(4s);
 
     m_timer.stop();
     starter1.wait();

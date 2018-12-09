@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
-project(timers VERSION 1.3.2 LANGUAGES CXX)
+project(timers VERSION 1.3.3 LANGUAGES CXX)
 
 add_library(${PROJECT_NAME} INTERFACE)
 

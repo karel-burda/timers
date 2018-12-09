@@ -39,9 +39,11 @@ matrix:
          - cmake --build build/example --config $BUILD_TYPE
          - valgrind --error-exitcode=255 -v ./build/example/example
 
+         - cmake -Bbuild/submodules/cpp-utils -Hsubmodules/cpp-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake -Bbuild/submodules/test-utils -Hsubmodules/test-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake -Bbuild/tests/unit -Htests/unit
                  -Dtimers_DIR:PATH=$(pwd)/build
+                 -Dcpp-utils_DIR:PATH=$(pwd)/build/submodules/cpp-utils
                  -Dtest-utils_DIR:PATH=$(pwd)/build/submodules/test-utils
                  -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
                  -DCOVERAGE:BOOL=ON
@@ -67,9 +69,11 @@ matrix:
          # RVM overrides these shell built-ins for Ruby, but we need to use these
          - unset -f pushd && unset -f popd
 
+         - cmake -Bbuild/submodules/cpp-utils -Hsubmodules/cpp-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake -Bbuild/submodules/test-utils -Hsubmodules/test-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake -Bbuild/tests/unit -Htests/unit
                  -Dtimers_DIR:PATH=$(pwd)/build
+                 -Dcpp-utils_DIR:PATH=$(pwd)/build/submodules/cpp-utils
                  -Dtest-utils_DIR:PATH=$(pwd)/build/submodules/test-utils
                  -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
                  -DCOVERAGE:BOOL=ON
@@ -90,9 +94,11 @@ matrix:
          - cmake --build build/example --config $BUILD_TYPE
          - start build/example/$BUILD_TYPE/example.exe
 
+         - cmake -Bbuild/submodules/cpp-utils -Hsubmodules/cpp-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake -Bbuild/submodules/test-utils -Hsubmodules/test-utils -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake -Bbuild/tests/unit -Htests/unit
                  -Dtimers_DIR:PATH=$(pwd)/build
+                 -Dcpp-utils_DIR:PATH=$(pwd)/build/submodules/cpp-utils
                  -Dtest-utils_DIR:PATH=$(pwd)/build/submodules/test-utils
                  -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
          - cmake --build build/tests/unit --target run-all-tests-verbose --config $BUILD_TYPE

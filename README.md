@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-1.3.2-green.svg)
+![Version](https://img.shields.io/badge/version-1.3.3-green.svg)
 [![License](https://img.shields.io/badge/license-MIT_License-green.svg?style=flat)](LICENSE)
 [![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=master)](https://travis-ci.org/karel-burda/timers)
 [![Codecov Status](https://codecov.io/gh/karel-burda/timers/branch/master/graph/badge.svg)](https://codecov.io/gh/karel-burda/timers/branch/master)
@@ -204,17 +204,19 @@ foo.work();
 For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
 # Unit Tests
-Tests require sub-modules [cmake-helpers](https://github.com/karel-burda/cmake-helpers) and [test-utils](https://github.com/karel-burda/test-utils).
+Tests require sub-modules [cmake-helpers](https://github.com/karel-burda/cmake-helpers), [cpp-utils](https://github.com/karel-burda/cpp-utils) and [test-utils](https://github.com/karel-burda/test-utils).
 
 For building tests, run CMake in the source directory [tests/unit](tests/unit):
 
 ```cmake
 cmake -Bbuild -H.
 
+cmake -Bbuild/submodules/cpp-utils -Hsubmodules/cpp-utils
 cmake -Bbuild/submodules/test-utils -Hsubmodules/test-utils
 # you can also add coverage by appending "-DCOVERAGE:BOOL=ON"
 cmake -Bbuild/tests/unit -Htests/unit
       -Dtimers_DIR:PATH=$(pwd)/build
+      -Dcpp-utils_DIR:PATH=$(pwd)/build/submodules/cpp-utils
       -Dtest-utils_DIR:PATH=$(pwd)/build/submodules/test-utils
 cmake --build build/tests/unit
 

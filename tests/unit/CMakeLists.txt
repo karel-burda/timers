@@ -25,6 +25,10 @@ target_include_directories(${PROJECT_NAME}
                                 PRIVATE
                                     ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+find_package(cpp-utils CONFIG REQUIRED)
+message(STATUS "Found version of cpp-utils is: ${cpp-utils_VERSION}")
+target_link_libraries(${PROJECT_NAME} PRIVATE burda::cpp-utils)
+
 find_package(test-utils CONFIG REQUIRED)
 message(STATUS "Found version of test-utils is: ${test-utils_VERSION}")
 target_link_libraries(${PROJECT_NAME} PRIVATE burda::test-utils)

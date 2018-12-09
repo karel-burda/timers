@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-1.3.1-green.svg)
+![Version](https://img.shields.io/badge/version-1.3.2-green.svg)
 [![License](https://img.shields.io/badge/license-MIT_License-green.svg?style=flat)](LICENSE)
 [![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=develop)](https://travis-ci.org/karel-burda/timers)
 [![Codecov Status](https://codecov.io/gh/karel-burda/timers/branch/develop/graph/badge.svg)](https://codecov.io/gh/karel-burda/timers/branch/develop)
@@ -49,7 +49,7 @@ There are essentially these ways of how to use this package depending on your pr
 Call `add_subdirectory(...)` directly in your CMakeLists.txt:
 
 ```cmake
-add_executable("my-project" main.cpp)
+add_executable(my-project main.cpp)
 
 add_subdirectory(<path-to-timers>)
 # example: add_subdirectory(timers ${CMAKE_BINARY_DIR}/timers)
@@ -60,8 +60,8 @@ message(STATUS "Current version of timers is: ${timers_VERSION}")
 add_library(burda::timers ALIAS timers)
 
 # this will import search paths, compile definitions and other dependencies of the timers as well
-target_link_libraries("my-project" timers)
-# or with private visibility: target_link_libraries("my-project" PRIVATE timers)
+target_link_libraries(my-project timers)
+# or with private visibility: target_link_libraries(my-project PRIVATE timers)
 ```
 
 ### B) Generate separately
@@ -77,7 +77,7 @@ This will create automatically generated package configuration file `timers-conf
 Then you can do this in your CMakeLists.txt:
 
 ```cmake
-add_executable("my-project" main.cpp)
+add_executable(my-project main.cpp)
 
 find_package(timers CONFIG PATHS <path-to-binary-dir-of-timers>)
 # alternatively assuming that the "timers_DIR" variable is set: find_package(timers CONFIG)
@@ -86,7 +86,7 @@ find_package(timers CONFIG PATHS <path-to-binary-dir-of-timers>)
 message(STATUS "Found version of timers is: ${timers_VERSION}")
 
 # this will import search paths, compile definitions and other dependencies of the timers as well
-target_link_libraries("my-project" burda::timers)
+target_link_libraries(my-project burda::timers)
 # or with public visibility: target_link_libraries("my-project" PUBLIC burda::timers)
 ```
 
@@ -95,7 +95,7 @@ Not recommended.
 
 Make sure that the `include` directory is in the search paths.
 
-You also have to set C++11 standard and potentially other settings as well (e.g. linking `pthread` on POSIXes, etc.).
+You also have to set C++ 11 standard and potentially other settings as well (e.g. linking `pthread` on POSIXes, etc.).
 
 # Example
 For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).

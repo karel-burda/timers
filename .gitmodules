@@ -8,3 +8,8 @@
 	url = https://github.com/karel-burda/test-utils.git
     branch = master
 	shallow = true
+[submodule "submodules/cpp-utils"]
+	path = submodules/cpp-utils
+	url = https://github.com/karel-burda/cpp-utils.git
+	branch = master
+	shallow = true

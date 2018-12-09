@@ -41,7 +41,7 @@ public:
     /// @throws std::future_error
     void stop()
     {
-        std::lock_guard<decltype(m_async_protection)> lock { m_async_protection };
+        const std::lock_guard<decltype(m_async_protection)> lock { m_async_protection };
 
         underlying_timer::stop();
 

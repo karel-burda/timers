@@ -1,8 +1,13 @@
-![Version](https://img.shields.io/badge/version-1.2.3-green.svg)
+![Version](https://img.shields.io/badge/version-1.3.1-green.svg)
 [![License](https://img.shields.io/badge/license-MIT_License-green.svg?style=flat)](LICENSE)
 [![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=develop)](https://travis-ci.org/karel-burda/timers)
-[![Coverage Status](https://coveralls.io/repos/github/karel-burda/timers/badge.svg?branch=develop)](https://coveralls.io/github/karel-burda/timers?branch=develop)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/27e08eaa6aa64eddbe4a79085e95ebcc)](https://www.codacy.com/app/karel-burda/timers?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=karel-burda/timers&amp;utm_campaign=Badge_Grade)
+[![Codecov Status](https://codecov.io/gh/karel-burda/timers/branch/develop/graph/badge.svg)](https://codecov.io/gh/karel-burda/timers/branch/develop)
+
+# Important
+This project contains git sub-modules that are needed for building example and tests.
+
+If you just want to use the implementation, you can clone without sub-modules. In case you want to build the example or tests, be sure to clone the repository
+with `--recurse-submodules` or `--recursive` on older versions of git. Alternatively, you can clone without sub-modules and initialize these later.
 
 # Introduction
 `timers` features a thread-safe and header-only library that's implementing timer-related functionality and provides following features:
@@ -23,24 +28,77 @@ Implementation might throw these exceptions upon the `start(...)`:
 * `time_period_is_zero`
 * `time_period_is_negative`
 
-See [exceptions.h](include/timers/exceptions.hpp) for more info.
+See [exceptions.hpp](include/timers/exceptions.hpp) for more info.
 
 Policies specifies how timer class will behave when exception is thrown from the user's callback:
 * `stop` -- causes the timer to call `stop()` on itself and re-throws catched exception
 * `ignore` -- causes the timer to ignore catched exception and keep on working
 
-See [policies.h](include/timers/policies.hpp).
+See [policies.hpp](include/timers/policies.hpp).
 
 # Usage
-In order to use the `timers`, it's only the `include` directory that matters. Just make sure that the header search path is pointing to the [include](include) directory located in the root directory.
-
-Threading library collection (e.g. `pthreads` on Linux) might be necessary to link to the final binary (either shared library or executable).
-In the example usage and tests, the threading library is being searched and linked via CMake: [threads.cmake](cmake-helpers/threads.cmake).
-This is not usually necessary on Windows and OS X.
-
 Implementation resides in the `burda::timers` namespace, so it might be useful to do `namespace timers = burda::timers;` in your project.
 
-See also section [Requirements](#Requirements).
+## 1. CMake Way
+Recommended option.
+
+There are essentially these ways of how to use this package depending on your preferences our build architecture:
+
+### A) Generate directly
+
+Call `add_subdirectory(...)` directly in your CMakeLists.txt:
+
+```cmake
+add_executable("my-project" main.cpp)
+
+add_subdirectory(<path-to-timers>)
+# example: add_subdirectory(timers ${CMAKE_BINARY_DIR}/timers)
+
+# query of package version
+message(STATUS "Current version of timers is: ${timers_VERSION}")
+
+add_library(burda::timers ALIAS timers)
+
+# this will import search paths, compile definitions and other dependencies of the timers as well
+target_link_libraries("my-project" timers)
+# or with private visibility: target_link_libraries("my-project" PRIVATE timers)
+```
+
+### B) Generate separately
+
+Generation phase on the timers is run separately, that means that you run:
+```cmake
+cmake <path-to-timers>
+# example: cmake -Bbuild/timers -Htimers in the root of your project 
+```
+
+This will create automatically generated package configuration file `timers-config.cmake` that contains exported target and all important information.
+
+Then you can do this in your CMakeLists.txt:
+
+```cmake
+add_executable("my-project" main.cpp)
+
+find_package(timers CONFIG PATHS <path-to-binary-dir-of-timers>)
+# alternatively assuming that the "timers_DIR" variable is set: find_package(timers CONFIG)
+
+# you can also query (or force specific version during the previous "find_package()" call)
+message(STATUS "Found version of timers is: ${timers_VERSION}")
+
+# this will import search paths, compile definitions and other dependencies of the timers as well
+target_link_libraries("my-project" burda::timers)
+# or with public visibility: target_link_libraries("my-project" PUBLIC burda::timers)
+```
+
+## 2. Manual Way
+Not recommended.
+
+Make sure that the `include` directory is in the search paths.
+
+You also have to set C++11 standard and potentially other settings as well (e.g. linking `pthread` on POSIXes, etc.).
+
+# Example
+For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
 ### Blocking
 ```cpp
@@ -145,59 +203,40 @@ foo.work();
 
 For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
-# Build Process
-Library itself is just header-only, so no need for additional linking, just threading library might need to be linked to the final executable on most Linux standard library implementations. See section [Usage](#Usage) for more info.
-
-In order to build the usage example ([main.cpp](example/src/main.cpp)) run the cmake in the top-level directory like this:
-
-`cmake .`
-
-I personally prefer to specify a separate build directory explicitly:
-
-`cmake -Bbuild -H.`
-
-You can of course specify ordinary cmake options like build type (debug, release with debug info, ...), used generator, etc.
-
 # Unit Tests
-For building tests, run cmake with the option `UNIT-TESTS=ON`:
+Tests require sub-modules [cmake-helpers](https://github.com/karel-burda/cmake-helpers) and [test-utils](https://github.com/karel-burda/test-utils).
 
-`cmake -Bbuild -H. -DUNIT-TESTS:BOOL=ON`
+For building tests, run CMake in the source directory [tests/unit](tests/unit):
 
-The project is using the `gtest` that is automatically downloaded, "cmaked" and built in its build step
-(the fixed stable revision of the `gtest` is used).
+```cmake
+cmake -Bbuild -H.
 
-Then, you can run the default test target (e.g. `make test` or `RUN_TESTS` in the Visual Studio)
-or the custom target `run-all-tests-verbose` (which is recommended and used in the Continuous Integration).
+cmake -Bbuild/submodules/test-utils -Hsubmodules/test-utils
+# you can also add coverage by appending "-DCOVERAGE:BOOL=ON"
+cmake -Bbuild/tests/unit -Htests/unit
+      -Dtimers_DIR:PATH=$(pwd)/build
+      -Dtest-utils_DIR:PATH=$(pwd)/build/submodules/test-utils
+cmake --build build/tests/unit
 
-The target `run-all-tests-verbose` uses the `ctest` for executing the tests binary and has built-in timeout feature (useful because of dead-locks for example).
+# this runs target "run-all-tests-verbose" that will also run the tests with timeout, etc.:
+cmake --build build/tests/unit --target run-all-tests-verbose
+```
 
-If you want to debug tests and implementation, run the target `tests` target manually (ideally in the Debug mode).
+This is the example of running tests in the debug mode.
 
-It is also possible to turn off build of the example, and build just the tests:
-
-`cmake -Bbuild -H. -DEXAMPLE:BOOL=OFF -DUNIT-TESTS:BOOL=ON`
+For more info, see [.travis.yml](.travis.yml).
 
 # Continuous Integration
-Continuous Integration is now being run on OS X (clang 8.x) and Linux (gcc 5.x and clang 5.x) on Travis: https://travis-ci.org/karel-burda/timers
+Continuous Integration is now being run Linux, OS X and Windows on Travis: https://travis-ci.org/karel-burda/timers.
 
-Compilers are set-up to treat warnings as errors and with pedantic warning level. Targets are built in a release mode with debug symbols (because of the [valgrind](http://valgrind.org) and code coverage measure).
+Compilers are set-up to treat warnings as errors and with pedantic warning level.
+Targets are built in one stage with debug symbols with code coverage measure and in release mode with debug symbols in the second one.
 
-The project is using free Travis services, so the CI process is (because of overhead and expense) broken up into just 3 steps (both with different OS & compiler):
-* `example (C++11)` -- testing core build-ability of `timers` in the older C++11 standard (backwards compatibility); run example under the valgrind
-* `example (C++14)` -- perform cppcheck on example usage (including `timers` themselves); build on gcc 5.x; run example under the valgrind
-* `tests (C++14)` -- perform cppcheck on unit tests; build tests on clang 8.x; run tests; collect code coverage (using codecov and then coveralls)
+Valgrind is being run on the example as well.
 
-Project uses [coveralls.io](https://coveralls.io/github/karel-burda/timers) for code coverage summary and [codacy](https://app.codacy.com/app/karel-burda/timers/dashboard) for the coding style and additional static analysis.
+The project is using these jobs:
+* `timers, example, tests -- linux, debug, cppcheck, valgrind, coverage, g++, 64-bit`
+* `timers, example, tests -- osx, release with debug info, clang++, 64-bit`
+* `timers, example, tests -- windows, release, msvc, 32-bit`
 
-# Branch Model
-Project is using git workflow, this includes `master`, `develop`, feature (prefix `feature/`) and bug-fix (`bugfix/`) branches.
-
-`release/` branches are obsolete (overkill for such a small project). 
-
-# Coding Style
-Project is following boost and STL coding guidelines with these exceptions:
-* Using `m_` prefix for member variables
-* Placing a space before and after the `*` or `&`
-* Using `{}` instead of `()` to denote constructors, using `()` only for function calls
-* Include order is: interface file, standard includes, internal ones
-* Documentation of public interface is Doxygen-like
+Project uses [codecov.io](https://codecov.io/gh/karel-burda/timers) for code coverage summary.

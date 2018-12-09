@@ -87,7 +87,7 @@ message(STATUS "Found version of timers is: ${timers_VERSION}")
 
 # this will import search paths, compile definitions and other dependencies of the timers as well
 target_link_libraries(my-project burda::timers)
-# or with public visibility: target_link_libraries("my-project" PUBLIC burda::timers)
+# or with public visibility: target_link_libraries(my-project PUBLIC burda::timers)
 ```
 
 ## 2. Manual Way

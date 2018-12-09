@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include <cpp_utils/time/measure_time.hpp>
+#include <cpp_utils/time/measure_duration.hpp>
 #include <test_utils/make_all_members_public.hpp>
 #include <test_utils/lifetime_assertions.hpp>
 #include <test_utils/mutex.hpp>

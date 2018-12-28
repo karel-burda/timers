@@ -11,12 +11,12 @@ with `--recurse-submodules` or `--recursive` on older versions of git. Alternati
 
 ## Introduction
 `timers` features a thread-safe and header-only library that's implementing timer-related functionality and provides following features:
-* General blocking timer: `blocking`
-* Single-shot timer that does given action after time period expires: `single_shot`
-* Its asynchronous version: `single_shot_async`
-* Timer that does some action periodically: `periodic`
-* Its asynchronous version: `periodic_async`
-* Scoped "RAII" timer that stops underlying timer automatically upon destruction: `scoped`
+  * General blocking timer: `blocking`
+  * Single-shot timer that does given action after time period expires: `single_shot`
+  * Its asynchronous version: `single_shot_async`
+  * Timer that does some action periodically: `periodic`
+  * Its asynchronous version: `periodic_async`
+  * Scoped "RAII" timer that stops underlying timer automatically upon destruction: `scoped`
 
 Implemented using C++11 with the use of `std::conditional_variable`, `std::promise` and `std::async`.
 
@@ -97,7 +97,7 @@ Make sure that the `include` directory is in the search paths.
 
 You also have to set C++ 11 standard and potentially other settings as well (e.g. linking `pthread` on POSIXes, etc.).
 
-## Example
+## Examples
 For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
 ### Blocking

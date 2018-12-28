@@ -228,7 +228,7 @@ This is the example of running tests in the debug mode.
 
 For more info, see [.travis.yml](.travis.yml).
 
-# Continuous Integration
+## Continuous Integration
 Continuous Integration is now being run Linux, OS X and Windows on Travis: https://travis-ci.org/karel-burda/timers.
 
 Compilers are set-up to treat warnings as errors and with pedantic warning level.

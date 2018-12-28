@@ -3,13 +3,13 @@
 [![Build Status](https://travis-ci.org/karel-burda/timers.svg?branch=develop)](https://travis-ci.org/karel-burda/timers)
 [![Codecov Status](https://codecov.io/gh/karel-burda/timers/branch/develop/graph/badge.svg)](https://codecov.io/gh/karel-burda/timers/branch/develop)
 
-# Important
+## Important
 This project contains git sub-modules that are needed for building example and tests.
 
 If you just want to use the implementation, you can clone without sub-modules. In case you want to build the example or tests, be sure to clone the repository
 with `--recurse-submodules` or `--recursive` on older versions of git. Alternatively, you can clone without sub-modules and initialize these later.
 
-# Introduction
+## Introduction
 `timers` features a thread-safe and header-only library that's implementing timer-related functionality and provides following features:
 * General blocking timer: `blocking`
 * Single-shot timer that does given action after time period expires: `single_shot`
@@ -24,27 +24,27 @@ Client defines timer's action that should be of type `timers::callback`, thus `s
 Time intervals are being defined as `timers::interval` = `std::chrono::duration<double>`.
 
 Implementation might throw these exceptions upon the `start(...)`:
-* `callback_not_callable`
-* `time_period_is_zero`
-* `time_period_is_negative`
+  * `callback_not_callable`
+  * `time_period_is_zero`
+  * `time_period_is_negative`
 
 See [exceptions.hpp](include/timers/exceptions.hpp) for more info.
 
 Policies specifies how timer class will behave when exception is thrown from the user's callback:
-* `stop` -- causes the timer to call `stop()` on itself and re-throws catched exception
-* `ignore` -- causes the timer to ignore catched exception and keep on working
+  * `stop` -- causes the timer to call `stop()` on itself and re-throws catched exception
+  * `ignore` -- causes the timer to ignore catched exception and keep on working
 
 See [policies.hpp](include/timers/policies.hpp).
 
-# Usage
+## Usage
 Implementation resides in the `burda::timers` namespace, so it might be useful to do `namespace timers = burda::timers;` in your project.
 
-## 1. CMake Way
+### 1. CMake Way
 Recommended option.
 
 There are essentially these ways of how to use this package depending on your preferences our build architecture:
 
-### A) Generate directly
+#### A) Generate directly
 
 Call `add_subdirectory(...)` directly in your CMakeLists.txt:
 
@@ -64,7 +64,7 @@ target_link_libraries("my-project" timers)
 # or with private visibility: target_link_libraries("my-project" PRIVATE timers)
 ```
 
-### B) Generate separately
+#### B) Generate separately
 
 Generation phase on the timers is run separately, that means that you run:
 ```cmake
@@ -90,14 +90,14 @@ target_link_libraries("my-project" burda::timers)
 # or with public visibility: target_link_libraries("my-project" PUBLIC burda::timers)
 ```
 
-## 2. Manual Way
+### 2. Manual Way
 Not recommended.
 
 Make sure that the `include` directory is in the search paths.
 
 You also have to set C++11 standard and potentially other settings as well (e.g. linking `pthread` on POSIXes, etc.).
 
-# Example
+## Example
 For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
 ### Blocking
@@ -203,7 +203,7 @@ foo.work();
 
 For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
-# Unit Tests
+## Unit Tests
 Tests require sub-modules [cmake-helpers](https://github.com/karel-burda/cmake-helpers) and [test-utils](https://github.com/karel-burda/test-utils).
 
 For building tests, run CMake in the source directory [tests/unit](tests/unit):
@@ -235,8 +235,8 @@ Targets are built in one stage with debug symbols with code coverage measure and
 Valgrind is being run on the example as well.
 
 The project is using these jobs:
-* `timers, example, tests -- linux, debug, cppcheck, valgrind, coverage, g++, 64-bit`
-* `timers, example, tests -- osx, release with debug info, clang++, 64-bit`
-* `timers, example, tests -- windows, release, msvc, 32-bit`
+  * `timers, example, tests -- linux, debug, cppcheck, valgrind, coverage, g++, 64-bit`
+  * `timers, example, tests -- osx, release with debug info, clang++, 64-bit`
+  * `timers, example, tests -- windows, release, msvc, 32-bit`
 
 Project uses [codecov.io](https://codecov.io/gh/karel-burda/timers) for code coverage summary.

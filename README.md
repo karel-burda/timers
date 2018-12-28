@@ -203,7 +203,7 @@ foo.work();
 
 For full use cases, see [main.cpp](example/src/main.cpp) or implementation of unit tests at [tests/unit](tests/unit).
 
-# Unit Tests
+## Unit Tests
 Tests require sub-modules [cmake-helpers](https://github.com/karel-burda/cmake-helpers), [cpp-utils](https://github.com/karel-burda/cpp-utils) and [test-utils](https://github.com/karel-burda/test-utils).
 
 For building tests, run CMake in the source directory [tests/unit](tests/unit):

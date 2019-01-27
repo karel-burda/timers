@@ -5,9 +5,9 @@
 
 #include <cpp_utils/time/measure_duration.hpp>
 #include <test_utils/make_all_members_public.hpp>
-#include <test_utils/lifetime_assertions.hpp>
+#include <test_utils/lifetime.hpp>
 #include <test_utils/mutex.hpp>
-#include <test_utils/static_class_assertions.hpp>
+#include <test_utils/statics.hpp>
 #include <test_utils/time.hpp>
 #include <timers/blocking.hpp>
 #include <timers/exceptions.hpp>
@@ -28,14 +28,14 @@ private:
 
 TEST(blocking_construction_destruction, construction_destruction)
 {
-    test_utils::assert_construction_and_destruction<timers::blocking>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::blocking>();
 }
 
 TEST_F(blocking_test, static_assertions)
 {
-    test_utils::assert_default_constructibility<decltype(m_timer), true>();
-    test_utils::assert_copy_constructibility<decltype(m_timer), false>();
-    test_utils::assert_move_constructibility<decltype(m_timer), false>();
+    test_utils::statics::assert_default_constructibility<decltype(m_timer), true>();
+    test_utils::statics::assert_copy_constructibility<decltype(m_timer), false>();
+    test_utils::statics::assert_move_constructibility<decltype(m_timer), false>();
 
     SUCCEED();
 }
@@ -43,8 +43,8 @@ TEST_F(blocking_test, static_assertions)
 TEST_F(blocking_test, default_values)
 {
     EXPECT_FALSE(m_timer.m_terminate_forcefully);
-    test_utils::check_if_mutex_is_owned(m_timer.m_block_protection, false);
-    test_utils::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_block_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_cv_protection, false);
 }
 
 TEST_F(blocking_test, block_not_throwing)
@@ -65,7 +65,7 @@ TEST_F(blocking_test, block_time)
         EXPECT_TRUE(m_timer.block(2s));
     });
 
-    test_utils::assert_that_elapsed_time_in_tolerance(elapsed, 2s, 100s);
+    test_utils::time::assert_that_elapsed_time_in_tolerance(elapsed, 2s, 100s);
 }
 
 TEST_F(blocking_test, block_and_stop)
@@ -91,7 +91,7 @@ TEST_F(blocking_test, block_multiple_times)
         EXPECT_TRUE(m_timer.block(4s));
     });
 
-    test_utils::assert_that_elapsed_time_in_tolerance(elapsed, 5s, 100s);
+    test_utils::time::assert_that_elapsed_time_in_tolerance(elapsed, 5s, 100s);
     EXPECT_FALSE(m_timer.m_terminate_forcefully);
 }
 
@@ -114,8 +114,8 @@ TEST_F(blocking_test, block_multiple_times_in_parallel)
     });
 
     EXPECT_FALSE(m_timer.m_terminate_forcefully);
-    test_utils::check_if_mutex_is_owned(m_timer.m_block_protection, false);
-    test_utils::assert_that_elapsed_time_in_tolerance(elapsed, 10s, 100s);
+    test_utils::mutex::check_if_owned(m_timer.m_block_protection, false);
+    test_utils::time::assert_that_elapsed_time_in_tolerance(elapsed, 10s, 100s);
 }
 
 TEST_F(blocking_test, block_multiple_times_in_parallel_and_stop_second)
@@ -172,8 +172,8 @@ TEST_F(blocking_test, block_multiple_times_in_parallel_and_stop_second)
     });
 
     EXPECT_TRUE(m_timer.m_terminate_forcefully);
-    test_utils::check_if_mutex_is_owned(m_timer.m_block_protection, false);
-    test_utils::assert_that_elapsed_time_in_tolerance(elapsed, 7s, 100s);
+    test_utils::mutex::check_if_owned(m_timer.m_block_protection, false);
+    test_utils::time::assert_that_elapsed_time_in_tolerance(elapsed, 7s, 100s);
 }
 
 TEST_F(blocking_test, stop)
@@ -183,7 +183,7 @@ TEST_F(blocking_test, stop)
     m_timer.m_terminate_forcefully = false;
     m_timer.stop();
     EXPECT_TRUE(m_timer.m_terminate_forcefully);
-    test_utils::check_if_mutex_is_owned(m_timer.m_block_protection, false);
-    test_utils::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_block_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_cv_protection, false);
 }
 }

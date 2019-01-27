@@ -3,11 +3,13 @@
 
 #include <gtest/gtest.h>
 
-#include <cpp_utils/time/measure_duration.hpp>
+// deliberately in this place ahead of following includes
 #include <test_utils/make_all_members_public.hpp>
-#include <test_utils/lifetime_assertions.hpp>
+
+#include <cpp_utils/time/measure_duration.hpp>
+#include <test_utils/lifetime.hpp>
 #include <test_utils/mutex.hpp>
-#include <test_utils/static_class_assertions.hpp>
+#include <test_utils/statics.hpp>
 #include <test_utils/time.hpp>
 #include <timers/single_shot.hpp>
 
@@ -33,14 +35,14 @@ private:
 
 TEST(single_shot_construction_destruction, construction_destruction)
 {
-    test_utils::assert_construction_and_destruction<timers::single_shot>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::single_shot>();
 }
 
 TEST_F(single_shot_test, static_assertions)
 {
-    test_utils::assert_default_constructibility<decltype(m_timer), true>();
-    test_utils::assert_copy_constructibility<decltype(m_timer), false>();
-    test_utils::assert_move_constructibility<decltype(m_timer), false>();
+    test_utils::statics::assert_default_constructibility<decltype(m_timer), true>();
+    test_utils::statics::assert_copy_constructibility<decltype(m_timer), false>();
+    test_utils::statics::assert_move_constructibility<decltype(m_timer), false>();
 
     SUCCEED();
 }
@@ -65,8 +67,8 @@ TEST_F(single_shot_test, callback_throwing)
 {
     EXPECT_ANY_THROW(m_timer.start(1s, [](){ throw std::exception{}; }));
 
-    test_utils::check_if_mutex_is_owned(m_timer.m_block_protection, false);
-    test_utils::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_block_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_cv_protection, false);
     EXPECT_TRUE(m_timer.m_terminate_forcefully);
 }
 
@@ -78,7 +80,7 @@ TEST_F(single_shot_test, callback_multiple_times)
         EXPECT_TRUE(m_timer.start(3s, std::bind(&single_shot_test::callback, this)));
     });
 
-    test_utils::assert_that_elapsed_time_in_tolerance(elapsed, 6s, 100s);
+    test_utils::time::assert_that_elapsed_time_in_tolerance(elapsed, 6s, 100s);
 }
 
 TEST_F(single_shot_test, start_long_callback)
@@ -96,7 +98,7 @@ TEST_F(single_shot_test, start_long_callback)
 
     const auto elapsed = end - start;
 
-    test_utils::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(elapsed), 12s, 100s);
+    test_utils::time::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(elapsed), 12s, 100s);
     }
 
 TEST_F(single_shot_test, start_in_parallel)

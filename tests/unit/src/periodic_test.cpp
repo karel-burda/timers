@@ -3,11 +3,13 @@
 
 #include <gtest/gtest.h>
 
+// deliberately in this place ahead of following includes
 #include <test_utils/make_all_members_public.hpp>
-#include <test_utils/lifetime_assertions.hpp>
+
+#include <test_utils/lifetime.hpp>
 #include <test_utils/macros.hpp>
 #include <test_utils/mutex.hpp>
-#include <test_utils/static_class_assertions.hpp>
+#include <test_utils/statics.hpp>
 #include <timers/periodic.hpp>
 
 namespace
@@ -31,21 +33,21 @@ private:
 
 TEST(periodic_construction_destruction, construction_destruction)
 {
-    test_utils::assert_construction_and_destruction<timers::periodic>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::periodic>();
 }
 
 TEST_F(periodic_test, static_assertions)
 {
-    test_utils::assert_default_constructibility<decltype(m_timer), true>();
-    test_utils::assert_copy_constructibility<decltype(m_timer), false>();
-    test_utils::assert_move_constructibility<decltype(m_timer), false>();
+    test_utils::statics::assert_default_constructibility<decltype(m_timer), true>();
+    test_utils::statics::assert_copy_constructibility<decltype(m_timer), false>();
+    test_utils::statics::assert_move_constructibility<decltype(m_timer), false>();
 
     SUCCEED();
 }
 
 TEST_F(periodic_test, default_values)
 {
-    test_utils::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_cv_protection, false);
 }
 
 TEST_F(periodic_test, callback_called)

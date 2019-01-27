@@ -3,13 +3,14 @@
 
 #include <gtest/gtest.h>
 
-#include "make_all_members_public.h"
-#include <timers/periodic_async.h>
-#include <timers/exceptions.h>
+// deliberately in this place ahead of following includes
+#include <test_utils/make_all_members_public.hpp>
 
-#include "static_assertions.h"
-#include "test_utils.h"
-#include "time_utils.h"
+#include <timers/exceptions.hpp>
+#include <timers/periodic_async.hpp>
+#include <test_utils/lifetime.hpp>
+#include <test_utils/statics.hpp>
+#include <test_utils/time.hpp>
 
 namespace
 {
@@ -24,14 +25,14 @@ private:
 
 TEST(periodic_async_construction_destruction, construction_destruction)
 {
-    timers::testing::assert_construction_and_destruction<timers::periodic_async>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::periodic_async>();
 }
 
 TEST_F(periodic_async_test, static_assertions)
 {
-    timers::testing::assert_default_constructibility<decltype(m_timer)>();
-    timers::testing::assert_copy_constructibility<decltype(m_timer)>();
-    timers::testing::assert_move_constructibility<decltype(m_timer)>();
+    test_utils::statics::assert_default_constructibility<decltype(m_timer)>();
+    test_utils::statics::assert_copy_constructibility<decltype(m_timer)>();
+    test_utils::statics::assert_move_constructibility<decltype(m_timer)>();
 
     SUCCEED();
 }
@@ -39,8 +40,8 @@ TEST_F(periodic_async_test, static_assertions)
 TEST_F(periodic_async_test, default_values)
 {
     EXPECT_FALSE(m_timer.m_async_task.valid());
-    timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
-    timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+    test_utils::testing::mutex::check_if_owned(m_timer.m_async_protection, false);
+    test_utils::testing::mutex::check_if_owned(m_timer.m_cv_protection, false);
 }
 
 TEST_F(periodic_async_test, start_exception_policy_ignore)
@@ -61,9 +62,9 @@ TEST_F(periodic_async_test, start_exception_policy_stop)
 
     std::this_thread::sleep_for(3s);
 
-    timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
-    timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
-    timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_block_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_async_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_cv_protection, false);
     EXPECT_TRUE(m_timer.m_terminate_forcefully);
 
     EXPECT_EQ(counter, 1);
@@ -90,7 +91,7 @@ TEST_F(periodic_async_test, start_long_callback)
     const auto elapsed = end - start;
 
     EXPECT_EQ(callback_counter, 2);
-    timers::testing::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(elapsed), 12s, 100s);
+    test_utils::time::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(elapsed), 12s, 100s);
 }
 
 TEST_F(periodic_async_test, stop_in_parallel)
@@ -110,9 +111,9 @@ TEST_F(periodic_async_test, stop_in_parallel)
     stopper1.wait();
     stopper2.wait();
 
-    timers::testing::check_if_mutex_is_owned(m_timer.m_block_protection, false);
-    timers::testing::check_if_mutex_is_owned(m_timer.m_async_protection, false);
-    timers::testing::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_block_protection, false);
+    test_utils::testing::check_if_owned(m_timer.m_async_protection, false);
+    test_utils::testing::check_if_owned(m_timer.m_cv_protection, false);
     EXPECT_TRUE(m_timer.m_terminate_forcefully);
 }
 }

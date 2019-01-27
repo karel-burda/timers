@@ -112,8 +112,8 @@ TEST_F(periodic_async_test, stop_in_parallel)
     stopper2.wait();
 
     test_utils::mutex::check_if_owned(m_timer.m_block_protection, false);
-    test_utils::testing::check_if_owned(m_timer.m_async_protection, false);
-    test_utils::testing::check_if_owned(m_timer.m_cv_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_async_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_cv_protection, false);
     EXPECT_TRUE(m_timer.m_terminate_forcefully);
 }
 }

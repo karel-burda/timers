@@ -16,8 +16,6 @@ target_sources(${PROJECT_NAME}
                        ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/single_shot.hpp
                        ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/single_shot_async.hpp
                        ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/type_definitions.hpp
-
-                   PRIVATE
                        ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/detail/type_traits.hpp)
 
 target_include_directories(${PROJECT_NAME}

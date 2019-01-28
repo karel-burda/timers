@@ -81,7 +81,7 @@ TEST_F(periodic_async_test, start_long_callback)
     const auto elapsed = cpp_utils::time::measure_duration([this]() {
         unsigned char callback_counter = 0;
 
-        EXPECT_NO_THROW(m_timer.start(2s, [&callback_counter, &end]()
+        EXPECT_NO_THROW(m_timer.start(2s, [&callback_counter]()
         {
             ++callback_counter;
             std::this_thread::sleep_for(10s);

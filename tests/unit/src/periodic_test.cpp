@@ -121,7 +121,7 @@ TEST_F(periodic_test, start_in_parallel)
     starter2.wait();
 
     // XOR relationship expected, because exactly one timer should have been started 
-    BURDA_TEST_UTILS_EXPECT_XOR(taskFinished1, taskFinished2);
+    BURDA_TEST_UTILS_XOR_EXPECT(taskFinished1, taskFinished2);
 }
 
 TEST_F(periodic_test, stop)

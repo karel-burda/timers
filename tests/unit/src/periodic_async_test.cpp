@@ -6,6 +6,7 @@
 // deliberately in this place ahead of following includes
 #include <test_utils/make_all_members_public.hpp>
 
+#include <cpp_utils/time/measure_duration.hpp>
 #include <test_utils/lifetime.hpp>
 #include <test_utils/mutex.hpp>
 #include <test_utils/statics.hpp>
@@ -84,13 +85,11 @@ TEST_F(periodic_async_test, start_long_callback)
             ++callback_counter;
             std::this_thread::sleep_for(10s);
             ++callback_counter;
-            end = timers::testing::clock::now();
         }, timers::policies::start::exception::stop));
 
         std::this_thread::sleep_for(5s);
 
         m_timer.stop();
-        const auto elapsed = end - start;
 
         EXPECT_EQ(callback_counter, 2);
     });

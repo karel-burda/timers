@@ -9,6 +9,7 @@
 #include <timers/exceptions.hpp>
 #include <timers/periodic_async.hpp>
 #include <test_utils/lifetime.hpp>
+#include <test_utils/mutex.hpp>
 #include <test_utils/statics.hpp>
 #include <test_utils/time.hpp>
 
@@ -32,9 +33,9 @@ TEST(periodic_async_construction_destruction, construction_destruction)
 
 TEST_F(periodic_async_test, static_assertions)
 {
-    test_utils::statics::assert_default_constructibility<decltype(m_timer)>();
-    test_utils::statics::assert_copy_constructibility<decltype(m_timer)>();
-    test_utils::statics::assert_move_constructibility<decltype(m_timer)>();
+    test_utils::statics::assert_default_constructibility<decltype(m_timer), true>();
+    test_utils::statics::assert_copy_constructibility<decltype(m_timer), false>();
+    test_utils::statics::assert_move_constructibility<decltype(m_timer), false>();
 
     SUCCEED();
 }

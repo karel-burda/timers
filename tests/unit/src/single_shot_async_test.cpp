@@ -97,7 +97,7 @@ TEST_F(single_shot_async_test, callback_multiple_times)
 
     std::this_thread::sleep_for(5s);
 
-    test_utils::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(end - start), 5s, 100s);
+    test_utils::time::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(end - start), 5s, 100s);
 }
 
 TEST_F(single_shot_async_test, start_in_parallel)
@@ -115,6 +115,7 @@ TEST_F(single_shot_async_test, start_in_parallel)
         taskFinished1 = true;
         m_cv.notify_one();
     });
+
     m_timer.start(2s, [&taskFinished2, &m_cv_protection, &m_cv]()
     {
         std::lock_guard<decltype(m_cv_protection)> lock { m_cv_protection };

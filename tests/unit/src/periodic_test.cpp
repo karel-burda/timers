@@ -7,9 +7,9 @@
 #include <test_utils/make_all_members_public.hpp>
 
 #include <test_utils/lifetime.hpp>
-#include <test_utils/macros.hpp>
 #include <test_utils/mutex.hpp>
 #include <test_utils/statics.hpp>
+#include <test_utils/xor.hpp>
 #include <timers/periodic.hpp>
 
 namespace

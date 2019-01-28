@@ -4,7 +4,6 @@
 
 #include <test_utils/lifetime.hpp>
 #include <test_utils/macros.hpp>
-#include <test_utils/mutex.hpp>
 #include <test_utils/statics.hpp>
 #include <timers/periodic.hpp>
 #include <timers/periodic_async.hpp>

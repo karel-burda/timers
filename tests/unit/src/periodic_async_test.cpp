@@ -6,12 +6,12 @@
 // deliberately in this place ahead of following includes
 #include <test_utils/make_all_members_public.hpp>
 
-#include <timers/exceptions.hpp>
-#include <timers/periodic_async.hpp>
 #include <test_utils/lifetime.hpp>
 #include <test_utils/mutex.hpp>
 #include <test_utils/statics.hpp>
 #include <test_utils/time.hpp>
+#include <timers/exceptions.hpp>
+#include <timers/periodic_async.hpp>
 
 namespace
 {
@@ -76,25 +76,26 @@ TEST_F(periodic_async_test, start_exception_policy_stop)
 
 TEST_F(periodic_async_test, start_long_callback)
 {
-    unsigned char callback_counter = 0;
-    const auto start = timers::testing::clock::now();
-    auto end = timers::testing::clock::now();
+    const auto elapsed = cpp_utils::time::measure_duration([this]() {
+        unsigned char callback_counter = 0;
 
-    EXPECT_NO_THROW(m_timer.start(2s, [&callback_counter, &end]()
-    {
-        ++callback_counter;
-        std::this_thread::sleep_for(10s);
-        ++callback_counter;
-        end = timers::testing::clock::now();
-    }, timers::policies::start::exception::stop));
+        EXPECT_NO_THROW(m_timer.start(2s, [&callback_counter, &end]()
+        {
+            ++callback_counter;
+            std::this_thread::sleep_for(10s);
+            ++callback_counter;
+            end = timers::testing::clock::now();
+        }, timers::policies::start::exception::stop));
 
-    std::this_thread::sleep_for(5s);
+        std::this_thread::sleep_for(5s);
 
-    m_timer.stop();
-    const auto elapsed = end - start;
+        m_timer.stop();
+        const auto elapsed = end - start;
 
-    EXPECT_EQ(callback_counter, 2);
-    test_utils::time::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(elapsed), 12s, 100s);
+        EXPECT_EQ(callback_counter, 2);
+    });
+
+    test_utils::time::assert_that_elapsed_time_in_tolerance(elapsed, 12s, 100s);
 }
 
 TEST_F(periodic_async_test, stop_in_parallel)

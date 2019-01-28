@@ -25,18 +25,18 @@ protected:
 
 TEST(scoped_construction_destruction, construction_destruction)
 {
-    test_utils::statics::assert_construction_and_destruction<timers::scoped<timers::single_shot>>();
-    test_utils::statics::assert_construction_and_destruction<timers::scoped<timers::single_shot_async>>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::scoped<timers::single_shot>>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::scoped<timers::single_shot_async>>();
 
-    test_utils::statics::assert_construction_and_destruction<timers::scoped<timers::periodic>>();
-    test_utils::statics::assert_construction_and_destruction<timers::scoped<timers::periodic_async>>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::scoped<timers::periodic>>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::scoped<timers::periodic_async>>();
 }
 
 TEST_F(scoped_test, static_assertions)
 {
-    test_utils::lifetime::assert_default_constructibility<decltype(m_periodic_async), true>();
-    test_utils::lifetime::assert_copy_constructibility<decltype(m_periodic_async), false>();
-    test_utils::lifetime::assert_move_constructibility<decltype(m_periodic_async), false>();
+    test_utils::statics::assert_default_constructibility<decltype(m_periodic_async), true>();
+    test_utils::statics::assert_copy_constructibility<decltype(m_periodic_async), false>();
+    test_utils::statics::assert_move_constructibility<decltype(m_periodic_async), false>();
 
     SUCCEED();
 }

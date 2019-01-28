@@ -18,6 +18,7 @@ namespace
 {
 using namespace std::chrono_literals;
 
+namespace cpp_utils = burda::cpp_utils;
 namespace test_utils = burda::test_utils;
 namespace timers = burda::timers;
 

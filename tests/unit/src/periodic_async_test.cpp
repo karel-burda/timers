@@ -15,6 +15,8 @@
 namespace
 {
 using namespace std::chrono_literals;
+
+namespace test_utils = burda::test_utils;
 namespace timers = burda::timers;
 
 class periodic_async_test : public ::testing::Test
@@ -40,8 +42,8 @@ TEST_F(periodic_async_test, static_assertions)
 TEST_F(periodic_async_test, default_values)
 {
     EXPECT_FALSE(m_timer.m_async_task.valid());
-    test_utils::testing::mutex::check_if_owned(m_timer.m_async_protection, false);
-    test_utils::testing::mutex::check_if_owned(m_timer.m_cv_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_async_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_cv_protection, false);
 }
 
 TEST_F(periodic_async_test, start_exception_policy_ignore)

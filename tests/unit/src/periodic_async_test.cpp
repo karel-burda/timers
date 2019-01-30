@@ -38,8 +38,6 @@ TEST_F(periodic_async_test, static_assertions)
     test_utils::statics::assert_default_constructibility<decltype(m_timer), true>();
     test_utils::statics::assert_copy_constructibility<decltype(m_timer), false>();
     test_utils::statics::assert_move_constructibility<decltype(m_timer), false>();
-
-    SUCCEED();
 }
 
 TEST_F(periodic_async_test, default_values)

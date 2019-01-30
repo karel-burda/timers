@@ -42,8 +42,6 @@ TEST_F(single_shot_async_test, static_assertions)
     test_utils::statics::assert_default_constructibility<timers::single_shot_async, true>();
     test_utils::statics::assert_copy_constructibility<timers::single_shot_async, false>();
     test_utils::statics::assert_move_constructibility<timers::single_shot_async, false>();
-
-    SUCCEED();
 }
 
 TEST_F(single_shot_async_test, default_values)

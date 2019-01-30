@@ -1,13 +1,14 @@
 #include <future>
-#include <mutex>
 #include <thread>
 
 #include <gtest/gtest.h>
 
+// deliberately in this place ahead of following includes
 #include <test_utils/make_all_members_public.hpp>
-#include <test_utils/lifetime_assertions.hpp>
+
+#include <test_utils/lifetime.hpp>
 #include <test_utils/mutex.hpp>
-#include <test_utils/static_class_assertions.hpp>
+#include <test_utils/statics.hpp>
 #include <test_utils/time.hpp>
 #include <timers/single_shot_async.hpp>
 
@@ -32,23 +33,21 @@ private:
 
 TEST(single_shot_async_construction_destruction, construction_destruction)
 {
-    test_utils::assert_construction_and_destruction<timers::single_shot_async>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::single_shot_async>();
 }
 
 TEST_F(single_shot_async_test, static_assertions)
 {
-    test_utils::assert_default_constructibility<timers::single_shot_async, true>();
-    test_utils::assert_copy_constructibility<timers::single_shot_async, false>();
-    test_utils::assert_move_constructibility<timers::single_shot_async, false>();
-
-    SUCCEED();
+    test_utils::statics::assert_default_constructibility<timers::single_shot_async, true>();
+    test_utils::statics::assert_copy_constructibility<timers::single_shot_async, false>();
+    test_utils::statics::assert_move_constructibility<timers::single_shot_async, false>();
 }
 
 TEST_F(single_shot_async_test, default_values)
 {
     EXPECT_FALSE(m_timer.m_async_task.valid());
-    test_utils::check_if_mutex_is_owned(m_timer.m_async_protection, false);
-    test_utils::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_async_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_cv_protection, false);
 }
 
 TEST_F(single_shot_async_test, callback_called)
@@ -67,9 +66,9 @@ TEST_F(single_shot_async_test, start_exception_policy_stop)
 
     std::this_thread::sleep_for(3s);
 
-    test_utils::check_if_mutex_is_owned(m_timer.m_block_protection, false);
-    test_utils::check_if_mutex_is_owned(m_timer.m_async_protection, false);
-    test_utils::check_if_mutex_is_owned(m_timer.m_cv_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_block_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_async_protection, false);
+    test_utils::mutex::check_if_owned(m_timer.m_cv_protection, false);
     EXPECT_TRUE(m_timer.m_terminate_forcefully);
 }
 
@@ -95,7 +94,7 @@ TEST_F(single_shot_async_test, callback_multiple_times)
 
     std::this_thread::sleep_for(5s);
 
-    test_utils::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(end - start), 5s, 100s);
+    test_utils::time::assert_that_elapsed_time_in_tolerance(std::chrono::duration_cast<std::chrono::seconds>(end - start), 5s, 100s);
 }
 
 TEST_F(single_shot_async_test, start_in_parallel)
@@ -113,6 +112,7 @@ TEST_F(single_shot_async_test, start_in_parallel)
         taskFinished1 = true;
         m_cv.notify_one();
     });
+
     m_timer.start(2s, [&taskFinished2, &m_cv_protection, &m_cv]()
     {
         std::lock_guard<decltype(m_cv_protection)> lock { m_cv_protection };

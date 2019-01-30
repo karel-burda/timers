@@ -16,4 +16,4 @@ find_package(timers CONFIG REQUIRED)
 message(STATUS "Found version of timers is: ${timers_VERSION}")
 target_link_libraries(${PROJECT_NAME} PRIVATE burda::timers)
 
-burda_cmake_helpers_cpp_warnings_add_pedantic_level(${PROJECT_NAME} PRIVATE)
+burda_cmake_helpers_cpp_warnings_add_pedantic_level(${PROJECT_NAME} PRIVATE CXX)

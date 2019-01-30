@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <test_utils/lifetime_assertions.hpp>
+#include <test_utils/lifetime.hpp>
 #include <timers/exceptions.hpp>
 
 namespace
@@ -10,10 +10,10 @@ namespace timers = burda::timers;
 
 TEST(exceptions_construction_destruction, construction_destruction)
 {
-    test_utils::assert_construction_and_destruction<timers::exceptions::callback_not_callable>();
-    test_utils::assert_construction_and_destruction<timers::exceptions::time_period_is_invalid>();
-    test_utils::assert_construction_and_destruction<timers::exceptions::time_period_is_zero>();
-    test_utils::assert_construction_and_destruction<timers::exceptions::time_period_is_negative>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::exceptions::callback_not_callable>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::exceptions::time_period_is_invalid>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::exceptions::time_period_is_zero>();
+    test_utils::lifetime::assert_construction_and_destruction<timers::exceptions::time_period_is_negative>();
 }
 }
 

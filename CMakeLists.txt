@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
-project(timers VERSION 1.3.4 LANGUAGES CXX)
+project(timers VERSION 1.3.5 LANGUAGES CXX)
 
 add_library(${PROJECT_NAME} INTERFACE)
 
@@ -15,7 +15,8 @@ target_sources(${PROJECT_NAME}
                        ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/scoped.hpp
                        ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/single_shot.hpp
                        ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/single_shot_async.hpp
-                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/type_definitions.hpp)
+                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/type_definitions.hpp
+                       ${CMAKE_CURRENT_SOURCE_DIR}/include/timers/detail/type_traits.hpp)
 
 target_include_directories(${PROJECT_NAME}
                                 INTERFACE
